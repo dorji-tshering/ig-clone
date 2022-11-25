@@ -1,4 +1,9 @@
 import { useSession } from "next-auth/react";
+import { FormEvent, useEffect, useState } from "react";
+import { addDoc, collection, serverTimestamp, onSnapshot, 
+        query, orderBy, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
+import { db } from "../firebase";
+import Moment from 'react-moment';
 
 interface PostData {
     id: string,
@@ -9,7 +14,26 @@ interface PostData {
 }
 
 const Post = ({ id, username, avatar, image, caption }: PostData) => {
-    const {data: session} = useSession();
+    const {data: session}: any = useSession();
+    const [comment, setComment] = useState<string>();
+    const [comments, setComments] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
+
+    useEffect(() => onSnapshot(query(collection(db, 'posts', id, 'comments'), orderBy('timeStamp', 'desc')), 
+        snapShot => setComments(snapShot.docs)
+    ), [db]);
+
+    const postComment = async(e: FormEvent) => {
+        e.preventDefault();
+        const commentToSend = comment;
+        setComment('');
+
+        await addDoc(collection(db, 'posts', id, 'comments'), {
+            comment: commentToSend,
+            username: session.user.username,
+            userImage: session.user.image,
+            timeStamp: serverTimestamp()
+        });
+    }
 
     return (
         <div className="bg-white my-7 border rounded-sm">
@@ -27,7 +51,7 @@ const Post = ({ id, username, avatar, image, caption }: PostData) => {
                 </span>
             </div>
 
-            {/* Image */}
+            {/* Post image */}
             <img 
                 className="object-cover w-full"
                 src={image} 
@@ -67,9 +91,25 @@ const Post = ({ id, username, avatar, image, caption }: PostData) => {
                 </p>
             </div>
             {/* Comments */}
+            {comments.length > 0 && 
+                <div className="ml-10 h-20 overflow-y-scroll scrollbar-thumb-black scrollbar-thin">
+                    { comments.map((comment => (
+                        <div className="flex items-center space-x-2 mb-3" key={comment.id}>
+                            <img className="h-7 rounded-full" src={comment.data().userImage} alt="" />
+                            <p className="text-sm flex-1">
+                                <span className="font-bold">{comment.data().username + ' '}</span>
+                                {comment.data().comment}
+                            </p>
+                            <Moment fromNow className="pr-5 text-xs">
+                                {comment.data().timeStamp?.toDate()}
+                            </Moment>
+                        </div>
+                    ))) }
+                </div> 
+            }
             {/* Input box */}
             { session && 
-                <form className="flex items-center p-4">
+                <form className="flex items-center p-4" onSubmit={(e) => postComment(e)}>
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
@@ -80,8 +120,13 @@ const Post = ({ id, username, avatar, image, caption }: PostData) => {
                         type="text" 
                         name="comment" 
                         placeholder="Add a comment..."
-                        id="comment" />
-                    <button className="font-semibold text-blue-400" type="submit">Post</button>
+                        id="comment"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)} />
+                    <button 
+                        disabled={!comment?.trim()}
+                        className="font-semibold text-blue-400" 
+                        type="submit">Post</button>
                 </form>
             }
         </div>

@@ -2,15 +2,22 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@layer components {
-    .mNavBtn {
-        @apply h-7 md:hidden 
-        cursor-pointer;
-    }
 
-    .dNavBtn {
-        @apply hidden h-6 md:inline-flex 
-        cursor-pointer hover:scale-125 
-        transition-all duration-150 ease-out;
-    }
+.mNavBtn {
+    @apply h-7 md:hidden 
+    cursor-pointer;
 }
+
+.dNavBtn {
+    @apply hidden h-6 md:inline-flex 
+    cursor-pointer hover:scale-125 
+    transition-all duration-150 ease-out;
+}
+
+.reactBtn {
+    @apply cursor-pointer hover:scale-125 
+    transition-all duration-150 ease-out;
+}
+
+    
+
