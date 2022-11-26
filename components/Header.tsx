@@ -31,6 +31,7 @@ const Header = () => {
                         fill
                         className="object-contain"
                         sizes="50px"
+                        priority
                     />
                 </div>
 
