@@ -29,7 +29,7 @@ const Modal = () => {
         });
 
         // upload image/videos to firebase storage and update the document
-        const imageRef = ref(storage, `posts/${docRef.id}/image`);
+        const imageRef = ref(storage, `posts/image/${docRef.id}`);
 
         await uploadString(imageRef, selectedFile, "data_url").then(async () => {
             const downloadURL = await getDownloadURL(imageRef);
