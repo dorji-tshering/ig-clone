@@ -25,7 +25,8 @@ const Posts = () => {
                         username={post.data().username} 
                         avatar={post.data().profileImg}
                         image={post.data().image}
-                        caption={post.data().caption} />
+                        caption={post.data().caption}
+                        timeStamp={post.data().timeStamp} />
                 ))
             }
         </div>
