@@ -68,7 +68,7 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                     className="rounded-full h-10 w-10 object-contain p-1 mr-3 border" 
                     src={avatar} 
                     alt="user-avatar" />
-                <p className="flex-1 font-[500]">{ username }</p>
+                <p className="flex-1 font-bold">{ username }</p>
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
@@ -122,12 +122,12 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
             <div className="px-5 truncate mb-2">
                 { likes.length > 0 && (
                     likes.length === 1 ? (
-                        <p className="font-[500] mb-1">{likes.length} like</p>
+                        <p className="font-bold mb-1">{likes.length} like</p>
                     ) : (
-                        <p>{likes.length} likes</p>
+                        <p className="font-bold mb-1">{likes.length} likes</p>
                     )
                 )}
-                <span className="font-[500] mr-1">{username}</span>
+                <span className="font-bold mr-1">{username}</span>
                 {caption}
             </div>
             {/* Comments */}
@@ -144,7 +144,7 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                 </div> 
             }
             {/* post timestamp */}
-            <Moment fromNow className="mx-5 mt-2 block uppercase text-[10px] text-gray-400">
+            <Moment fromNow className="mx-5 mt-2 wordSpace block uppercase  text-[9px] text-gray-400">
                 {timeStamp.toDate()}
             </Moment>
             {/* Input box */}
@@ -162,10 +162,11 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         placeholder="Add a comment..."
                         id="comment"
                         value={comment}
+                        autoComplete="off"
                         onChange={(e) => setComment(e.target.value)} />
                     <button 
                         disabled={!comment?.trim()}
-                        className="font-semibold text-blue-400" 
+                        className="font-semibold text-instaBlue" 
                         type="submit">Post</button>
                 </form>
             }

@@ -6,7 +6,6 @@ function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>,
 
     return (
         <>
-            <Header />
             <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-32 px-14 text-center ">
                 <img className='w-80' src="/images/instagram-logo.png" alt="Instagram logo" />
                 <p className="font-xs italic">

@@ -58,7 +58,7 @@ function Suggestions() {
                         <div className="flex-1 ml-4">
                             <h2 className='font-semibold text-sm'>{profile.username}</h2>
                         </div>
-                        <button className='text-blue-400 text-sm  font-bold'>Follow</button>
+                        <button className='text-instaBlue text-sm  font-bold'>Follow</button>
                     </div>
                 ))
             }

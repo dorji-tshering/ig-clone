@@ -8,10 +8,19 @@
     cursor-pointer;
 }
 
+/* Wrapper to center tooltip */
+.dNavWrapper {
+    @apply hidden md:inline-flex !mx-1;
+}
+
 .dNavBtn {
-    @apply hidden h-6 md:inline-flex 
-    cursor-pointer hover:scale-125 
-    transition-all duration-150 ease-out;
+    @apply h-10 w-10 flex items-center justify-center cursor-pointer
+    bg-transparent ml-0 hover:bg-gray-100 rounded-full;
+}
+
+.dNavIcon {
+    @apply group-hover:w-[21px] group-hover:h-[21px] relative
+    transition-all duration-75 ease-in-out;
 }
 
 .reactBtn {
@@ -19,10 +28,22 @@
     transition-all duration-150 ease-out;
 }
 
-body {
-    font-family: 'outfit';
-    font-weight: 300;
-    font-size: 14px;
+.mBottomNavIcon {
+    @apply h-8 w-8
+}
+
+.wordSpace {
+    word-spacing: 2px;
+}
+
+:root {
+    @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 overflow-y-scroll
+}
+
+:root {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    color: #333;
 }
 
     

@@ -2,9 +2,11 @@ import { collection, DocumentData, onSnapshot, orderBy, query, QueryDocumentSnap
 import { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import Post from './Post';
+import { useSession } from 'next-auth/react';
 
 const Posts = () => {
     const [posts, setPosts] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
+    const {data: session} = useSession();
 
     useEffect(
         () => 
@@ -16,7 +18,7 @@ const Posts = () => {
     );
 
     return (
-        <div>
+        <div className={`max-w-md md:max-w-lg mx-auto ${session ? 'lg:max-w-none' : 'lg:max-w-2xl'}`}>
             {
                 posts.map((post) => (
                     <Post 

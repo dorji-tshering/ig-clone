@@ -1,4 +1,3 @@
-import Stories from "./Stories";
 import Posts from "./Posts";
 import MiniProfile from "./MiniProfile";
 import Suggestions from "./Suggestions";
@@ -8,22 +7,20 @@ const Feed = () => {
     const {data: session} = useSession();
 
     return (
-        <main className={`grid grid-cols-1 mx-2 md:mx-auto md:grid-cols-2 md:max-w-3xl ${session && 'lg:grid-cols-3 lg:max-w-5xl'}`}>
-            <section className="col-span-2">
-                <Stories/>  
+        <div className={`grid grid-cols-1 mx-2 md:mx-auto ${session && 'lg:grid-cols-3 lg:max-w-6xl'}`}>
+            {/* left section */}
+            <section className="col-span-1 lg:col-span-2">
                 <Posts/>
             </section>
 
-            {/* section */}
+            {/* right section */}
             <section className={`hidden ${session && 'lg:block'} lg:col-span-1`}>
-                <div className="fixed top-20 max-w-[341px]">
-                    {/* Mini profile */}
+                <div className="fixed top-20 w-[308px] overflow-y-auto h-[calc(100vh-100px)] pb-11">
                     <MiniProfile/>
-                    {/* Suggestions */}
                     <Suggestions/>
                 </div>
             </section>
-        </main>
+        </div>
     )
 }
 
