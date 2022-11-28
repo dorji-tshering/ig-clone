@@ -1,5 +1,4 @@
 import { useRecoilState } from "recoil";
-import { modalState } from "../atoms/modalAtom";
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useRef, useState } from "react";
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -9,7 +8,7 @@ import { ref, getDownloadURL, uploadString } from "firebase/storage";
 
 
 const Modal = () => {
-    const [open, setOpen] = useRecoilState(modalState);
+    const open = false ;
     const {data: session} = useSession() as any;
     const [selectedFile, setSelectedFile] = useState<any>(null);
     const filePickerRef = useRef<any>(null);
@@ -38,7 +37,7 @@ const Modal = () => {
             })
         });
 
-        setOpen(false);
+        //setOpen(false);
         setLoading(false);
         setSelectedFile(null);
     }
@@ -58,7 +57,7 @@ const Modal = () => {
             <Dialog
                 as="div"
                 className="fixed z-10 inset-0 overflow-y-auto"
-                onClose={() => setOpen(false)} >
+                onClose={() => console.log()} >
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"

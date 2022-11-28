@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import Header from "./Header";
 import MobileBottomNav from "./MobileBottomNav";
-import Modal from "./Modal";
+import PostUploadModal from "./PostUploadModal";
 
 const Layout = ({children}: {children: ReactElement}) => {
 
@@ -11,7 +11,7 @@ const Layout = ({children}: {children: ReactElement}) => {
             <Header/>
             {children}
             <MobileBottomNav/>
-            <Modal/>
+            <PostUploadModal/>
         </main>
     )
 }

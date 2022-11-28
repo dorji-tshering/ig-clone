@@ -2,14 +2,13 @@ import Image from 'next/image';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';
-import { modalState } from '../atoms/modalAtom';
+import { uploadModalState } from '../atoms/uploadModalAtom';
 import { Tooltip } from 'flowbite-react';
-
 
 const Header = () => {
     const {data: session} = useSession();
     const router = useRouter();     
-    const openModal = useSetRecoilState(modalState);
+    const openUploadModal = useSetRecoilState(uploadModalState);
 
     return (
        <div className="shadow-sm border-b bg-white sticky top-0 z-50 h-[54px]">
@@ -80,7 +79,7 @@ const Header = () => {
                             </div>
                             <div className="dNavWrapper group">
                                 <Tooltip className="mt-[2px]" style="light" content="Create" placement="bottom" animation="duration-1000">
-                                    <span className="dNavBtn" onClick={() => openModal(true)}>
+                                    <span className="dNavBtn" onClick={() => openUploadModal(true)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 dNavIcon">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
@@ -117,7 +116,7 @@ const Header = () => {
                                     </span>
                                 </Tooltip>
                             </div>
-                        </> : <button type="button" onClick={() => signIn()}>Signin</button> }        
+                        </> : <button type="button" className="font-bold" onClick={() => signIn()}>Signin</button> }        
                 </div>
             </div>
        </div>

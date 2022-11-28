@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { useSetRecoilState } from 'recoil';
+import { uploadModalState } from '../atoms/uploadModalAtom';
 
 const MobileBottomNav = () => {
     const router = useRouter();
     const {data: session} = useSession();
+    const openUploadModal = useSetRecoilState(uploadModalState);
 
     return (
         <div className="md:hidden flex justify-between w-full border-solid border-0 border-t-[1px] border-gray-200  bg-white py-3 px-5 z-10 fixed bottom-0">
@@ -15,7 +18,7 @@ const MobileBottomNav = () => {
             </span> 
             { session && (
                 <>
-                    <span className="order-3">
+                    <span onClick={() => openUploadModal(true)} className="order-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="mBottomNavIcon">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
