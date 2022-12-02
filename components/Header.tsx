@@ -6,7 +6,7 @@ import { uploadModalState } from '../atoms/uploadModalAtom';
 import { Tooltip } from 'flowbite-react';
 
 const Header = () => {
-    const {data: session} = useSession();
+    const {data: session}: any = useSession();
     const router = useRouter();     
     const openUploadModal = useSetRecoilState(uploadModalState);
 
@@ -105,8 +105,8 @@ const Header = () => {
                                 </Tooltip>
                             </div>
                             <div className="dNavWrapper group">
-                                <Tooltip className="mt-[-1.5px]" style="light" content="Profile" placement="bottom" animation="duration-1000">
-                                    <span className="h-12 w-12 flex items-center justify-center cursor-pointer
+                                <Tooltip className="mt-[-1.5px]" style="light" content={`Profile: ${session?.user?.username}`} placement="bottom" animation="duration-1000">
+                                    <span onClick={() => router.push(`/${session?.user?.username}`)} className="h-12 w-12 flex items-center justify-center cursor-pointer
                                         bg-transparent ml-0 hover:bg-gray-100 rounded-full">
                                         <img 
                                             src={session?.user?.image as string} 

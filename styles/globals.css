@@ -40,11 +40,41 @@
     @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 overflow-y-scroll
 }
 
+.imageEditor *, .SfxModal-Wrapper * {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.centerModal > div {
+    overflow-y: auto;
+    max-width: none;
+    max-height: 100%;
+}
+
 :root {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 13px;
     color: #333;
 }
+
+@media screen and (min-width: 600px) {
+    .centerModal > div {
+        min-width: 450px;
+        width: auto;
+    }
+}
+
+@media screen and (min-width: 991px) {
+    .centerModal > div {
+        max-width: 70%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .centerModal > div {
+        height: auto;
+    }
+}
+
 
     
 
