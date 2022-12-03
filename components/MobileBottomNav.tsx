@@ -5,7 +5,7 @@ import { uploadModalState } from '../atoms/uploadModalAtom';
 
 const MobileBottomNav = () => {
     const router = useRouter();
-    const {data: session} = useSession();
+    const {data: session}: any = useSession();
     const openUploadModal = useSetRecoilState(uploadModalState);
 
     return (
@@ -38,6 +38,7 @@ const MobileBottomNav = () => {
                         </svg>
                     </span>
                     <img 
+                        onClick={() => router.push(`/${session?.user?.username}`)}
                         src={session?.user?.image as string} 
                         className="order-5 w-8 object-contain border border-solid border-gray-200 p-[3px] rounded-full" 
                         alt="user-avatar" />

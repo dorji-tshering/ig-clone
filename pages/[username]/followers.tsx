@@ -1,9 +1,9 @@
 import React from 'react'
 
-const followers = () => {
+const Followers = () => {
   return (
     <div>followers</div>
   )
 }
 
-export default followers
+export default Followers

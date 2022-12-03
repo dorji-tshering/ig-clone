@@ -1,9 +1,9 @@
 import React from 'react'
 
 const Following = () => {
-    return (
-        <div>following</div>
-    )
+  return (
+    <div>Following</div>
+  )
 }
 
 export default Following

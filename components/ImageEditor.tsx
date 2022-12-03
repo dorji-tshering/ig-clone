@@ -1,6 +1,9 @@
 import { Alert, Modal } from 'flowbite-react';
 import dynamic from 'next/dynamic';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { MdOutlineArrowBack } from 'react-icons/md';
+import PostDiscardAlert from './PostDiscardAlert';
+
 const FilerobotImageEditor = dynamic(() => import('react-filerobot-image-editor'), {ssr: false});
 const TABS = dynamic(() => import('react-filerobot-image-editor').then(module => module.TABS as any), {ssr: false}) as any;
 const TOOLS = dynamic(() => import('react-filerobot-image-editor').then(module => module.TOOLS as any), {ssr: false}) as any;
@@ -13,6 +16,8 @@ type Props = {
     setEditedFile: Dispatch<SetStateAction<any>>;
     editedFile: any;
     setSelectedFile: Dispatch<SetStateAction<any>>;
+    editorOpen: boolean
+    captionModalOpen: boolean
 }
 
 const ImageEditor = ({ 
@@ -22,7 +27,9 @@ const ImageEditor = ({
         selectedFile, 
         setEditedFile, 
         editedFile,
-        setSelectedFile }: Props) => {
+        setSelectedFile,
+        editorOpen, 
+        captionModalOpen }: Props) => {
     const [alertChanges, setAlertChanges] = useState(false);
 
     const saveEditedImage = (editedImage: any) => {
@@ -35,7 +42,7 @@ const ImageEditor = ({
     }
 
     const onBack = () => {
-        if(editedFile) {
+        if(editedFile || selectedFile) {
             setAlertChanges(true);
         } else {
             setEditorOpen(false); 
@@ -44,28 +51,33 @@ const ImageEditor = ({
         }
     }
 
+    const discard = () => {
+        selectedFile && setSelectedFile(null);
+        editedFile && setEditedFile(null);
+        editorOpen && setEditorOpen(false);
+        captionModalOpen && setCaptionModalOpen(false);
+        setFileSelectOpen(true);
+        setAlertChanges(false);
+    }
+
+    const cancel = () => {
+        setAlertChanges(false);
+    }
+
     return (
-        <>  
+        <div className="md:max-w-[800px]">  
             { alertChanges &&  (
-                <div className="absolute top-0 left-0 h-full w-full flex items-center justify-center p-3 md:p-10 bg-black/30 z-10">
-                    <Alert color='warning' rounded={true} className="text-center">
-                        <h2 className="text-xl font-bold">Discard Post?</h2>
-                        <p className="mt-5">If you leave, your edits won't be saved.</p>
-                        <div className="mt-7">
-                            <button 
-                                onClick={() => {setEditorOpen(false); setFileSelectOpen(true); setEditedFile(null); setSelectedFile(null)}}
-                                className="py-2 px-5 mr-3 rounded-md text-white bg-yellow-700 border border-solid border-yellow-700"
-                                >Discard</button>
-                            <button 
-                                onClick={() => setAlertChanges(false)}
-                                className="py-2 px-5 rounded-md border border-yellow-700 border-solid"
-                                >Cancel</button>
-                        </div>
-                    </Alert>
-                </div>
+                <PostDiscardAlert discard={discard} cancel={cancel}/>
             )}
-            <Modal.Header>Edit</Modal.Header>
-            <Modal.Body className="imageEditor">
+            <header className="p-5 border-b border-solid border-b-gray-200 flex justify-between items-center">
+                <button 
+                    onClick={() => onBack()}>
+                        <MdOutlineArrowBack size={24}/>
+                </button>
+                <h1 className="text-lg font-bold">Edit</h1>
+                <button className="text-instaBlue font-bold pr-2" onClick={() => onNext()}>Next</button>
+            </header>
+            <div className="imageEditor">
                 <FilerobotImageEditor 
                     source={editedFile ?? selectedFile}
                     onSave={(editedImageObject: any) => {    
@@ -121,21 +133,9 @@ const ImageEditor = ({
                     savingPixelRatio={4}
                     previewPixelRatio={window.devicePixelRatio}
                 />
-                <p className="mt-6 text-center text-sm text-gray-500 font-[500]">Save image before proceeding</p>
-            </Modal.Body>
-            <Modal.Footer className="justify-center">            
-                <button 
-                    onClick={() => onBack()}
-                    className="py-2 px-5 mr-5 rounded-md bg-gray-100 font-bold">
-                        Back
-                </button>
-                {
-                    editedFile && (
-                        <button className="rounded-md py-2 px-5 !ml-5 text-white bg-instaBlue font-bold" onClick={() => onNext()}>Next</button>
-                    )
-                }
-            </Modal.Footer>
-        </>
+                <p className="my-6 text-center text-sm text-gray-500 font-[500]">Save image after changes</p>
+            </div>
+        </div>
     )
 }
 

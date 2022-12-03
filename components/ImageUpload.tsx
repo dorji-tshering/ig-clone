@@ -1,8 +1,8 @@
 import { updateDoc } from 'firebase/firestore';
 import { uploadString } from 'firebase/storage';
-import { Modal } from 'flowbite-react';
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { MdOutlineArrowBack } from 'react-icons/md';
 
 type Props = {
     setEditorOpen: Dispatch<SetStateAction<boolean>>;
@@ -10,11 +10,13 @@ type Props = {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     setFileSelectOpen: Dispatch<SetStateAction<boolean>>;
     editedFile: any;
+    selectedFile: any
 }
 
-const ImageUpload = ({ setEditorOpen, setCaptionModalOpen, setOpenModal, editedFile }: Props) => {
-    const captionRef = useRef(null);
+const ImageUpload = ({ setEditorOpen, setCaptionModalOpen, setOpenModal, editedFile, selectedFile }: Props) => {
+    const [caption, setCaption] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const spaceRef = useRef(0);
 
     const {data: session}: any = useSession();
 
@@ -45,13 +47,47 @@ const ImageUpload = ({ setEditorOpen, setCaptionModalOpen, setOpenModal, editedF
         setLoading(false);
     }
 
+
+    // allow only single space between characters
+    const updateCaption = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let lastChar = e.target.value.charAt(e.target.value.length - 1);
+
+        if(lastChar === ' ') {
+            if(caption?.charAt(caption.length - 1) === '.') {
+                spaceRef.current = 0;
+            }
+            if(spaceRef.current === 1) {
+                setCaption(e.target.value.slice(0, -1));
+                e.target.value = e.target.value.slice(0, -1);
+            }else {
+                spaceRef.current = 1;
+                setCaption(e.target.value);
+            }
+        }else {
+            if(spaceRef.current === 1) {
+                spaceRef.current = 0;
+            }
+            setCaption(e.target.value);
+        }
+    }
+
     return (
         <>
-            <Modal.Header>Create new post</Modal.Header>
-            <Modal.Body className="flex flex-col md:flex-row">
+            <header className="p-5 flex justify-between items-center border-b border-solid border-b-gray-200">
+                <button onClick={() => {setEditorOpen(true); setCaptionModalOpen(false);}}>
+                        <MdOutlineArrowBack size={24}/>
+                </button>
+                <h1 className="text-lg font-bold">Create new post</h1>
+                <button type="button" className="text-instaBlue font-bold mr-2
+                        disabled:text-gray-300 disabled:cursor-not-allowed"
+                        onClick={uploadPost} disabled={!caption?.trim()}>
+                        {loading ? 'Uploading...' : 'Upload post'}
+                </button>
+            </header>
+            <div className="flex flex-col md:flex-row">
                 {/* edited image */}
                 <section>
-                    <img src={editedFile} className="max-h-[400px] mx-auto" alt="edited post image" />
+                    <img src={editedFile ?? selectedFile} className="max-h-[400px] mx-auto" alt="edited post image" />
                 </section>
                 {/* caption */}
                 <section className="px-8 pt-8 md:pr-0 md:pb-8 min-w-[250px] flex flex-col justify-center">
@@ -62,28 +98,18 @@ const ImageUpload = ({ setEditorOpen, setCaptionModalOpen, setOpenModal, editedF
                             className="mx-auto w-10 rounded-full p-[1px] border border-solid border-gray-300 mb-2"/>
                         <p className="text-center font-bold">{session?.user?.username}</p>
                     </div>
-                    <div className="mt-2">
-                        <input
-                            ref={captionRef}
-                            type="text"
-                            className='border-none focus:ring-0 w-full text-center' 
+                    <div className="mt-4 pr-3">
+                        <textarea
+                            className='border-none focus:ring-0 w-full text-center bg-blue-50 rounded-xl resize-none' 
                             placeholder='Please enter a caption...' 
+                            onChange={(e) => updateCaption(e)}
+                            rows={5}
+                            maxLength={1000}
                         />
+                        <div className="text-right text-xs text-gray-400 mb-5">{caption ? caption.length : 0}/1000</div>
                     </div>
-                    <button type="button" className="inline-flex justify-center w-full rounded-md border mt-5 sm:mt-6
-                        border-transparent shadow-sm px-4 py-2 bg-instaBlue text-base font-bold text-white
-                        hover:bg-instaBlue/95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-instaBlue/90
-                        disabled:bg-gray-300 disabled:cursor-not-allowed hover:disabled:bg-gray-300"
-                        onClick={uploadPost} disabled={!editedFile}>
-                        {loading ? 'Uploading...' : 'Upload post'}
-                    </button>
                 </section>
-            </Modal.Body>
-            <Modal.Footer className="justify-center">
-                <button 
-                    className="rounded-md py-2 mr-5 px-5 font-bold bg-gray-100"
-                    onClick={() => {setEditorOpen(true); setCaptionModalOpen(false);}}>Back</button>
-            </Modal.Footer>
+            </div>
         </>
     )
 }
