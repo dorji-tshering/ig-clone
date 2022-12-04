@@ -170,7 +170,8 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         </svg>
                     </span>
                     <input 
-                        className="flex-1 text-[100%] focus:ring-0 border-none outline-none" 
+                        className="flex-1 text-[100%] focus:ring-0 border-none outline-none
+                            placeholder:font-[600] placeholder:text-gray-400" 
                         type="text" 
                         name="comment" 
                         placeholder="Add a comment..."

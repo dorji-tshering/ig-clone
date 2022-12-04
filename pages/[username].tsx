@@ -21,7 +21,7 @@ const Profile: NextPageWithLayout = () => {
 
     // set currentProfileState here
     useEffect(() => {
-        setCurrentProfileState(true);
+        setCurrentProfileState(false);
     }, []);
 
     // useEffect(() => {
@@ -43,7 +43,7 @@ const Profile: NextPageWithLayout = () => {
 
 
     return (
-        <div className="mt-12 mb-28">
+        <div className="mt-12">
             {
                 posts ? (
                     <>
@@ -115,7 +115,7 @@ const Profile: NextPageWithLayout = () => {
                             <p className="text-xl font-bold mb-16">Start creating one</p>
                             <div className="h-28 w-28 mx-auto relative">
                                 <span className="absolute inset-0 animate-ping rounded-full bg-instaBlue opacity-25"/>
-                                <button className="absolute inset-0 z-20 flex justify-center items-center
+                                <button className="absolute inset-0 z-1 flex justify-center items-center
                                     rounded-full bg-instaBlue"
                                     onClick={() => openUploadModal(true)}><AiOutlinePlus size={30} className="text-white"/>
                                 </button>
@@ -132,7 +132,7 @@ const Profile: NextPageWithLayout = () => {
 
 Profile.getLayout = function getLayout(page: ReactElement) {
     return (
-        <ProfileLayout tabName="">
+        <ProfileLayout>
             {page}
         </ProfileLayout>
     )

@@ -32,17 +32,29 @@ const ProfileLayout = ({ children }: Props) => {
     }
 
     return (
-        <div className="md:p-16">
+        <div className="md:p-16 mb-28">
             {/* profile meta-data */}
             <section className="flex p-5 md:p-0 min-h-[80px] sm:h-[150px] justify-between sm:justify-center">
                 <div className="mr-5 sm:mr-10">
                     <div className="flex justify-center items-center flex-col sm:h-full">
-                        <img 
-                            className="h-[70px] w-[70px] min-w-[70px] object-contain sm:h-full sm:w-auto 
-                                rounded-full p-1 border border-solid border-gray-300
-                                cursor-pointer"
-                            onClick={uploadProfileImage} 
-                            src={session?.user?.image} alt="avatar" />
+                        {
+                            currentUserProfile ? (
+                                <button className="rounded-full overflow-hidden" onClick={uploadProfileImage}>
+                                    <img 
+                                        className="h-[70px] w-[70px] min-w-[70px] object-contain sm:h-full sm:w-auto 
+                                            rounded-full p-1 border border-solid border-gray-300
+                                            cursor-pointer" 
+                                        src={session?.user?.image} alt="avatar"
+                                    />
+                                </button>
+                            ):(
+                                <img 
+                                    className="h-[70px] w-[70px] min-w-[70px] object-contain sm:h-full sm:w-auto 
+                                        rounded-full p-1 border border-solid border-gray-300" 
+                                    src={session?.user?.image} alt="avatar"
+                                />
+                            )
+                        }
                     </div>
                 </div>
                 <div className="sm:ml-10 grow sm:grow-0 flex flex-col justify-between sm:py-3">
@@ -69,18 +81,22 @@ const ProfileLayout = ({ children }: Props) => {
                             className="mr-10" 
                             href={makeContextualHref({
                                 routeModalId: 'followers',
-                                currentPageURL: returnHref
+                                currentPageURL: returnHref,
+                                userID: 'userId',
                             })}
-                            as={`/${encodeURIComponent(session?.user?.username)}/followers`}>
+                            as={`/${encodeURIComponent(session?.user?.username)}/followers`}
+                            scroll={false}>
                                 <span className="font-bold mr-1">200</span> followers
                         </Link>
                         <Link
                             className="mr-10" 
                             href={makeContextualHref({
                                 routeModalId: 'following',
-                                currentPageURL: returnHref
+                                currentPageURL: returnHref,
+                                userID: 'userId',
                             })}
-                            as={`/${session?.user?.username}/following`}>
+                            as={`/${encodeURIComponent(session?.user?.username)}/following`}
+                            scroll={false}>
                                 <span className="font-bold mr-1">10</span> following
                         </Link>
                     </div>
@@ -104,7 +120,8 @@ const ProfileLayout = ({ children }: Props) => {
                             routeModalId: 'followers',
                             currentPageURL: returnHref
                         })}
-                        as={`/${encodeURIComponent(session?.user?.username)}/followers`}>
+                        as={`/${encodeURIComponent(session?.user?.username)}/followers`}
+                        scroll={false}>
                             <span className="font-bold sm:mr-1 block">200</span><span className="text-gray-400">followers</span></Link>
                     <Link 
                         className="w-[33.3%]" 
@@ -112,7 +129,8 @@ const ProfileLayout = ({ children }: Props) => {
                             routeModalId: 'following',
                             currentPageURL: returnHref
                         })}
-                        as={`/${session?.user?.username}/following`}>
+                        as={`/${session?.user?.username}/following`}
+                        scroll={false}>
                             <span className="font-bold sm:mr-1 block">10</span> <span className="text-gray-400">following</span></Link>
                 </div>
             </section>

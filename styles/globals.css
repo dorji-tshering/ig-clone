@@ -42,8 +42,16 @@
     gap-3 px-4
 } 
 
+.pageContent {
+    @apply mt-5 lg:mt-10 mb-10
+}
+
 .wordSpace {
     word-spacing: 2px;
+}
+
+.useScrollbar {
+    @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
 }
 
 :root {
