@@ -7,7 +7,7 @@ const Feed = () => {
     const {data: session} = useSession();
 
     return (
-        <div className={`grid grid-cols-1 mx-2 md:mx-auto ${session && 'lg:grid-cols-3 lg:max-w-6xl'}`}>
+        <div className={`grid grid-cols-1 md:mx-auto ${session && 'lg:grid-cols-3 lg:max-w-6xl'}`}>
             {/* left section */}
             <section className="col-span-1 lg:col-span-2">
                 <Posts/>

@@ -34,37 +34,25 @@ const Likes: NextPageWithLayout = () => {
                             )
                         }
                         <div className="profileContentContainer">
-                        <div className="relative pt-[100%]">
-                            <div className="absolute inset-0">
-                                <Link 
-                                    href={makeContextualHref({
-                                        routeModalId: 'post',
-                                        currentPageURL: returnHref
-                                    })}
-                                    as={`/post/postID`}
-                                    className="group">
-                                    <img src="/images/dorji.jpg" alt="" className="object-cover"/>
-                                    <div className="hidden group-hover:flex absolute inset-0 justify-center 
-                                        items-center bg-black/30 text-white font-bold">
-                                        <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>120K</span>
-                                        <span className="flex items-center text-xl ml-3"><AiTwotoneMessage size={20} className="mr-1"/>300</span>
-                                    </div>
-                                </Link>
+                            <div className="relative pt-[100%]">
+                                <div className="absolute inset-0">
+                                    <Link 
+                                        href={makeContextualHref({
+                                            routeModalId: 'post',
+                                            currentPageURL: returnHref
+                                        })}
+                                        as={`/post/postID`}
+                                        className="group">
+                                        <img src="/images/dorji.jpg" alt="" className="object-cover"/>
+                                        <div className="hidden group-hover:flex absolute inset-0 justify-center 
+                                            items-center bg-black/30 text-white font-bold">
+                                            <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>120K</span>
+                                            <span className="flex items-center text-xl ml-3"><AiTwotoneMessage size={20} className="mr-1"/>300</span>
+                                        </div>
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                        <div className="relative pt-[100%]">
-                            <div className="absolute inset-0">
-                                <Link href={``} className="group">
-                                    <img src="/images/dorji.jpg" alt="" className="object-cover"/>
-                                    <div className="hidden group-hover:flex absolute inset-0 justify-center 
-                                        items-center bg-black/30 text-white font-bold">
-                                        <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>120K</span>
-                                        <span className="flex items-center text-xl ml-3"><AiTwotoneMessage size={20} className="mr-1"/>300</span>
-                                    </div>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="relative pt-[100%]">
+                            <div className="relative pt-[100%]">
                             <div className="absolute inset-0">
                                 <Link href={``} className="group">
                                     <img src="/images/dorji.jpg" alt="" className="object-cover"/>
@@ -75,19 +63,31 @@ const Likes: NextPageWithLayout = () => {
                                     </div>
                                 </Link>
                             </div>
-                        </div>
-                        <div className="relative pt-[100%]">
-                            <div className="absolute inset-0">
-                                <Link href={``} className="group">
-                                    <img src="/images/dorji.jpg" alt="" className="object-cover"/>
-                                    <div className="hidden group-hover:flex absolute inset-0 justify-center 
-                                        items-center bg-black/30 text-white font-bold">
-                                        <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>120K</span>
-                                        <span className="flex items-center text-xl ml-3"><AiTwotoneMessage size={20} className="mr-1"/>300</span>
-                                    </div>
-                                </Link>
                             </div>
-                        </div>
+                            <div className="relative pt-[100%]">
+                                <div className="absolute inset-0">
+                                    <Link href={``} className="group">
+                                        <img src="/images/dorji.jpg" alt="" className="object-cover"/>
+                                        <div className="hidden group-hover:flex absolute inset-0 justify-center 
+                                            items-center bg-black/30 text-white font-bold">
+                                            <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>120K</span>
+                                            <span className="flex items-center text-xl ml-3"><AiTwotoneMessage size={20} className="mr-1"/>300</span>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                            <div className="relative pt-[100%]">
+                                <div className="absolute inset-0">
+                                    <Link href={``} className="group">
+                                        <img src="/images/dorji.jpg" alt="" className="object-cover"/>
+                                        <div className="hidden group-hover:flex absolute inset-0 justify-center 
+                                            items-center bg-black/30 text-white font-bold">
+                                            <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>120K</span>
+                                            <span className="flex items-center text-xl ml-3"><AiTwotoneMessage size={20} className="mr-1"/>300</span>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     </>
                 ):(

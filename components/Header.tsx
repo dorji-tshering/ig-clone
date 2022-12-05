@@ -1,3 +1,4 @@
+// page header component
 import Image from 'next/image';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -100,7 +101,7 @@ const Header = () => {
                             </div>
                             {/* profile link */}
                             <div className="dNavWrapper">
-                                <Tooltip className="mt-[-1.5px]" style="light" content={`Profile: ${session?.user?.username}`} placement="bottom" animation="duration-1000">
+                                <Tooltip className="mt-[-1.5px]" style="light" content={`Profile @${session?.user?.username}`} placement="bottom" animation="duration-1000">
                                     <span onClick={() => router.push(`/${session?.user?.username}`)} 
                                         className="h-12 w-12 flex items-center justify-center cursor-pointer
                                         bg-transparent ml-0 hover:bg-gray-100 rounded-full group">

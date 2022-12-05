@@ -2,14 +2,14 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
-import type { NextPageWithLayout } from './_app';
-import ProfileLayout from '../components/ProfileLayout';
+import type { NextPageWithLayout } from '../_app';
+import ProfileLayout from '../../components/ProfileLayout';
 import Link from 'next/link';
 import { BsHeartFill } from 'react-icons/bs';
 import { AiTwotoneMessage, AiOutlinePlus } from 'react-icons/ai';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { uploadModalState } from '../atoms/uploadModalAtom';
-import { currentProfileState } from '../atoms/currentProfileAtom';
+import { uploadModalState } from '../../atoms/uploadModalAtom';
+import { currentProfileState } from '../../atoms/currentProfileAtom';
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter();
@@ -21,7 +21,7 @@ const Profile: NextPageWithLayout = () => {
 
     // set currentProfileState here
     useEffect(() => {
-        setCurrentProfileState(false);
+        setCurrentProfileState(true);
     }, []);
 
     // useEffect(() => {

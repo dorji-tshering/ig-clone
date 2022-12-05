@@ -8,7 +8,14 @@ type Props = {
     overflowY?: boolean
 }
 
-// overflowY param controls the overflow of the modal content
+/**
+ * Generic modal for any use cases that requires popups.
+ * @param open `boolean` controls modal open/close
+ * @param bg `string` modal background color in tailwind format
+ * @param overflowY `boolean` controls the overflow of the modal content
+ * @param onClose callback for the modal close
+ * @returns 
+ */
 const Modal = ({open, onClose, children, bg="bg-white", overflowY=true}: Props) => {
     return (
         <>

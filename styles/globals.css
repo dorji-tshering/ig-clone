@@ -24,8 +24,11 @@
 }
 
 .reactBtn {
-    @apply cursor-pointer hover:scale-125
-    transition-all duration-150 ease-out;
+    @apply cursor-pointer hover:text-gray-400 transition-all duration-150 ease-out;
+}
+
+.reactBtnIcon {
+    @apply w-8 h-8
 }
 
 .mBottomNavIcon {
@@ -38,12 +41,12 @@
 }
 
 .profileContentContainer {
-    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 
+    @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4
     gap-3 px-4
 } 
 
 .pageContent {
-    @apply mt-5 lg:mt-10 mb-10
+    @apply mt-5 lg:mt-10 mb-10 pb-10 md:pb-0
 }
 
 .wordSpace {

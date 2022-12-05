@@ -18,17 +18,18 @@ const Posts = () => {
     );
 
     return (
-        <div className={`max-w-md md:max-w-lg mx-auto ${session ? 'lg:max-w-none' : 'lg:max-w-2xl'}`}>
+        <div className={`sm:max-w-lg md:max-w-xl mx-auto ${session ? 'lg:max-w-none' : 'lg:max-w-2xl'}`}>
             {
                 posts.map((post) => (
-                    <Post 
-                        key={post.id} 
-                        id={post.id} 
-                        username={post.data().username} 
-                        avatar={post.data().profileImg}
-                        image={post.data().image}
-                        caption={post.data().caption}
-                        timeStamp={post.data().timeStamp} />
+                    <div className="mb-6" key={post.id}>
+                        <Post  
+                            id={post.id} 
+                            username={post.data().username} 
+                            avatar={post.data().profileImg}
+                            image={post.data().image}
+                            caption={post.data().caption}
+                            timeStamp={post.data().timeStamp} />
+                    </div>
                 ))
             }
         </div>

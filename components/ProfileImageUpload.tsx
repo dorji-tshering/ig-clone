@@ -1,9 +1,11 @@
 import { profileImageUploadState } from '../atoms/profileImageUploadAtom';
 import { useRecoilState } from 'recoil';
 import Modal from './Modal';
+import { useRouter } from 'next/router';
 
 const ProfileImageUpload = () => {
     const [openModal, setOpenModal] = useRecoilState(profileImageUploadState);
+    const router = useRouter();
 
     // upload photo
     const uploadPhoto = () => {

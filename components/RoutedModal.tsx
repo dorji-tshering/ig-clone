@@ -38,7 +38,6 @@ const RoutedModal = () => {
                 {
                     post && (
                         <DetailedPost 
-                            onClose={() => router.push(router.query.currentPageURL as string, undefined, {scroll: false})}
                             postID="postId"
                             onModal={true}/>
                     )
