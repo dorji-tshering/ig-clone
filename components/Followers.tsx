@@ -22,11 +22,11 @@ const Followers = ({onClose, userID, onModal=false}: Props) => {
                 </div>
                 {
                     onModal ? (
-                        <div className="h-full float-right flex items-center relative">
+                        <div className="h-full flex items-center justify-end relative">
                             <button onClick={onClose}><MdOutlineClose size={26}/></button>
                         </div>
                     ):(
-                        <div className="h-full float-left flex items-center relative">
+                        <div className="h-full flex items-center relative">
                             <button onClick={onClose}><MdKeyboardBackspace size={26}/></button>
                         </div>
                     )

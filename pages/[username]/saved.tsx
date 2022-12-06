@@ -8,10 +8,14 @@ import { AiTwotoneMessage } from 'react-icons/ai';
 import { currentProfileState } from '../../atoms/currentProfileAtom';
 import { useRecoilState } from "recoil";
 import { useRouter } from 'next/router';
+import isMobile from "../../utils/useMediaQuery";
+import { useContextualRouting } from 'next-use-contextual-routing';
 
 const Saved: NextPageWithLayout = () => {
     const [currentUserProfile ,setCurrentProfileState] = useRecoilState(currentProfileState);
-    const [savedPosts, setSavedPosts] = useState(false);
+    const [savedPosts, setSavedPosts] = useState(true);
+    const isMb = isMobile();
+    const { makeContextualHref, returnHref } = useContextualRouting();
 
     // set currentProfileState here
     //setCurrentProfileState(true);
@@ -26,7 +30,17 @@ const Saved: NextPageWithLayout = () => {
                             <div className="profileContentContainer">
                             <div className="relative pt-[100%]">
                                 <div className="absolute inset-0">
-                                    <Link href={``} className="group">
+                                    <Link href={
+                                            isMb ?
+                                            '/post/postId'
+                                            :
+                                            makeContextualHref({
+                                                routeModalId: 'post',
+                                                currentPageURL: returnHref
+                                            })
+                                        }
+                                        as={isMb ? undefined : `/post/postID`}  
+                                        className="group">
                                         <img src="/images/dorji.jpg" alt="" className="object-cover"/>
                                         <div className="hidden group-hover:flex absolute inset-0 justify-center 
                                             items-center bg-black/30 text-white font-bold">

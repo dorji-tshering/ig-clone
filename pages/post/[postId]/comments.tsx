@@ -199,10 +199,12 @@ const Comments = () => {
         <div className="pageContent">
             {/* top section */}
             <section className="relative h-[50px] px-4 border-t border-b">
-                <div className="h-full flex items-center">
-                    <button className="float-left" onClick={() => router.back()}><MdKeyboardBackspace size={26}/></button>
+                <div className="absolute inset-0 flex justify-center items-center">
+                    <h1 className="font-bold text-xl">Comments</h1>
                 </div>
-                <h1 className="absolute inset-0 flex justify-center items-center font-bold text-xl">Comments</h1>
+                <div className="h-full flex items-center relative">
+                    <button onClick={() => router.back()}><MdKeyboardBackspace size={26}/></button>
+                </div>
             </section>
             {/* comment input */}
             <section className="flex p-4 items-center bg-[#EFEEEE]">

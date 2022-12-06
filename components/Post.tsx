@@ -11,6 +11,7 @@ import { TbMessageCircle2 } from 'react-icons/tb';
 import { FiSend } from 'react-icons/fi';
 import { HiOutlineBookmark } from 'react-icons/hi';
 import { BsEmojiSmile } from 'react-icons/bs';
+import isMobile from '../utils/useMediaQuery';
 
 interface PostData {
     id: string,
@@ -32,6 +33,7 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
     const [hasLiked, setHasLiked] = useState(false);
     const { makeContextualHref, returnHref } = useContextualRouting();
     const router = useRouter();
+    const isMb = isMobile();
 
     useEffect(() => onSnapshot(query(collection(db, 'posts', id, 'comments'), orderBy('timeStamp', 'desc')), 
         snapShot => setComments(snapShot.docs)
@@ -114,10 +116,14 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         <span 
                             className="reactBtn"
                             onClick={() => {
-                                router.push(makeContextualHref({
-                                    routeModalId: 'post',
-                                    currentPageURL: returnHref
-                                }),`/post/postID`, {scroll: false})
+                                isMb ? 
+                                    router.push(`/post/${'posID'}/comments`)
+                                :
+                                    router.push(makeContextualHref({
+                                        routeModalId: 'post',
+                                        currentPageURL: returnHref
+                                    }),`/post/postID`, {scroll: false})
+                                
                             }}>
                             <TbMessageCircle2 className="reactBtnIcon"/>
                         </span>

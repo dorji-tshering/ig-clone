@@ -9,12 +9,14 @@ import { currentProfileState } from '../../atoms/currentProfileAtom';
 import { useRecoilState } from "recoil";
 import { useSession } from 'next-auth/react';
 import { useContextualRouting } from 'next-use-contextual-routing';
+import isMobile from "../../utils/useMediaQuery";
 
 const Likes: NextPageWithLayout = () => {
     const [currentUserProfile ,setCurrentProfileState] = useRecoilState(currentProfileState);
     const [likedPosts, setLikedPosts] = useState(true);
     const {data: session}: any = useSession();
     const { makeContextualHref, returnHref } = useContextualRouting();
+    const isMb = isMobile();
 
     // set currentProfileState here
     //setCurrentProfileState(true);
@@ -37,11 +39,16 @@ const Likes: NextPageWithLayout = () => {
                             <div className="relative pt-[100%]">
                                 <div className="absolute inset-0">
                                     <Link 
-                                        href={makeContextualHref({
-                                            routeModalId: 'post',
-                                            currentPageURL: returnHref
-                                        })}
-                                        as={`/post/postID`}
+                                        href={
+                                            isMb ?
+                                            '/post/postId'
+                                            :
+                                            makeContextualHref({
+                                                routeModalId: 'post',
+                                                currentPageURL: returnHref
+                                            })
+                                        }
+                                        as={isMb ? undefined : `/post/postID`} 
                                         className="group">
                                         <img src="/images/dorji.jpg" alt="" className="object-cover"/>
                                         <div className="hidden group-hover:flex absolute inset-0 justify-center 

@@ -11,7 +11,6 @@ const PostPage = () => {
     console.log(isMb);
 
     return (
-        // text-center to align the direct child centrally which has display inline-block containing a direct child with display flex
         <div className="pageContent px-5">
             {
                 isMb ? (

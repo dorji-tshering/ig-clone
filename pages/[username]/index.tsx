@@ -1,4 +1,4 @@
-// default profile posts component
+// default profile page with post content
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
@@ -10,11 +10,15 @@ import { AiTwotoneMessage, AiOutlinePlus } from 'react-icons/ai';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { uploadModalState } from '../../atoms/uploadModalAtom';
 import { currentProfileState } from '../../atoms/currentProfileAtom';
+import isMobile from "../../utils/useMediaQuery";
+import { useContextualRouting } from 'next-use-contextual-routing';
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter();
     const {data: session}: any = useSession();
-    const [posts, setPosts] = useState(false);
+    const [posts, setPosts] = useState(true);
+    const isMb = isMobile();
+    const { makeContextualHref, returnHref } = useContextualRouting();
 
     const openUploadModal = useSetRecoilState(uploadModalState);
     const [currentUserProfile ,setCurrentProfileState] = useRecoilState(currentProfileState);
@@ -59,7 +63,17 @@ const Profile: NextPageWithLayout = () => {
                         <div className="profileContentContainer">
                             <div className="relative pt-[100%]">
                                 <div className="absolute inset-0">
-                                    <Link href={``} className="group">
+                                    <Link href={
+                                            isMb ?
+                                            '/post/postId'
+                                            :
+                                            makeContextualHref({
+                                                routeModalId: 'post',
+                                                currentPageURL: returnHref
+                                            })
+                                        }
+                                        as={isMb ? undefined : `/post/postID`} 
+                                        className="group">
                                         <img src="/images/dorji.jpg" alt="" className="object-cover"/>
                                         <div className="hidden group-hover:flex absolute inset-0 justify-center 
                                             items-center bg-black/30 text-white font-bold">
