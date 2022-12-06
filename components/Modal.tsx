@@ -17,6 +17,7 @@ type Props = {
  * @returns 
  */
 const Modal = ({open, onClose, children, bg="bg-white", overflowY=true}: Props) => {
+    
     return (
         <>
             <Dialog 

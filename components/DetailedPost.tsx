@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import classNames from 'classnames';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { FiSend } from 'react-icons/fi';
@@ -13,7 +13,8 @@ import { TbMessageCircle2 } from 'react-icons/tb';
 import PostComment from './PostComment';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { postOptionsModalState } from '../atoms/postOptionsAtom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { onModalState } from '../atoms/onModalAtom';
 
 type Props = {
     postID: string,
@@ -213,6 +214,15 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
     const hasLiked = true;
     const router = useRouter();
 
+    useEffect(() => {
+        onModal && setOnRoutedModal(true)
+        return () => {
+            if(onModal) setOnRoutedModal(false)
+        }
+    },[])
+
+    const setOnRoutedModal = useSetRecoilState (onModalState);
+ 
     const follow = () => {
         // follow other user
     }

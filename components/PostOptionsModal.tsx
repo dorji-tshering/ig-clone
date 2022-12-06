@@ -1,12 +1,12 @@
 import Modal from "./Modal";
 import { postOptionsModalState } from '../atoms/postOptionsAtom';
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useRouter } from 'next/router';
 import { onModalState } from '../atoms/onModalAtom';
 
 const PostOptionsModal = () => {
     const [postId, setPostIdForOptions] = useRecoilState(postOptionsModalState);
-    const [onModal, setOnModal] = useRecoilState(onModalState);
+    const onRoutedModal = useRecoilValue(onModalState);
     const router = useRouter();
     const myPost = false;
 
@@ -24,19 +24,18 @@ const PostOptionsModal = () => {
                     </button>
                 }
                 {
-                    (onModal || router.query.postId === undefined) &&
+                    (onRoutedModal || router.query.postId === undefined) &&
                     <button 
                         onClick={() => {
                             router.push(`/post/${postId}`, undefined, {scroll: false})
                             setPostIdForOptions(null)
-                            onModal && setOnModal(false)
                         }} 
                         className="py-4 border-b font-[500]">
                         Go to post
                     </button>
                 }
                 <button 
-                    onClick={() => navigator.clipboard.writeText(window.location.toString())}
+                    onClick={() => navigator.clipboard.writeText(window.location.hostname + `/post/${postId}`)}
                     className="py-4 border-b font-[500]">Copy link</button>
                 <button 
                     onClick={() => setPostIdForOptions(null)} 
