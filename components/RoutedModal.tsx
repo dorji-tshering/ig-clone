@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 import Followers from "./Followers";
 import Following from './Following';
 import DetailedPost from './DetailedPost';
+import { onModalState } from '../atoms/onModalAtom';
+import { useSetRecoilState } from "recoil";
+import { useEffect } from "react";
 
 const RoutedModal = () => {
     const router = useRouter();
@@ -11,11 +14,20 @@ const RoutedModal = () => {
     const followers = modalName === 'followers';
     const following = modalName === 'following';
     const post = modalName === 'post';
+    const setOnModalState = useSetRecoilState(onModalState);
+
+    // set onModal state to true
+    useEffect(() => {
+        setOnModalState(true);
+    },[])
 
     return (
         <Modal
             open={!!router.query.routeModalId}
-            onClose={() => router.push(router.query.currentPageURL as string, undefined, {scroll: false})}
+            onClose={() => {
+                router.push(router.query.currentPageURL as string, undefined, {scroll: false})
+                setOnModalState(false)
+            }}
             bg={post ? 'bg-transparent':'bg-white'}
             overflowY={post ? false : true}>
             <>

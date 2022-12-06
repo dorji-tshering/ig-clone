@@ -1,5 +1,8 @@
-// a post component to show when user clicks a post comment icon/view comments
+/**
+ * Post component used by post page and routedModal on desktop  
+ */ 
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import classNames from 'classnames';
 import { FormEvent, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
@@ -9,6 +12,8 @@ import { HiOutlineBookmark } from 'react-icons/hi';
 import { TbMessageCircle2 } from 'react-icons/tb';
 import PostComment from './PostComment';
 import { BsEmojiSmile } from 'react-icons/bs';
+import { postOptionsModalState } from '../atoms/postOptionsAtom';
+import { useSetRecoilState } from 'recoil';
 
 type Props = {
     postID: string,
@@ -202,9 +207,11 @@ const comments = [
  * Single post component for device-width > 768px. Used by `RoutedModal` component and `/post/[postID]` path.
  */
 const DetailedPost = ({postID, onModal=false}: Props) => {
-    const [comment, setComment] = useState<string | undefined>();
+    const [comment, setComment] = useState<string>('');
+    const openPostIdForOptions = useSetRecoilState(postOptionsModalState);
     const follows = false;
     const hasLiked = true;
+    const router = useRouter();
 
     const follow = () => {
         // follow other user
@@ -261,7 +268,10 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                                 </div>
                             </div>
                             <div className="flex items-center">
-                                <button><BiDotsHorizontalRounded size={26}/></button>
+                                <button onClick={() => {
+                                    openPostIdForOptions(postID)
+                                    }}><BiDotsHorizontalRounded size={26}/>
+                                </button>
                             </div>
                         </section>
 
@@ -335,7 +345,7 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                                     name="comment" 
                                     placeholder="Add a comment..."
                                     id="comment"
-                                    value={comment as string}
+                                    value={comment}
                                     autoComplete="off"
                                     onChange={(e) => setComment(e.target.value)} />
                                 <button 

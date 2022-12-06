@@ -12,6 +12,9 @@ import { FiSend } from 'react-icons/fi';
 import { HiOutlineBookmark } from 'react-icons/hi';
 import { BsEmojiSmile } from 'react-icons/bs';
 import isMobile from '../utils/useMediaQuery';
+import { BiDotsHorizontalRounded } from 'react-icons/bi';
+import { postOptionsModalState } from '../atoms/postOptionsAtom';
+import { useSetRecoilState } from "recoil";
 
 interface PostData {
     id: string,
@@ -27,13 +30,14 @@ interface PostData {
  */
 const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) => {
     const {data: session}: any = useSession();
-    const [comment, setComment] = useState<string>();
+    const [comment, setComment] = useState<string>('');
     const [comments, setComments] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
     const [likes, setLikes] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
     const [hasLiked, setHasLiked] = useState(false);
     const { makeContextualHref, returnHref } = useContextualRouting();
     const router = useRouter();
     const isMb = isMobile();
+    const setPostIdForOptions = useSetRecoilState(postOptionsModalState);
 
     useEffect(() => onSnapshot(query(collection(db, 'posts', id, 'comments'), orderBy('timeStamp', 'desc')), 
         snapShot => setComments(snapShot.docs)
@@ -75,7 +79,7 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
     }
 
     return (
-        <div className="bg-white border rounded-md shadow-sm">
+        <div className={`bg-white ${!router.query.postId && 'border rounded-md shadow-sm'}`}>
             {/* Header */}
             <div className="flex items-center p-2 md:p-3">
                 <img 
@@ -83,11 +87,9 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                     src={avatar} 
                     alt="user-avatar" />
                 <p className="flex-1 font-bold">{ username }</p>
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                    </svg>
-                </span>
+                <button onClick={() => setPostIdForOptions(id)}>
+                    <BiDotsHorizontalRounded className="h-8 w-8"/>
+                </button>
             </div>
 
             {/* Post image */}

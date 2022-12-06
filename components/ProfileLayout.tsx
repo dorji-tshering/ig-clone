@@ -23,6 +23,7 @@ const ProfileLayout = ({ children }: Props) => {
 
     const profileImage = true;
 
+    // profile image upload for the logged in user
     const uploadProfileImage = async () => {
         if(profileImage) {
             openProfileUploadModal(true);
@@ -69,10 +70,16 @@ const ProfileLayout = ({ children }: Props) => {
                             <h1 className="text-2xl sm:text-3xl mb-3 sm:mb-0 sm:mr-6">{session?.user?.username}</h1>
                             {
                                 currentUserProfile ? (
-                                    <Link 
-                                        className="text-lg xs:w-[200px] text-center sm:w-auto py-1 px-3 font-[600] border border-solid border-gray-200 rounded-md" 
-                                        href="/account/edit" >Edit profile
-                                    </Link>
+                                    <div className="flex flex-col xs:flex-row">
+                                        <Link 
+                                            className="text-lg text-center py-1 px-3 font-[600] border border-solid 
+                                            border-gray-200 rounded-md mr-8" 
+                                            href="/account/edit" >Edit profile
+                                        </Link>
+                                        <button 
+                                            onClick={() => 'logout'}
+                                            className="font-bold text-instaBlue mt-3 xs:mt-0 w-fit">Logout</button>
+                                    </div>   
                                 ):(
                                     <div>
                                         <button className="py-1 px-4 font-[600] bg-instaBlue text-white rounded-md
