@@ -184,7 +184,7 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         onChange={(e) => setComment(e.target.value)} />
                     <button 
                         disabled={!comment?.trim()}
-                        className="font-semibold text-instaBlue" 
+                        className="font-semibold text-instaBlue disabled:text-instaBlue/50" 
                         type="submit">Post</button>
                 </form>
             </section>

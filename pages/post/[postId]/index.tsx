@@ -1,8 +1,8 @@
 // single post page
-import DetailedPost from '../../components/DetailedPost';
-import Post from '../../components/Post';
+import DetailedPost from '../../../components/DetailedPost';
+import Post from '../../../components/Post';
 import { useRouter } from 'next/router';
-import isMobile from '../../utils/useMediaQuery';
+import isMobile from '../../../utils/useMediaQuery';
 
 const PostPage = () => {
     const router = useRouter();
