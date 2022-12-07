@@ -15,6 +15,7 @@ import isMobile from '../utils/useMediaQuery';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { postOptionsModalState } from '../atoms/postOptionsAtom';
 import { useSetRecoilState } from "recoil";
+import Link from "next/link";
 
 interface PostData {
     id: string,
@@ -82,11 +83,14 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
         <div className={`bg-white ${!router.query.postId && 'border rounded-md shadow-sm'}`}>
             {/* Header */}
             <div className="flex items-center p-2 md:p-3">
-                <img 
-                    className="rounded-full h-10 w-10 object-contain p-1 mr-3 border" 
-                    src={avatar} 
-                    alt="user-avatar" />
-                <p className="flex-1 font-bold">{ username }</p>
+                <Link href="/username">
+                    <img 
+                        className="rounded-full h-10 w-10 object-contain p-1 mr-3 border" 
+                        src={avatar} 
+                        alt="user-avatar"
+                    />
+                </Link>
+                <Link href='/username' className="flex-1 font-bold">{ username }</Link>
                 <button onClick={() => setPostIdForOptions(id)}>
                     <BiDotsHorizontalRounded className="h-8 w-8"/>
                 </button>
@@ -105,17 +109,17 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         {/* like button */}
                         {
                             hasLiked ? (
-                                <span onClick={() => postLike()} className="reactBtn">
+                                <button onClick={() => postLike()} className="reactBtn">
                                     <AiFillHeart className="reactBtnIcon text-[#FF69B4]"/>
-                                </span>
+                                </button>
                             ) : (
-                                <span onClick={() => postLike()} className="reactBtn">
+                                <button onClick={() => postLike()} className="reactBtn">
                                     <AiOutlineHeart className="reactBtnIcon"/>
-                                </span>
+                                </button>
                             )
                         }
                         {/* comment button */}
-                        <span 
+                        <button 
                             className="reactBtn"
                             onClick={() => {
                                 isMb ? 
@@ -128,16 +132,16 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                                 
                             }}>
                             <TbMessageCircle2 className="reactBtnIcon"/>
-                        </span>
+                        </button>
                         {/* share button */}
-                        <span className="reactBtn">
+                        <button className="reactBtn">
                             <FiSend className="w-7 h-7 rotate-[18deg]"/>
-                        </span>
+                        </button>
                     </div>
                     {/* save button */}
-                    <span className="reactBtn">
+                    <button className="reactBtn">
                         <HiOutlineBookmark className="reactBtnIcon"/>                  
-                    </span>
+                    </button>
                 </div>
 
                 {/* Caption, likes and comments */}

@@ -35,7 +35,9 @@ const PostOptionsModal = () => {
                     </button>
                 }
                 <button 
-                    onClick={() => navigator.clipboard.writeText(window.location.hostname + `/post/${postId}`)}
+                    onClick={() => navigator.clipboard.writeText(
+                        window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + `/post/${postId}`
+                    )}
                     className="py-4 border-b font-[500]">Copy link</button>
                 <button 
                     onClick={() => setPostIdForOptions(null)} 

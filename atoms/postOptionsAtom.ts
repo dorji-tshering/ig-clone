@@ -6,4 +6,5 @@ import { atom } from 'recoil';
 export const postOptionsModalState = atom<string | null>({
     key: 'PostOptionsModalState',
     default: null
+    
 });

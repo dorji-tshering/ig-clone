@@ -11,17 +11,20 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { BsPeople } from 'react-icons/bs';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { TbSearch } from 'react-icons/tb';
+import { useState } from 'react';
+import InstantSearch from './InstantSearch';
 
 const Header = () => {
     const {data: session}: any = useSession();
+    const [searchText, setSearchText] = useState<string | null>(null);
     const router = useRouter();     
     const openUploadModal = useSetRecoilState(uploadModalState);
 
     return (
        <div className="shadow-sm border-b bg-white sticky top-0 z-50 h-[54px]">
-             <div className="flex justify-between h-full mx-6 md:max-w-4xl lg:max-w-6xl md:mx-auto">
+             <div className="flex justify-between h-full items-center mx-6 md:max-w-4xl lg:max-w-6xl md:mx-auto">
                 {/* Header left */}
-                <div className="relative w-[100px] cursor-pointer" onClick={() => router.push('/')}>
+                <div className="relative w-[100px] h-full cursor-pointer" onClick={() => router.push('/')}>
                     <Image 
                         src="/images/instagram-logo.png"
                         alt="instagram-logo"
@@ -31,20 +34,17 @@ const Header = () => {
                         sizes="150px"
                     />
                 </div>
-                {/* Header middle */}
-                <div className="relative hidden self-center md:block h-[35px] rounded-md max-w-xs">
-                    <div className="absolute inset-y-0 flex pl-3 items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" 
-                            className="w-5 h-5 text-gray-500">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                        </svg>
+                {/* Header middle/search input */}
+                <div className="relative hidden md:block h-[35px] min-w-[200px]
+                    transition-all ease-in-out duration-100 ml-6 mr-auto 
+                    focus-within:flex-1">
+                    <div className="focus-within:shadow-searchShadow rounded-md overflow-hidden">
+                        <InstantSearch/>
                     </div>
-                    <input className="bg-gray-50 block h-full w-full pl-10 text-sm rounded-md border-gray-300 focus:ring-black focus:border-black" 
-                        type="text" placeholder="Search" />
                 </div>
 
                 {/* Header right */}
-                <div className="flex items-center justify-end space-x-4">
+                <div className="flex md:ml-5 items-center justify-end space-x-4">
                     {/* home icon */}
                     <div className="dNavWrapper">
                         <Tooltip className="mt-[2px]" style="light" content="Home" placement="bottom" animation="duration-1000">
@@ -56,13 +56,13 @@ const Header = () => {
                     { session ? 
                         <>
                             {/* mobile search icon */}
-                            <span className="md:hidden">
+                            <button onClick={() => router.push('/search')} className="md:hidden">
                                 <TbSearch className="w-8 h-8"/>
-                            </span>
+                            </button>
                             {/* mobile notification icon */}
-                            <span className="md:hidden">
+                            <button className="md:hidden">
                                 <IoMdNotificationsOutline className="w-9 h-9"/>
-                            </span>
+                            </button>
                             {/* message icon */}
                             <div className="dNavWrapper">
                                 <Tooltip className="mt-[2px]" style="light" content="Messages" placement="bottom" animation="duration-1000">
