@@ -106,7 +106,7 @@ const ImageUpload = ({ setEditorOpen, setCaptionModalOpen, setOpenModal, editedF
                             rows={5}
                             maxLength={1000}
                         />
-                        <div className="text-right text-xs text-gray-400 mb-5">{caption ? caption.length : 0}/1000</div>
+                        <div className="text-center text-xs text-gray-400 mb-5">{caption ? caption.length : 0}/1000</div>
                     </div>
                 </section>
             </div>

@@ -2,7 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-
 .mNavBtn {
     @apply h-7 md:hidden 
     cursor-pointer;
@@ -61,16 +60,8 @@
     @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 overflow-y-scroll
 }
 
-.imageEditor *, .SfxModal-Wrapper * {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-}
-
 :root {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 13px;
     color: #333;
 }
-
-
-    
-

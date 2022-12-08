@@ -1,12 +1,7 @@
-import { Alert, Modal } from 'flowbite-react';
-import dynamic from 'next/dynamic';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { MdOutlineArrowBack } from 'react-icons/md';
 import PostDiscardAlert from './PostDiscardAlert';
-
-const FilerobotImageEditor = dynamic(() => import('react-filerobot-image-editor'), {ssr: false});
-const TABS = dynamic(() => import('react-filerobot-image-editor').then(module => module.TABS as any), {ssr: false}) as any;
-const TOOLS = dynamic(() => import('react-filerobot-image-editor').then(module => module.TOOLS as any), {ssr: false}) as any;
+import * as htmlToImage from 'html-to-image';
 
 type Props = {
     setFileSelectOpen: Dispatch<SetStateAction<boolean>>;
@@ -20,6 +15,14 @@ type Props = {
     captionModalOpen: boolean
 }
 
+const imageFilters = [
+    '_1977', 'brannan', 'brooklyn', 'clarendon',
+    'earlybird', 'gingham', 'hudson', 'inkwell', 'kelvin', 
+    'lark', 'lofi', 'Maven', 'mayfair', 'moon', 'nashville', 'perpetua',
+    'reyes', 'rise', 'slumber', 'stinson', 'toaster', 'valencia',
+    'walden', 'willow', 'xpro2'
+]
+
 const ImageEditor = ({ 
         setFileSelectOpen, 
         setEditorOpen, 
@@ -31,14 +34,15 @@ const ImageEditor = ({
         editorOpen, 
         captionModalOpen }: Props) => {
     const [alertChanges, setAlertChanges] = useState(false);
-
-    const saveEditedImage = (editedImage: any) => {
-        setEditedFile(editedImage.imageBase64);
-    }
+    const [filter, setFilter] = useState('');
+    const mainImageRef = useRef<HTMLImageElement | null>(null)
 
     const onNext = () => {
-        setEditorOpen(false); 
-        setCaptionModalOpen(true);
+        htmlToImage.toPng(mainImageRef.current!).then(dataURl => {
+            setEditedFile(dataURl)
+            setEditorOpen(false); 
+            setCaptionModalOpen(true);
+        })
     }
 
     const onBack = () => {
@@ -48,7 +52,7 @@ const ImageEditor = ({
             setEditorOpen(false); 
             setFileSelectOpen(true);
             setSelectedFile(null);
-        }
+        } 
     }
 
     const discard = () => {
@@ -77,63 +81,24 @@ const ImageEditor = ({
                 <h1 className="text-lg font-bold">Edit</h1>
                 <button className="text-instaBlue font-bold pr-2" onClick={() => onNext()}>Next</button>
             </header>
-            <div className="imageEditor">
-                <FilerobotImageEditor 
-                    source={editedFile ?? selectedFile}
-                    onSave={(editedImageObject: any) => {    
-                        saveEditedImage(editedImageObject)
-                    }}
-                    
-                    Text={{ text: 'Filerobot...' }}
-                    Rotate={{ angle: 90, componentType: 'slider' }}
-                    Crop={{
-                        presetsItems: [
-                        {
-                            titleKey: 'classicTv',
-                            descriptionKey: '4:3',
-                            ratio: (4 / 3).toString(),
-                            // icon: CropClassicTv, // optional, CropClassicTv is a React Function component. Possible (React Function component, string or HTML Element)
-                        },
-                        {
-                            titleKey: 'cinemascope',
-                            descriptionKey: '21:9',
-                            ratio: (21 / 9).toString(),
-                            // icon: CropCinemaScope, // optional, CropCinemaScope is a React Function component.  Possible (React Function component, string or HTML Element)
-                        },
-                        ],
-                        presetsFolders: [
-                            {
-                                titleKey: 'socialMedia', // will be translated into Social Media as backend contains this translation key
-                                // icon: Social, // optional, Social is a React Function component. Possible (React Function component, string or HTML Element)
-                                groups: [
-                                    {
-                                        titleKey: 'facebook',
-                                        items: [
-                                            {
-                                                titleKey: 'profile',
-                                                width: 180,
-                                                height: 180,
-                                                descriptionKey: 'fbProfileSize',
-                                            },
-                                            {
-                                            titleKey: 'coverPhoto',
-                                            width: 820,
-                                            height: 312,
-                                            descriptionKey: 'fbCoverPhotoSize',
-                                        },
-                                        ],
-                                    },
-                                ],
-                            },
-                        ],
-                    }}
-                    tabsIds={[TABS.ADJUST,TABS.FILTERS, TABS.FINETUNE, TABS.RESIZE]}
-                    defaultTabId={TABS.ADJUST}
-                    defaultToolId={TOOLS.TEXT}
-                    savingPixelRatio={4}
-                    previewPixelRatio={window.devicePixelRatio}
-                />
-                <p className="my-6 text-center text-sm text-gray-500 font-[500]">Save image after changes</p>
+            <div className="flex flex-col md:flex-row">
+                <figure ref={mainImageRef} className={`mx-auto md:max-h-[550px] md:basis-2/3 ${filter}`}>
+                        <img src={editedFile || selectedFile} className='h-full max-h-[400px] md:max-h-fit object-cover relative' alt="post image" />
+                </figure>
+                <div className='md:basis-1/3 my-5 md:my-0 md:h-auto mx-2 md:mx-0 md:mt-0 flex md:grid md:grid-cols-2 
+                    md:max-h-[550px] md:overflow-y-auto overflow-x-auto scrollbar-none'>
+                    <figure onClick={() => setFilter('')} className='min-w-[75px] sm:min-w-[90px] md:min-w-[auto]'>
+                        <img src={editedFile || selectedFile} className=' md:h-full object-cover' alt="original image" />
+                    </figure>
+                    {
+                        imageFilters.map((filter, idx) => (
+                            <figure key={idx} onClick={() => setFilter(filter)} 
+                                className={filter + ' min-w-[75px] sm:min-w-[90px] md:min-w-[auto]'}>
+                                <img src={editedFile || selectedFile} className='md:h-full object-cover relative' alt={`filter ${filter}`} />
+                            </figure>
+                        ))
+                    }
+                </div>
             </div>
         </div>
     )
