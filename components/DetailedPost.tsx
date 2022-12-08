@@ -13,8 +13,9 @@ import { TbMessageCircle2 } from 'react-icons/tb';
 import PostComment from './PostComment';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { postOptionsModalState } from '../atoms/postOptionsAtom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { onModalState } from '../atoms/onModalAtom';
+import EmojiPicker from './EmojiPicker';
 
 type Props = {
     postID: string,
@@ -210,18 +211,19 @@ const comments = [
 const DetailedPost = ({postID, onModal=false}: Props) => {
     const [comment, setComment] = useState<string>('');
     const openPostIdForOptions = useSetRecoilState(postOptionsModalState);
+    const [showPicker,setShowPicker] = useState(false);
     const follows = false;
     const hasLiked = true;
     const router = useRouter();
+    const setOnRoutedModal = useSetRecoilState (onModalState);
 
+    // update whether the post is on routed modal or not
     useEffect(() => {
         onModal && setOnRoutedModal(true)
         return () => {
             if(onModal) setOnRoutedModal(false)
         }
     },[])
-
-    const setOnRoutedModal = useSetRecoilState (onModalState);
  
     const follow = () => {
         // follow other user
@@ -237,7 +239,6 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
     }
 
     return (
-        
         <div className="text-center">
             <div className={classNames(
                 'rounded-md overflow-hidden inline-block text-left',
@@ -254,9 +255,21 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                     </div>
                     {/* right/bottom section */}
                     <div className={classNames(
-                        'bg-white flex flex-col scrollbar-none w-auto',
+                        'bg-white flex flex-col scrollbar-none w-auto relative',
                         !onModal && 'max-w-[350px]', onModal && 'max-w-[400px]'
                     )}>
+                        <div id="emojiPicker">
+                            {
+                                showPicker && (
+                                    <EmojiPicker
+                                        onClose={() => setShowPicker(false)}
+                                        onSelect={(emoji) => setComment(prevComment => prevComment + emoji.native)}
+                                        bottom='bottom-[60px]'
+                                        customStyles='right-0 left-0 w-fit mx-auto'
+                                    />
+                                )
+                            }
+                        </div>
                         {/* top section */}
                         <section className="flex justify-between items-center p-5 border-b">
                             <div className="flex items-center">
@@ -345,9 +358,9 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                             </div>
                             {/* comment input */}
                             <form className="flex items-center border-t py-3 px-5" onSubmit={(e) => postComment(e)}>
-                                <span>
+                                <button type='button' onClick={() => setShowPicker(true)}>
                                     <BsEmojiSmile className="w-6 h-6"/>
-                                </span>
+                                </button>
                                 <input 
                                     className="flex-1 text-[100%] focus:ring-0 border-none outline-none 
                                         placeholder:font-[600] placeholder:text-gray-400" 

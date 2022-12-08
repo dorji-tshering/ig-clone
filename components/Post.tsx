@@ -1,5 +1,7 @@
 import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import EmojiPicker from "./EmojiPicker";
+import { Emoji } from 'emoji-mart'
 import { addDoc, collection, serverTimestamp, onSnapshot, 
         query, orderBy, DocumentData, QueryDocumentSnapshot, setDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from "../firebase";
@@ -30,24 +32,28 @@ interface PostData {
  * Post component used in the `index/home page` composing the feeds and in the `single post page` for mobile devices.
  */
 const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) => {
-    const {data: session}: any = useSession();
-    const [comment, setComment] = useState<string>('');
-    const [comments, setComments] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
-    const [likes, setLikes] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
-    const [hasLiked, setHasLiked] = useState(false);
-    const { makeContextualHref, returnHref } = useContextualRouting();
-    const router = useRouter();
-    const isMb = isMobile();
-    const setPostIdForOptions = useSetRecoilState(postOptionsModalState);
+    const [showPicker, setShowPicker] = useState(false)
+    const {data: session}: any = useSession()
+    const [comment, setComment] = useState<string>('')
+    const [comments, setComments] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
+    const [likes, setLikes] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
+    const [hasLiked, setHasLiked] = useState(false)
+    const { makeContextualHref, returnHref } = useContextualRouting()
+    const router = useRouter()
+    const isMb = isMobile()
+    const setPostIdForOptions = useSetRecoilState(postOptionsModalState)
 
+    // update comments
     useEffect(() => onSnapshot(query(collection(db, 'posts', id, 'comments'), orderBy('timeStamp', 'desc')), 
         snapShot => setComments(snapShot.docs)
     ), [db, id]);
 
+    // update likes
     useEffect(() => onSnapshot(collection(db, 'posts', id, 'likes'), snapshot => (
         setLikes(snapshot.docs)
     )), [db, id]);
 
+    // update hasLiked
     useEffect(() => {
         setHasLiked(
             likes.findIndex(
@@ -80,7 +86,16 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
     }
 
     return (
-        <div className={`bg-white ${!router.query.postId && 'border rounded-md shadow-sm'}`}>
+        <div className={`bg-white ${!router.query.postId && 'border rounded-md shadow-sm'} relative`}>
+            {/* show emoji picker */}
+            {
+                showPicker && (
+                    <EmojiPicker 
+                        onClose={() => setShowPicker(false)}
+                        onSelect={(emoji) => setComment(prevComment => prevComment + emoji.native)}
+                        />
+                )
+            }
             {/* Header */}
             <div className="flex items-center p-2 md:p-3">
                 <Link href="/username">
@@ -154,11 +169,10 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         )
                     )}
                     <p className="mb-2">
-                        <span className="font-bold mr-1 truncate">{username}</span>{caption}
+                        <Link href="/href" className="font-bold mr-1 truncate">{username}</Link>{caption}
                     </p>
                     <p className="text-gray-500 mb-2">View all 120K comments</p>
                 </div>
-
                 {/* Comments */}
                 {/* {comments.length > 0 && 
                     <div className="px-5 max-h-20 overflow-y-scroll scrollbar-thumb-black scrollbar-thin">
@@ -180,13 +194,14 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                 <p className="px-5 mb-5 md:mb-4 wordSpace block uppercase text-[10px] font-[500] text-gray-400">5 DAYS AGO</p>
                 
                 {/* Input box */}
-                <form className="hidden border-t py-2 md:flex items-center px-5" onSubmit={(e) => postComment(e)}>
-                    <span>
+                <form className="hidden border-t py-2 md:flex items-center px-5" 
+                    onSubmit={(e) => postComment(e)}>
+                    <button type='button' onClick={() => setShowPicker(true)}>
                         <BsEmojiSmile className="w-6 h-6"/>
-                    </span>
+                    </button>
                     <input 
                         className="flex-1 text-[100%] focus:ring-0 border-none outline-none
-                            placeholder:font-[600] placeholder:text-gray-400" 
+                            placeholder:font-[600] placeholder:text-gray-400"
                         type="text" 
                         name="comment" 
                         placeholder="Add a comment..."

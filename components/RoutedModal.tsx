@@ -4,16 +4,16 @@ import { useRouter } from 'next/router';
 import Followers from "./Followers";
 import Following from './Following';
 import DetailedPost from './DetailedPost';
-import { onModalState } from '../atoms/onModalAtom';
-import { useSetRecoilState } from "recoil";
+import { useState } from "react";
 
 const RoutedModal = () => {
-    const router = useRouter();
-    const modalName = router.query.routeModalId as string;
-    const followers = modalName === 'followers';
-    const following = modalName === 'following';
-    const post = modalName === 'post';
-    
+    const router = useRouter()
+    const modalName = router.query.routeModalId as string
+    const followers = modalName === 'followers'
+    const following = modalName === 'following'
+    const post = modalName === 'post'
+    const [emojiClicked, setEmojiClicked] = useState(false)
+
     return (
         <Modal
             open={!!router.query.routeModalId}

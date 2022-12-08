@@ -9,7 +9,7 @@ import { JSXElementConstructor, ReactElement, useEffect, useState } from 'react'
 import { NextPage } from 'next';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-    getLayout?: (page: ReactElement<any, string | JSXElementConstructor<any>>) => ReactElement<any, string | JSXElementConstructor<any>>
+    getLayout: (page: ReactElement<any, string | JSXElementConstructor<any>>) => ReactElement<any, string | JSXElementConstructor<any>>
 }
 
 type AppPropsWithLayout = AppProps & {

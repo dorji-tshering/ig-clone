@@ -35,13 +35,17 @@ const Header = () => {
                     />
                 </div>
                 {/* Header middle/search input */}
-                <div className="relative hidden md:block h-[35px] min-w-[200px]
-                    transition-all ease-in-out duration-100 ml-6 mr-auto 
-                    focus-within:flex-1">
-                    <div className="focus-within:shadow-searchShadow rounded-md overflow-hidden">
-                        <InstantSearch/>
-                    </div>
-                </div>
+                {
+                    router.pathname !== '/search' && (
+                        <div className="relative hidden md:block h-[35px] min-w-[200px]
+                            transition-all ease-in-out duration-100 ml-6 mr-auto 
+                            focus-within:flex-1">
+                            <div className="focus-within:shadow-searchShadow rounded-md overflow-hidden">
+                                <InstantSearch/>
+                            </div>
+                        </div>
+                    )
+                }
 
                 {/* Header right */}
                 <div className="flex md:ml-5 items-center justify-end space-x-4">
