@@ -54,7 +54,10 @@ const NewMessageModal = () => {
                         <h1 className='text-lg font-bold'>New message</h1>
                     </div>
                     <div className='float-right h-full flex items-center relative'>
-                        <button onClick={() => router.push('/direct/t/chatId')} className='font-bold text-instaBlue'>Next</button>
+                        <button onClick={() => {
+                            setOpen(false)
+                            router.push('/direct/t/chatId')
+                        }} className='font-bold text-instaBlue'>Next</button>
                     </div>
                 </div>
                 {/* search section */}
