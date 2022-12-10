@@ -13,7 +13,7 @@ const EmojiPicker = ({onClose, onSelect, bottom='bottom-[50px]', customStyles}: 
     return (
         <>
             <div onClick={onClose} className="fixed inset-0 z-[100]"></div>
-            <div className={`absolute ${bottom} z-[110] ${customStyles} shadow-lg rounded-[10px]`}>
+            <div className={`absolute ${bottom} z-[110] ${customStyles} shadow-searchShadow rounded-[10px]`}>
                 <Picker 
                     theme='auto' 
                     onClick={(e:any) => e.stopPropagation()} 
@@ -21,7 +21,8 @@ const EmojiPicker = ({onClose, onSelect, bottom='bottom-[50px]', customStyles}: 
                     onEmojiSelect={onSelect}
                     navPosition='bottom'
                     previewPosition='none'
-                    maxFrequentRows={2} />
+                    maxFrequentRows={2}
+                    perLine={8} />
             </div> 
         </>
     )

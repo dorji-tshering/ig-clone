@@ -172,6 +172,11 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         <Link href="/href" className="font-bold mr-1 truncate">{username}</Link>{caption}
                     </p>
                     <p className="text-gray-500 mb-2">View all 120K comments</p>
+                    {/* current user comments */}
+                    <p className='mb-3'>
+                        <span className='font-bold mr-2'>dorji_dev</span>
+                        <span>A simple, accessible foundation for building custom UIs that show and hide content, like togglable accordion panels.</span>
+                    </p>
                 </div>
                 {/* Comments */}
                 {/* {comments.length > 0 && 

@@ -5,12 +5,14 @@ import PostUploadModal from "./PostUploadModal";
 import ProfileImageUpload from "./ProfileImageUpload";
 import RoutedModal from "./RoutedModal";
 import PostOptionsModal from "./PostOptionsModal";
+import SwitchAccountModal from "./Message/SwitchAccountModal";
+import NewMessageModal from "./Message/NewMessageModal";
 
 const Layout = ({children}: {children: ReactElement}) => {
 
     
     return (
-        <main className="mb-14">
+        <main className="mb-14 h-full">
             <Header/>
             {children}
             <MobileBottomNav/>
@@ -18,6 +20,8 @@ const Layout = ({children}: {children: ReactElement}) => {
             <ProfileImageUpload/>
             <RoutedModal/>
             <PostOptionsModal/>
+            <SwitchAccountModal/>
+            <NewMessageModal/>
         </main>
     )
 }

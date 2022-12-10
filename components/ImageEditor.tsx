@@ -18,7 +18,7 @@ type Props = {
 const imageFilters = [
     '_1977', 'brannan', 'brooklyn', 'clarendon',
     'earlybird', 'gingham', 'hudson', 'inkwell', 'kelvin', 
-    'lark', 'lofi', 'Maven', 'mayfair', 'moon', 'nashville', 'perpetua',
+    'lark', 'lofi', 'maven', 'mayfair', 'moon', 'nashville', 'perpetua',
     'reyes', 'rise', 'slumber', 'stinson', 'toaster', 'valencia',
     'walden', 'willow', 'xpro2'
 ]
@@ -82,13 +82,15 @@ const ImageEditor = ({
                 <button className="text-instaBlue font-bold pr-2" onClick={() => onNext()}>Next</button>
             </header>
             <div className="flex flex-col md:flex-row">
-                <figure ref={mainImageRef} className={`mx-auto md:max-h-[550px] md:basis-2/3 ${filter}`}>
-                        <img src={editedFile || selectedFile} className='h-full max-h-[400px] md:max-h-fit object-cover relative' alt="post image" />
+                <figure ref={mainImageRef} className={`md:max-h-[550px] md:basis-2/3 ${filter}`}>
+                        <img src={editedFile ?? selectedFile} 
+                        className={`h-full max-h-[400px] md:max-h-fit object-contain relative ${!filter && 'w-full'}`} 
+                        alt="post image" />
                 </figure>
                 <div className='md:basis-1/3 my-5 md:my-0 md:h-auto mx-2 md:mx-0 md:mt-0 flex md:grid md:grid-cols-2 
                     md:max-h-[550px] md:overflow-y-auto overflow-x-auto scrollbar-none'>
                     <figure onClick={() => setFilter('')} className='min-w-[75px] sm:min-w-[90px] md:min-w-[auto]'>
-                        <img src={editedFile || selectedFile} className=' md:h-full object-cover' alt="original image" />
+                        <img src={editedFile ?? selectedFile} className=' md:h-full object-cover' alt="original image" />
                     </figure>
                     {
                         imageFilters.map((filter, idx) => (

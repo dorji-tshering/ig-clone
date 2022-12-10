@@ -23,7 +23,7 @@ const Modal = ({open, onClose, children, bg="bg-white", overflowY=true}: Props) 
             <Dialog 
                 open={open} 
                 onClose={onClose}
-                className="relative z-[999]">
+                className="relative z-[999] shadow-searchShadow">
                     {/* backdrop */}
                 <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
                 <div className="fixed inset-0">
