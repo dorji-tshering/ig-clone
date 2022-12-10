@@ -1,4 +1,5 @@
 import Modal from "../Modal"
+import { faker } from '@faker-js/faker'
 import { newMessageModalState } from '../../atoms/newMessageAtom'
 import { useRecoilState } from "recoil"
 import { MdOutlineClose } from 'react-icons/md'
@@ -12,29 +13,40 @@ const NewMessageModal = () => {
     const [open, setOpen] = useRecoilState(newMessageModalState)
     const [suggestions, setSuggestions] = useState([
         {
-            name: 'Dorji Tshering',
-            username: 'dorji_dev'
+            name: faker.name.fullName(),
+            username: faker.internet.userName(),
+            image: faker.image.avatar()
         }, 
         {
-            name: 'Yangchen Dolkar',
-            username: 'bumie'
+            name: faker.name.fullName(),
+            username: faker.internet.userName(),
+            image: faker.image.avatar()
         }, 
         {
-            name: 'Tshering Lhamo',
-            username: 'yuki'
-        },
+            name: faker.name.fullName(),
+            username: faker.internet.userName(),
+            image: faker.image.avatar()
+        }, 
         {
-            name: 'Pema Doeji',
-            username: 'pe_doe'
-        },
+            name: faker.name.fullName(),
+            username: faker.internet.userName(),
+            image: faker.image.avatar()
+        }, 
         {
-            name: 'Cheki Lhamo',
-            username: 'lhamo_'
-        }
+            name: faker.name.fullName(),
+            username: faker.internet.userName(),
+            image: faker.image.avatar()
+        }, 
+        {
+            name: faker.name.fullName(),
+            username: faker.internet.userName(),
+            image: faker.image.avatar()
+        }, 
     ])
     const [chatUsers, setChatUsers] = useState<{
         name: string;
         username: string;
+        image: string
     }[] | null>(null)
 
     const router = useRouter();
@@ -96,7 +108,7 @@ const NewMessageModal = () => {
                                         className="flex justify-between items-center px-5 py-2 cursor-pointer hover:bg-gray-100/40">
                                         <div className="flex items-center">
                                             <div className="h-14 w-14 mr-4">
-                                                <img src="/images/dorji.jpg" alt="" className="h-full object-cover rounded-full border
+                                                <img src={user.image} alt="" className="h-full object-cover rounded-full border
                                                     border-solid border-gray-100" />
                                             </div>
                                             <div className="flex flex-col items-start">
