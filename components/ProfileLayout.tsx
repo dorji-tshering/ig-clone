@@ -1,13 +1,13 @@
-import { useSession } from 'next-auth/react';
-import classNames from 'classnames';
-import Link from 'next/link';
-import { BiGridAlt, BiHeart } from 'react-icons/bi';
-import { HiOutlineBookmark } from 'react-icons/hi';
-import { useRouter } from 'next/router';
-import { currentProfileState } from '../atoms/currentProfileAtom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { profileImageUploadState } from '../atoms/profileImageUploadAtom';
-import { useContextualRouting } from 'next-use-contextual-routing';
+import { useSession } from 'next-auth/react'
+import classNames from 'classnames'
+import Link from 'next/link'
+import { BiGridAlt, BiHeart } from 'react-icons/bi'
+import { HiOutlineBookmark } from 'react-icons/hi'
+import { useRouter } from 'next/router'
+import { currentProfileState } from '../atoms/currentProfileAtom'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { profileImageUploadState } from '../atoms/profileImageUploadAtom'
+import { useContextualRouting } from 'next-use-contextual-routing'
 
 type Props = {
     children: React.ReactElement;
@@ -18,9 +18,8 @@ const ProfileLayout = ({ children }: Props) => {
     const router = useRouter();
     const currentUserProfile = useRecoilValue(currentProfileState);
     const openProfileUploadModal = useSetRecoilState(profileImageUploadState);
-
+    const currentProfile = router.query.username as string
     const { makeContextualHref, returnHref } = useContextualRouting();
-
     const profileImage = true;
 
     // profile image upload for the logged in user
@@ -150,22 +149,22 @@ const ProfileLayout = ({ children }: Props) => {
                 </section>
                 {/* link tabs */}
                 <section className="mt-16 flex justify-center border-t border-solid border-t-gray-200">
-                    <Link href={`/${session?.user?.username}`} className={classNames(
-                        'profileTabLink', router.asPath === `/${session?.user?.username}` ? 
+                    <Link href={`/${currentProfile}`} className={classNames(
+                        'profileTabLink', router.asPath === `/${currentProfile}` ? 
                         'border-t-black' : 'border-t-transparent text-gray-400'
                     )}>
                         <BiGridAlt className="mr-2 h-8 w-8 sm:h-4 sm:w-4"/> <span className="hidden sm:block">POSTS</span>
                     </Link>
-                    <Link href={`/${session?.user?.username}/likes`} className={classNames(
-                        'profileTabLink', router.asPath === `/${session?.user?.username}/likes` ? 
+                    <Link href={`/${currentProfile}/likes`} className={classNames(
+                        'profileTabLink', router.asPath === `/${currentProfile}/likes` ? 
                         'border-t-black' : 'border-t-transparent text-gray-400'
                     )}>
                         <BiHeart className="mr-2 h-8 w-8 sm:h-[14px] sm:w-[14px]"/> <span className="hidden sm:block">LIKES</span>
                     </Link>
                     {
                         currentUserProfile && (
-                            <Link href={`/${session?.user?.username}/saved`} className={classNames(
-                                'profileTabLink', router.asPath === `/${session?.user?.username}/saved` ? 
+                            <Link href={`/${currentProfile}/saved`} className={classNames(
+                                'profileTabLink', router.asPath === `/${currentProfile}/saved` ? 
                                 'border-t-black' : 'border-t-transparent text-gray-400'
                             )}>
                                 <HiOutlineBookmark className="mr-2 h-8 w-8 sm:h-4 sm:w-4"/> <span className="hidden sm:block">SAVED</span>

@@ -27,18 +27,19 @@ const Modal = ({open, onClose, children, bg="bg-white", overflowY=true}: Props) 
                     onClose={onClose}
                     className="relative z-[999] shadow-searchShadow">
                         {/* backdrop */}
-                    <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+                    <div className="fixed inset-0 bg-black/70" aria-hidden="true" />
                     <div className="fixed inset-0">
                         <div className="flex h-full items-center justify-center p-4">
                             <Transition.Child
-                                enter='ease-out duration-100'
-                                enterFrom='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
-                                enterTo='opacity-100 translate-y-0 sm:scale-100'
+                                enter='ease-out duration-300'
+                                enterFrom='opacity-0 translate-y-4 translate-y-0 scale-105'
+                                enterTo='opacity-100 translate-y-0 scale-100'
                                 leave='ease-in duration-100'
-                                leaveFrom='opacity-100 translate-y-0 sm:scale-100'
-                                leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'>
-                                <Dialog.Panel className={`mx-auto ${overflowY && 'overflow-y-auto'} w-full max-h-full
+                                leaveFrom='opacity-100 translate-y-0 scale-100'
+                                leaveTo='opacity-0 translate-y-4 translate-y-0 scale-90'
+                                className={`mx-auto ${overflowY && 'overflow-y-auto'} w-full max-h-full
                                     sm:min-w-[400px] sm:w-auto rounded-lg ${bg} text-center`}>
+                                <Dialog.Panel>
                                     {children}
                                 </Dialog.Panel>
                             </Transition.Child>

@@ -114,7 +114,6 @@ const NewMessageModal = () => {
                                                 <p className="text-gray-400">{user.name}</p>
                                             </div>
                                         </div>
-                                        <>{true && console.log('hello')}</>
                                         <div>
                                             <RiCheckboxBlankCircleLine size={24}/>
                                         </div>

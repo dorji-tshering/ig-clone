@@ -23,7 +23,7 @@ const SwitchAccountModal = () => {
                 </div>
                 {/* active account */}
                 <div className='p-5 flex items-center mb-10'>
-                    <Link href='/username' className='mr-3'>
+                    <Link onClick={() => setOpen(false)} href='/username' className='mr-3'>
                         <img 
                             src="/images/dorji.jpg" 
                             alt="current user image"

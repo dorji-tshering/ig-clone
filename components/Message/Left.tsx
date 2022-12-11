@@ -16,7 +16,7 @@ const Left = ({children}: {children: React.ReactNode}) => {
 
     return (
         <div className="basis-full md:basis-2/5 md:border-r overflow-y-auto">
-            <section className='sticky h-[60px] border-b px-5 top-0 bg-white'>
+            <section className='sticky h-[50px] border-b px-5 top-0 bg-white'>
                 <div className='float-left z-10 relative md:hidden h-full flex items-center'>
                     <button onClick={() => router.back()}>
                         <MdKeyboardBackspace size={26}/>

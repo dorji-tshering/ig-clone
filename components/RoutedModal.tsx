@@ -1,10 +1,11 @@
 // modal routing component
-import Modal from "./Modal";
-import { useRouter } from 'next/router';
-import Followers from "./Followers";
-import Following from './Following';
-import DetailedPost from './DetailedPost';
-import { useState } from "react";
+import Modal from "./Modal"
+import { useRouter } from 'next/router'
+import Followers from "./Followers"
+import Following from './Following'
+import DetailedPost from './DetailedPost'
+import { useState } from "react"
+import Notifications from "./Notifications"
 
 const RoutedModal = () => {
     const router = useRouter()
@@ -12,7 +13,7 @@ const RoutedModal = () => {
     const followers = modalName === 'followers'
     const following = modalName === 'following'
     const post = modalName === 'post'
-    const [emojiClicked, setEmojiClicked] = useState(false)
+    const notification = modalName === 'notification'
 
     return (
         <Modal
@@ -44,6 +45,13 @@ const RoutedModal = () => {
                         <DetailedPost 
                             postID="postId"
                             onModal={true}/>
+                    )
+                }
+                {
+                    notification && (
+                        <Notifications 
+                            onModal={true} 
+                            onClose={() => router.push(router.query.currentPageURL as string, undefined, {scroll: false})}/>
                     )
                 }
             </>

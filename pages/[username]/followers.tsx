@@ -7,10 +7,8 @@ const FollowersPage = () => {
     const router = useRouter();
 
     return ( 
-        <div className="pageContent px-2">
-            <div className="border border-solid rounded-lg mx-auto max-w-[400px] text-center">
-                <Followers onClose={() => router.back()} userID="userid"/>
-            </div>
+        <div className="pb-16 md:mt-5 md:w-fit md:mx-auto">
+            <Followers onClose={() => router.back()} userID="userid"/>
         </div>
     )
 }

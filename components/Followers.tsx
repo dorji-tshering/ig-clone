@@ -10,13 +10,13 @@ type Props = {
 }
 
 const Followers = ({onClose, userID, onModal=false}: Props) => {
-    const router = useRouter();
-    const followerLength = 0;
-    const loggedInUser = true;
+    const router = useRouter()
+    const followerLength = 0
+    const loggedInUser = true
 
     return (
-        <div className="mb-6">
-            <div className="h-[50px] px-4 relative border-b">
+        <div className={`mb-6 ${!onModal && 'md:border md:rounded-lg'} md:mx-auto md:w-[500px] text-center`}>
+            <div className={`h-[50px] px-4 border-b sticky bg-white ${onModal ? 'top-0':'top-[53px] md:rounded-tr-lg md:rounded-tl-lg'}`}>
                 <div className="flex items-center justify-center h-full w-full absolute inset-0">
                     <h1 className="font-bold text-xl">Followers</h1>
                 </div>

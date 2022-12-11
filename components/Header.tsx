@@ -13,12 +13,14 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { TbSearch } from 'react-icons/tb';
 import { useState } from 'react';
 import InstantSearch from './InstantSearch';
+import { useContextualRouting } from 'next-use-contextual-routing'
 
 const Header = () => {
-    const {data: session}: any = useSession();
-    const [searchText, setSearchText] = useState<string | null>(null);
-    const router = useRouter();     
-    const openUploadModal = useSetRecoilState(uploadModalState);
+    const {data: session}: any = useSession()
+    const [searchText, setSearchText] = useState<string | null>(null)
+    const router = useRouter()
+    const openUploadModal = useSetRecoilState(uploadModalState)
+    const { makeContextualHref, returnHref } = useContextualRouting()
 
     return (
        <div className="shadow-sm border-b bg-white sticky top-0 z-50 h-[54px]">
@@ -52,9 +54,9 @@ const Header = () => {
                     {/* home icon */}
                     <div className="dNavWrapper">
                         <Tooltip className="mt-[2px]" style="light" content="Home" placement="bottom" animation="duration-1000">
-                            <span className="dNavBtn group" onClick={() => router.push('/')}>
+                            <button className="dNavBtn group" onClick={() => router.push('/')}>
                                 <FaHome className="w-6 h-6 dNavIcon"/>
-                            </span>
+                            </button>
                         </Tooltip>
                     </div>
                     { session ? 
@@ -64,49 +66,54 @@ const Header = () => {
                                 <TbSearch className="w-8 h-8"/>
                             </button>
                             {/* mobile notification icon */}
-                            <button className="md:hidden">
+                            <button onClick={() => router.push('/accounts/activity')} className="md:hidden">
                                 <IoMdNotificationsOutline className="w-9 h-9"/>
                             </button>
                             {/* message icon */}
                             <div className="dNavWrapper">
                                 <Tooltip className="mt-[2px]" style="light" content="Messages" placement="bottom" animation="duration-1000">
-                                    <span className="relative dNavBtn group" onClick={() => router.push('/direct/inbox')}>
+                                    <button className="relative dNavBtn group" onClick={() => router.push('/direct/inbox')}>
                                         <span className="absolute top-0 right-1 text-xs w-5 h-5 rounded-full bg-red-500
                                             flex items-center justify-center text-white z-10 animate-pulse">
                                             3
                                         </span>
                                         <BiMessageRounded className="w-6 h-6 dNavIcon"/>
-                                    </span>
+                                    </button>
                                 </Tooltip>
                             </div>
                             {/* create icon */}
                             <div className="dNavWrapper">
                                 <Tooltip className="mt-[2px]" style="light" content="Create" placement="bottom" animation="duration-1000">
-                                    <span className="dNavBtn group" onClick={() => openUploadModal(true)}>
+                                    <button className="dNavBtn group" onClick={() => openUploadModal(true)}>
                                         <AiOutlinePlusCircle className="w-[18px] h-[18px] dNavIcon"/>
-                                    </span>
+                                    </button>
                                 </Tooltip>
                             </div>
                             {/* explore icon */}
                             <div className="dNavWrapper">
                                 <Tooltip className="mt-[2px]" style="light" content="Explore" placement="bottom" animation="duration-1000">
-                                    <span className="dNavBtn group">
+                                    <button className="dNavBtn group">
                                         <BsPeople className="w-[20px] h-[20px] dNavIcon"/>
-                                    </span>
+                                    </button>
                                 </Tooltip>
                             </div>
                             {/* notification icon */}
                             <div className="dNavWrapper">
                                 <Tooltip className="mt-[2px]" style="light" content="Notification" placement="bottom" animation="duration-1000">
-                                    <span className="dNavBtn -mr-3 md:mr-0 group">
+                                    <button 
+                                        onClick={() => router.push(makeContextualHref({
+                                            routeModalId: 'notification',
+                                            currentPageURL: returnHref,
+                                        }), '/accounts/activity')}
+                                        className="dNavBtn -mr-3 md:mr-0 group">
                                         <IoMdNotificationsOutline className="w-6 h-6 dNavIcon"/>
-                                    </span>
+                                    </button>
                                 </Tooltip>
                             </div>
                             {/* profile link */}
                             <div className="dNavWrapper">
                                 <Tooltip className="mt-[-1.5px]" style="light" content={`Profile @${session?.user?.username}`} placement="bottom" animation="duration-1000">
-                                    <span onClick={() => router.push(`/${session?.user?.username}`)} 
+                                    <button onClick={() => router.push(`/${session?.user?.username}`)} 
                                         className="h-12 w-12 flex items-center justify-center cursor-pointer
                                         bg-transparent ml-0 hover:bg-gray-100 rounded-full group">
                                         <img 
@@ -114,7 +121,7 @@ const Header = () => {
                                             alt="avatar" 
                                             className="h-10 rounded-full cursor-pointer group-hover:w-[35px] group-hover:h-[35px] relative
                                             transition-all duration-75 ease-in-out" />
-                                    </span>
+                                    </button>
                                 </Tooltip>
                             </div>
                         </> : <button type="button" className="font-bold" onClick={() => signIn()}>Signin</button> }        

@@ -43,7 +43,7 @@ const ChatPage = () => {
                         <Left>
                             {
                                 activeChats && activeChats.map(chat => (
-                                    <Link href={`/direct/t/${chat.chatId}`} 
+                                    <Link key={chat.chatId} href={`/direct/t/${chat.chatId}`} 
                                         className={classNames(
                                             'px-5 py-2 flex items-center hover:bg-gray-100/30',
                                             router.query.chatId === chat.chatId && 'bg-gray-100 hover:!bg-gray-100'
