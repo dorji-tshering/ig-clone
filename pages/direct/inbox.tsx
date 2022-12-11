@@ -62,7 +62,7 @@ const Inbox = () => {
                                     <FiSend className='rotate-[20deg] relative -left-1' size={44}/>
                                 </div>
                                 <h1 className='text-2xl mb-2'>Your Messages</h1>
-                                <p className='text-gray-400 mb-8'>Send private photos and messages to a friend or group.</p>
+                                <p className='text-gray-400 mb-8 text-center'>Send private photos and messages to a friend or group.</p>
                                 <button onClick={() => openNewMessageModal(true)}className='px-4 py-2 bg-instaBlue text-white rounded-md font-bold'>Send Message</button>
                             </div>
                         )

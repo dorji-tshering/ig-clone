@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 
 const NewMessageModal = () => {
     const [open, setOpen] = useRecoilState(newMessageModalState)
+    const [chatUsers, setChatUsers] = useState<{ name: string, username: string, image: string }[] | null>(null)
     const [suggestions, setSuggestions] = useState([
         {
             name: faker.name.fullName(),
@@ -43,11 +44,6 @@ const NewMessageModal = () => {
             image: faker.image.avatar()
         }, 
     ])
-    const [chatUsers, setChatUsers] = useState<{
-        name: string;
-        username: string;
-        image: string
-    }[] | null>(null)
 
     const router = useRouter();
 
@@ -56,7 +52,7 @@ const NewMessageModal = () => {
             open={open}
             onClose={() => setOpen(false)}
         >
-            <div className="flex flex-col pb-10">
+            <div className="flex flex-col pb-10 w-[400px] min-h-[500px]">
                 {/* header */}
                 <div className='relative p-5 border-b'>
                     <div className='float-left h-full flex items-center relative z-10'>
@@ -68,14 +64,14 @@ const NewMessageModal = () => {
                     <div className='float-right h-full flex items-center relative'>
                         <button onClick={() => {
                             setOpen(false)
-                            router.push('/direct/t/chatId')
+                            router.push(`/direct/t/2342345345`)
                         }} className='font-bold text-instaBlue'>Next</button>
                     </div>
                 </div>
                 {/* search section */}
                 <div className='flex px-5 py-2 items-center border-b'>
                     <div className='mr-5'><span>To:</span></div>
-                    <div className='grow flex flex-wrap max-w-[400px]'>
+                    <div className='grow flex flex-wrap'>
                         {
                             chatUsers && chatUsers.map((chatUser) => (
                                 <div key={uuidv4()} className='flex items-center rounded-full bg-instaBlue/10 px-3 py-1 mr-2 mb-2'>

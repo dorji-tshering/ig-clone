@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import EmojiPicker from "./EmojiPicker";
-import { Emoji } from 'emoji-mart'
 import { addDoc, collection, serverTimestamp, onSnapshot, 
         query, orderBy, DocumentData, QueryDocumentSnapshot, setDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from "../firebase";
