@@ -12,7 +12,7 @@ const Inbox = () => {
     const inbox = false
 
     return (
-        <div className="pageContent md:px-5 mx-auto md:max-w-[800px] md:h-[calc(100%-130px)]">
+        <div className="md:px-5 mx-auto md:max-w-[800px] h-[calc(100vh-100px)] md:mt-5 md:pb-14">
             <div className="md:border md:rounded-md flex h-full">
                 <Left>
                     {

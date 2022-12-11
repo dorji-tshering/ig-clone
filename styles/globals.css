@@ -41,11 +41,11 @@
 
 .profileContentContainer {
     @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4
-    gap-3 px-4
+    gap-3 px-4 mb-5
 } 
 
 .pageContent {
-    @apply mt-5 lg:mt-10 mb-10 pb-10 md:pb-0
+    @apply mt-5 pb-20 md:pb-14
 }
 
 .wordSpace {

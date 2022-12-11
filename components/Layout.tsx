@@ -12,7 +12,7 @@ const Layout = ({children}: {children: ReactElement}) => {
 
     
     return (
-        <main className="mb-14 h-full">
+        <main>
             <Header/>
             {children}
             <MobileBottomNav/>

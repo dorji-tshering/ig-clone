@@ -35,7 +35,7 @@ const MobileBottomNav = () => {
                     <img 
                         onClick={() => router.push(`/${session?.user?.username}`)}
                         src={session?.user?.image as string} 
-                        className="order-5 w-8 object-contain border border-solid border-gray-200 p-[3px] rounded-full" 
+                        className="order-5 w-8 object-cover border border-solid border-gray-200 p-[3px] max-h-[28px] rounded-full" 
                         alt="user-avatar" />
                 </>
             )}          

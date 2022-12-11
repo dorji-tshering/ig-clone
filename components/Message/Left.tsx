@@ -15,7 +15,7 @@ const Left = ({children}: {children: React.ReactNode}) => {
     const router = useRouter()
 
     return (
-        <div className="basis-full -mt-5 md:mt-0 md:basis-2/5 md:border-r overflow-y-auto">
+        <div className="basis-full md:basis-2/5 md:border-r overflow-y-auto">
             <section className='sticky h-[60px] border-b px-5 top-0 bg-white'>
                 <div className='float-left z-10 relative md:hidden h-full flex items-center'>
                     <button onClick={() => router.back()}>

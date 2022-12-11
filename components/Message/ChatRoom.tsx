@@ -25,7 +25,7 @@ const ChatRoom = () => {
                         onClose={() => setShowPicker(false)}
                         onSelect={(emoji) => setMessage(prevMessage => prevMessage + emoji.native)}
                         customStyles='w-fit mx-auto left-0 right-0'
-                        bottom='bottom-[70px]'
+                        bottom='bottom-[75px]'
                     />
                 )
             }
