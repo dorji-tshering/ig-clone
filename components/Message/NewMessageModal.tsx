@@ -52,7 +52,7 @@ const NewMessageModal = () => {
             open={open}
             onClose={() => setOpen(false)}
         >
-            <div className="flex flex-col pb-10 w-[400px] min-h-[500px]">
+            <div className="flex flex-col pb-10 md:w-[400px] min-h-[500px]">
                 {/* header */}
                 <div className='relative p-5 border-b'>
                     <div className='float-left h-full flex items-center relative z-10'>

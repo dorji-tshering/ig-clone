@@ -4,14 +4,16 @@ import ChatRoom from "../../components/Message/ChatRoom"
 import { FiSend } from 'react-icons/fi'
 import { newMessageModalState } from '../../atoms/newMessageAtom'
 import { useSetRecoilState } from "recoil"
+import isMobile from '../../utils/useMediaQuery'
 
 const Inbox = () => {
     const openNewMessageModal = useSetRecoilState(newMessageModalState)
+    const isMb = isMobile()
     const inbox = false
 
     return (
-        <div className="pageContent px-5 mx-auto md:max-w-[800px] h-[calc(100%-130px)]">
-            <div className="md:border rounded-md flex h-full">
+        <div className="pageContent md:px-5 mx-auto md:max-w-[800px] md:h-[calc(100%-130px)]">
+            <div className="md:border md:rounded-md flex h-full">
                 <Left>
                     {
                         inbox ? (
@@ -51,23 +53,27 @@ const Inbox = () => {
                         )
                     }
                 </Left>
-                <Right>
-                    {
-                        inbox ? (
-                            <div></div>
-                        ):(
-                            <div className='flex flex-col justify-center items-center h-full'>
-                                <div className='w-[96px] h-[96px] border-2 border-black rounded-full flex 
-                                    justify-center items-center mb-4'>
-                                    <FiSend className='rotate-[20deg] relative -left-1' size={44}/>
-                                </div>
-                                <h1 className='text-2xl mb-2'>Your Messages</h1>
-                                <p className='text-gray-400 mb-8 text-center'>Send private photos and messages to a friend or group.</p>
-                                <button onClick={() => openNewMessageModal(true)}className='px-4 py-2 bg-instaBlue text-white rounded-md font-bold'>Send Message</button>
-                            </div>
-                        )
-                    }
-                </Right>
+                {
+                    !isMb && (
+                        <Right>
+                            {
+                                inbox ? (
+                                    <div></div>
+                                ):(
+                                    <div className='flex flex-col justify-center items-center h-full'>
+                                        <div className='w-[96px] h-[96px] border-2 border-black rounded-full flex 
+                                            justify-center items-center mb-4'>
+                                            <FiSend className='rotate-[20deg] relative -left-1' size={44}/>
+                                        </div>
+                                        <h1 className='text-2xl mb-2'>Your Messages</h1>
+                                        <p className='text-gray-400 mb-8 text-center'>Send private photos and messages to a friend or group.</p>
+                                        <button onClick={() => openNewMessageModal(true)}className='px-4 py-2 bg-instaBlue text-white rounded-md font-bold'>Send Message</button>
+                                    </div>
+                                )
+                            }
+                        </Right>
+                    )
+                }
             </div>
         </div>
     )

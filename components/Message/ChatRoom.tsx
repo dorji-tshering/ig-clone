@@ -5,6 +5,7 @@ import { AiOutlineHeart } from 'react-icons/ai'
 import { HiOutlinePhoto } from 'react-icons/hi2'
 import { useState } from 'react'
 import EmojiPicker from '../EmojiPicker'
+import { MdKeyboardBackspace } from 'react-icons/md'
 
 /**
  * Component to display and allow a user to chat with other users.
@@ -28,14 +29,15 @@ const ChatRoom = () => {
                     />
                 )
             }
-            <header className="flex border-b px-10 py-5">
+            <header className="flex border-b px-5 md:px-10 py-5">
+                <button className='md:hidden mr-3' onClick={() => router.back()}><MdKeyboardBackspace size={24}/></button>
                 <button onClick={() => router.push('/username')}>
                     <img src="/images/dorji.jpg" alt="chat user image" className='h-8 w-8 rounded-full' />
                 </button>
                 <button onClick={() => router.push('/username')} className='font-bold text-lg ml-4'>dorji_dev</button>
                 <div className="grow flex justify-end">
-                    <button><IoCallOutline size={23}/></button>
-                    <button className="ml-4"><IoVideocamOutline size={26}/></button>
+                    <button className='hidden md:block'><IoCallOutline size={23}/></button>
+                    <button className="ml-4 hidden md:block"><IoVideocamOutline size={26}/></button>
                     <button className='ml-4'><IoInformationCircleOutline size={26}/></button>
                 </div>
             </header>

@@ -5,7 +5,7 @@
  */
 const Right = ({children}: {children: React.ReactNode}) => {
     return (
-        <div className="basis-3/5 overflow-y-auto">
+        <div className="basis-full md:basis-3/5 overflow-y-auto">
             {/* content specific to a page */}
             {children}
         </div>
