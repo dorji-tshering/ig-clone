@@ -65,7 +65,3 @@
     font-size: 13px;
     color: #333;
 }
-
-html, body, #__next {
-    height: 100%;
-}
