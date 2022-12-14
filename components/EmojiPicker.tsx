@@ -12,8 +12,8 @@ type Props = {
 const EmojiPicker = ({onClose, onSelect, bottom='bottom-[50px]', customStyles}: Props) => {
     return (
         <>
-            <div onClick={onClose} className="fixed inset-0 z-[100]"></div>
-            <div className={`absolute ${bottom} z-[110] ${customStyles} shadow-searchShadow rounded-[10px]`}>
+            <div onClick={onClose} className="fixed inset-0 z-[5]"></div>
+            <div className={`absolute ${bottom} z-[10] ${customStyles} shadow-searchShadow rounded-[10px]`}>
                 <Picker 
                     theme='auto' 
                     onClick={(e:any) => e.stopPropagation()} 
