@@ -10,9 +10,6 @@ module.exports = {
         extend: {
             colors: {
                 instaBlue: '#0095f6',
-                blue: {
-                    600: '#0095f6'
-                }
             },
             screens: {
                 'xs': '360px'

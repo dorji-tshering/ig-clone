@@ -1,18 +1,18 @@
 // page header component
-import Image from 'next/image';
-import { useSession, signIn } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import { useSetRecoilState } from 'recoil';
-import { uploadModalState } from '../atoms/uploadModalAtom';
-import { Tooltip } from 'flowbite-react';
-import { FaHome } from 'react-icons/fa';
-import { BiMessageRounded } from 'react-icons/bi';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { BsPeople } from 'react-icons/bs';
-import { IoMdNotificationsOutline } from 'react-icons/io';
-import { TbSearch } from 'react-icons/tb';
-import { useState } from 'react';
-import InstantSearch from './InstantSearch';
+import Image from 'next/image'
+import { useSession, signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { useSetRecoilState } from 'recoil'
+import { uploadModalState } from '../atoms/uploadModalAtom'
+import { Tooltip } from 'flowbite-react'
+import { FaHome } from 'react-icons/fa'
+import { BiMessageRounded } from 'react-icons/bi'
+import { AiOutlinePlusCircle } from 'react-icons/ai'
+import { BsPeople } from 'react-icons/bs'
+import { IoMdNotificationsOutline } from 'react-icons/io'
+import { TbSearch } from 'react-icons/tb'
+import { useState } from 'react'
+import InstantSearch from './InstantSearch'
 import { useContextualRouting } from 'next-use-contextual-routing'
 
 const Header = () => {

@@ -1,22 +1,59 @@
 import { BuiltInProviderType } from "next-auth/providers";
 import { ClientSafeProvider, getProviders, LiteralUnion, signIn as SignIntoProvider} from "next-auth/react"
-import Header from "../../components/Header";
+import { useRouter } from 'next/router'
+import { FcGoogle } from 'react-icons/fc'
+import { ImTwitter } from 'react-icons/im'
+import { useSetRecoilState } from "recoil";
+import { noticeState } from '../../atoms/noticeAtom'
+
+// possible signin errors
+const errors = {
+    Signin: "Try signing with a different account.",
+    OAuthSignin: "Try signing with a different account.",
+    OAuthCallback: "Try signing with a different account.",
+    OAuthCreateAccount: "Try signing with a different account.",
+    EmailCreateAccount: "Try signing with a different account.",
+    Callback: "Try signing with a different account.",
+    OAuthAccountNotLinked:
+      "To confirm your identity, sign in with the same provider you used originally.",
+    EmailSignin: "Check your email address.",
+    CredentialsSignin:
+      "Sign in failed. Check if the details you provided are correct.",
+    default: "Unable to sign in.",
+};
 
 function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>) {
+    const error = useRouter().query.error as keyof typeof errors
+    const setNotice = useSetRecoilState(noticeState)
+
+    if(error) {
+        setNotice({
+            show: true,
+            message: errors[error] ?? errors['default']
+        })
+    }
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-32 px-14 text-center ">
-                <img className='w-80' src="/images/instagram-logo.png" alt="Instagram logo" />
-                <p className="font-xs italic">
-                    This is not a REAL app, it is built for educational purposes only
+            <div className="md:flex md:flex-col md:items-center md:justify-center md:-mt-10 h-full overflow-y-auto 
+                px-5 text-center py-10">
+                <img className='w-40 mx-auto' src="/images/instagram-logo.png" alt="Instagram logo" />
+                <p className="text-sm text-gray-500 mt-3">
+                    This is not a <span className='text-black font-[500]'>REAL</span> app, it is built for educational purposes only
                 </p>
-                <div className="mt-40">
+                <h2 className="text-sm mt-5 font-bold text-gray-400">SIGN IN</h2>
+                <div className="mt-4 border rounded-lg px-5 py-5 w-full sm:max-w-[400px] sm:mx-auto">
                     {Object.values(providers).map((provider) => (
-                        <div key={provider.name}>
-                        <button className='p-3 bg-blue-500 rounded-lg text-white' onClick={() => SignIntoProvider(provider.id, {callbackUrl: "/"})}>
-                            Sign in with {provider.name}
-                        </button>
+                        <div key={provider.name} className='first:mb-4'>
+                            <button className='py-3 border rounded-lg font-[500] w-full flex items-center justify-center
+                                text-gray-700 hover:border-gray-400 transition-all duration-500' 
+                                onClick={() => 
+                                    SignIntoProvider(provider.id, {callbackUrl: "/"})
+                                }>
+                                Sign in with {provider.id === 'twitter' ? 'Twitter' : provider.name}
+                                { provider.id === 'twitter' && <span className='ml-3 text-[#1D9BEE]'><ImTwitter size={20}/></span> }
+                                { provider.id === 'google' && <span className='ml-3'><FcGoogle size={20}/></span> }
+                            </button>
                         </div>
                     ))}
                 </div>

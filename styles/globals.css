@@ -77,7 +77,11 @@
 }
 
 :root {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
+    font-family: 'Figtree', sans-serif;
+    font-size: 14px;
     color: #333;
+}
+
+html, body, #__next, main {
+    height: 100%;
 }

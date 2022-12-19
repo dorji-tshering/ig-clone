@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { BiGridAlt, BiHeart } from 'react-icons/bi'
@@ -76,7 +76,11 @@ const ProfileLayout = ({ children }: Props) => {
                                             href="/account/edit" >Edit profile
                                         </Link>
                                         <button 
-                                            onClick={() => 'logout'}
+                                            onClick={async () =>  {
+                                                // redirect without reloading the page
+                                                const data = await signOut({redirect: false, callbackUrl: '/auth/signin'})
+                                                router.push(data.url)
+                                            }}
                                             className="font-bold text-instaBlue mt-3 xs:mt-0 w-fit">Logout</button>
                                     </div>   
                                 ):(

@@ -1,8 +1,9 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
-import Feed from '../components/Feed';
+import Feed from '../components/Feed'
+import { useSession } from 'next-auth/react'
 
-const Home: NextPage = () => {
+const Home = () => {
+    const {data: session} = useSession();
 
     return (
         <div className="pageContent">

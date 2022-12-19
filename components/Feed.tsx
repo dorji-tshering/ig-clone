@@ -15,7 +15,7 @@ const Feed = () => {
 
             {/* right section */}
             <section className={`hidden ${session && 'lg:block'} lg:col-span-1`}>
-                <div className="fixed top-20 w-[308px] overflow-y-auto h-[calc(100vh-100px)] pb-11">
+                <div className="fixed top-20 w-[315px] overflow-y-auto h-[calc(100vh-100px)] pb-11">
                     <MiniProfile/>
                     <Suggestions/>
                 </div>

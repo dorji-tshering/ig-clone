@@ -1,13 +1,14 @@
-import '../styles/globals.css';
+import '../styles/globals.css'
 import '../styles/cssgram.css'
-import type { AppProps } from 'next/app';
-import { SessionProvider } from 'next-auth/react';
-import { RecoilRoot } from 'recoil';
-import { useRouter } from 'next/router';
-import Layout from '../components/Layout';
-import Loader from '../components/Loader';
-import { JSXElementConstructor, ReactElement, useEffect, useState } from 'react';
-import { NextPage } from 'next';
+import type { AppProps } from 'next/app'
+import { SessionProvider } from 'next-auth/react'
+import { RecoilRoot } from 'recoil'
+import { useRouter } from 'next/router'
+import Layout from '../components/Layout'
+import Loader from '../components/Loader'
+import { JSXElementConstructor, ReactElement, useEffect, useState } from 'react'
+import { NextPage } from 'next'
+import Head from 'next/head'
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout: (page: ReactElement<any, string | JSXElementConstructor<any>>) => ReactElement<any, string | JSXElementConstructor<any>>
@@ -22,11 +23,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         isRouteChanging: false,
         loadingKey: 0,
     })
+    const router = useRouter()
 
     // get layout of page if it exists, else return the page
     const getLayout = Component.getLayout ?? ((page) => page)
-
-    const router = useRouter();
 
     useEffect(() => {
         const handleRouteChangeStart = () => {
@@ -56,15 +56,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       }, [router.events])
 
     return (
-            <SessionProvider session={pageProps.session}>
-                <RecoilRoot>
-                    <Loader isRouteChanging={state.isRouteChanging} key={state.loadingKey} />
-                    <Layout>
-                        { getLayout(<Component {...pageProps} />) }
-                    </Layout>
-                </RecoilRoot>
-            </SessionProvider>
-        
+        <SessionProvider session={pageProps.session}>
+            <RecoilRoot>
+                <Head>
+                    <title>InstaClone</title>
+                    <link rel="icon" href="/images/insta-mobile-logo.png" />
+                </Head>
+                <Loader isRouteChanging={state.isRouteChanging} key={state.loadingKey} />
+                <Layout>
+                    { getLayout(<Component {...pageProps} />) }
+                </Layout>
+            </RecoilRoot>
+        </SessionProvider>
     )
 }
 

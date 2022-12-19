@@ -1,7 +1,8 @@
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react"
+import { useRouter } from 'next/router'
 
 function MiniProfile() {
-
+    const router = useRouter()
     const {data: session}: any = useSession();
 
     return (
@@ -11,7 +12,12 @@ function MiniProfile() {
                 <h2 className='font-bold'>{session?.user?.username}</h2>
                 <h3 className='text-sm text-gray-400'>Welcome to Instagram</h3>
             </div>
-            <button onClick={() => signOut()} className='text-instaBlue text-sm font-bold'>Sign Out</button>
+            <button 
+                onClick={async () =>  {
+                    // redirect without reloading the page
+                    const data = await signOut({redirect: false, callbackUrl: '/auth/signin'})
+                    router.push(data.url)
+                }} className='text-instaBlue text-sm font-bold'>Sign Out</button>
         </div>
     )
 }
