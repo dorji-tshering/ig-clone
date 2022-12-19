@@ -7,6 +7,6 @@ export const noticeState = atom({
     key: 'NoticeState',
     default: {
         show: false, 
-        message: 'sdfdfhdfg',
+        message: '',
     }
 })

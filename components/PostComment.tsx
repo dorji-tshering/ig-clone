@@ -21,7 +21,7 @@ type Props = {
 
 const PostComment = ({comments}: {comments: Props}) => {
 
-    const reply = () => {
+    const reply = (ref: string) => {
         // reply code here
     }
 
@@ -44,7 +44,7 @@ const PostComment = ({comments}: {comments: Props}) => {
                                 <div className="flex text-gray-400 text-sm mt-2">
                                     <span className="mr-4">{comment.timeStamp}</span>
                                     <span className="mr-4 font-bold">{comment.likes} likes</span>
-                                    <button onClick={reply} className="font-bold">Reply</button>
+                                    <button onClick={() => reply('ref')} className="font-bold">Reply</button>
                                 </div>
                             </div>
                         </div>
