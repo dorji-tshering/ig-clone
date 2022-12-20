@@ -1,221 +1,54 @@
 /**
  * Post component used by post page and routedModal on desktop  
  */ 
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import classNames from 'classnames';
-import { FormEvent, useEffect, useState } from 'react';
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import { BiDotsHorizontalRounded } from 'react-icons/bi';
-import { FiSend } from 'react-icons/fi';
-import { HiOutlineBookmark } from 'react-icons/hi';
-import { TbMessageCircle2 } from 'react-icons/tb';
-import PostComment from './PostComment';
-import { BsEmojiSmile } from 'react-icons/bs';
-import { postOptionsModalState } from '../atoms/postOptionsAtom';
-import { useSetRecoilState } from 'recoil';
-import { onModalState } from '../atoms/onModalAtom';
-import EmojiPicker from './EmojiPicker';
+import Link from 'next/link'
+import useSWR from 'swr'
+import classNames from 'classnames'
+import { FormEvent, useEffect, useRef, useState } from 'react'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { BiDotsHorizontalRounded } from 'react-icons/bi'
+import { FiSend } from 'react-icons/fi'
+import { RiBookmark3Fill, RiBookmark3Line } from 'react-icons/ri'
+import { TbMessageCircle2 } from 'react-icons/tb'
+import PostComment from './PostComment'
+import { BsEmojiSmile } from 'react-icons/bs'
+import { postOptionsModalState } from '../atoms/postOptionsAtom'
+import { useSetRecoilState } from 'recoil'
+import { onModalState } from '../atoms/onModalAtom'
+import EmojiPicker from './EmojiPicker'
+import { db } from '../firebase'
+import { addDoc, arrayUnion, collection, doc, getDoc, onSnapshot, orderBy, query, QueryDocumentSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore'
+import Moment from 'react-moment'
+import { Comment } from '../utils/types'
+import { useSession } from 'next-auth/react'
+import { CurrentSession } from '../utils/types'
 
 type Props = {
-    postID: string,
+    postId: string,
     onModal?: boolean
 }
 
-const comments = [
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-                replies: [
-                    {
-                        data: 'Wow you look so so cool YO!',
-                        likes: 20,
-                        timeStamp: '3d',
-                        username: 'dorji_dev',
-                        userImage: '/images/dorji.jpg',
-                        uid: '1234',
-                    },
-                ]
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-];
+const fetchPost = async(posdId: string) => {
+    return await getDoc(doc(db, 'posts', posdId))
+}
 
 /**
  * Single post component for device-width > 768px. Used by `RoutedModal` component and `/post/[postID]` path.
  */
-const DetailedPost = ({postID, onModal=false}: Props) => {
-    const [comment, setComment] = useState<string>('');
-    const openPostIdForOptions = useSetRecoilState(postOptionsModalState);
-    const [showPicker,setShowPicker] = useState(false);
-    const follows = false;
-    const hasLiked = true;
-    const router = useRouter();
-    const setOnRoutedModal = useSetRecoilState (onModalState);
+const DetailedPost = ({postId, onModal=false}: Props) => {
+    const [comment, setComment] = useState<string>('')
+    const [postComments, setPostComments] = useState<Comment[]>([])
+    const openPostIdForOptions = useSetRecoilState(postOptionsModalState)
+    const [showPicker,setShowPicker] = useState(false)
+    const [likes, setLikes] = useState<string[]>([]) // post likes
+    const [hasLiked, setHasLiked] = useState(false)
+    const [savedPosts, setSavedPosts] = useState<string[]>([])
+    const [hasSaved, setHasSaved] = useState(false)
+    const follows = false
+    const setOnRoutedModal = useSetRecoilState (onModalState)
+    const session = useSession().data as CurrentSession
+    const {data: post, isLoading} = useSWR(postId, fetchPost)
+    const inputRef = useRef<any>(null)
 
     // update whether the post is on routed modal or not
     useEffect(() => {
@@ -224,19 +57,94 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
             if(onModal) setOnRoutedModal(false)
         }
     },[])
+
+    // update likes
+    useEffect(() => onSnapshot(doc(db, 'posts', postId), snapshot => (
+        setLikes(snapshot.data()?.likes)
+    )), [])
+
+    // update hasLiked
+    useEffect(() => {
+        setHasLiked(likes.includes(session.user.id))
+    }, [likes])
+
+    // listen to post comments
+    useEffect(() => 
+        onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
+            setPostComments(snapshot.docs.map(doc => {
+                return {
+                    id: doc.id,
+                    text: doc.data().text,
+                    likes: doc.data().likes,
+                    timeStamp: doc.data().timeStamp,
+                    userImage: doc.data().userImage,
+                    username: doc.data().username,
+                    userId: doc.data().userId,
+                    parentColRef: doc.data().parentColRef,
+                    replies: doc.data().replies
+                }
+            }))
+        }
+    ),[])
+
+    //update savePosts
+    useEffect(() => onSnapshot(doc(db, 'users', session.user.id), snapshot => (
+        setSavedPosts(snapshot.data()?.savedPosts)
+    )),[])
+
+    // update hasSaved
+    useEffect(() => {
+        setHasSaved(savedPosts.includes(postId))
+    },[savedPosts])
  
     const follow = () => {
         // follow other user
     }
 
-    const postLike = async () => {
-        // post like code
+    // post like
+    const postLike = async() => {
+        if(hasLiked) {
+            await updateDoc(doc(db, 'posts', postId), {
+                likes: likes.filter(like => like !== session.user.id)
+            })
+        } else {
+            await updateDoc(doc(db, 'posts', postId), {
+                likes: arrayUnion(session.user.id),
+            })
+        }
     }
 
-    const postComment = async (e: FormEvent) => {
-        e.preventDefault();
-        // post comment code
+    // post comment
+    const postComment = async(e: FormEvent) => {
+        e.preventDefault()
+        const commentToSend = comment
+        setComment('') // avoid spamming
+
+        await addDoc(collection(db, 'posts', postId, 'comments'), {
+            text: commentToSend,
+            likes: [],
+            userId: session.user.id,
+            username: session.user.username,
+            userImage: session.user.image,
+            parentColRef: `posts/${postId}/comments`,
+            timeStamp: serverTimestamp(),
+        });
     }
+
+    // save post
+    const savePost = async () => {
+        if(hasSaved) {
+            await updateDoc(doc(db, 'users', session.user.id), {
+                savedPosts: savedPosts.filter(id => id !== postId)
+            })
+        }else {
+            await updateDoc(doc(db, 'users', session.user.id), {
+                savedPosts: arrayUnion(postId)
+            })
+        }
+    }
+
+    if(isLoading) return <></>
 
     return (
         <div className="text-center">
@@ -249,14 +157,14 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                 <div className='flex h-full w-full'>
                     {/* left/top section */}
                     <div className="bg-black h-full flex items-center">
-                        <img src="/images/hori.jpeg" alt="" className={classNames(
-                            'object-contain', onModal ? 'h-[90%]' : 'h-[100%] w-auto',
+                        <img src={post?.data()?.postImage} alt="" className={classNames(
+                            'object-contain', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
                         )}/>
                     </div>
                     {/* right/bottom section */}
                     <div className={classNames(
                         'bg-white flex flex-col scrollbar-none w-auto relative',
-                        !onModal && 'max-w-[350px]', onModal && 'max-w-[400px]'
+                        !onModal && 'max-w-[350px]', onModal && 'max-w-[400px] min-w-[380px]'
                     )}>
                         <div id="emojiPicker">
                             {
@@ -273,12 +181,12 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                         {/* top section */}
                         <section className="flex justify-between items-center p-5 border-b">
                             <div className="flex items-center">
-                                <Link href="/username" className="mr-6 rounded-full">
-                                    <img src="/images/dorji.jpg" alt="" className="h-10 w-10 object-cover rounded-full"/>
+                                <Link href={`/${post?.data()?.username}`} className="mr-5 rounded-full">
+                                    <img src={post?.data()?.userImage} alt="post user image" className="h-10 w-10 object-cover rounded-full"/>
                                 </Link>
-                                <div>
-                                    <Link href="/username" className="font-bold">
-                                        dorji_dev
+                                <div> 
+                                    <Link href={`/${post?.data()?.username}`} className="font-bold">
+                                        {post?.data()?.username}
                                     </Link>
                                     {
                                         !follows && (
@@ -292,32 +200,34 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                             </div>
                             <div className="flex items-center">
                                 <button onClick={() => {
-                                    openPostIdForOptions(postID)
+                                    openPostIdForOptions(postId)
                                     }}><BiDotsHorizontalRounded size={26}/>
                                 </button>
                             </div>
                         </section>
 
                         {/* middle scrollable comment section */}
-                        <section className="p-5 overflow-y-auto scrollbar-none">
+                        <section className="p-5 overflow-y-auto scrollbar-none flex-1">
                             {/* caption */}
                             <div className="flex mb-7">
                                 <div className="mr-5">
-                                    <Link href="/username" className="rounded-full">
-                                        <img src="/images/dorji.jpg" alt="" className="object-cover rounded-full w-10 h-10" />
+                                    <Link href={`/${post?.data()?.username}`} className="rounded-full">
+                                        <img src={post?.data()?.userImage} alt="post user image" className="object-cover rounded-full w-10 h-10" />
                                     </Link>
                                 </div>
                                 <div className="flex-1">
                                     <p>
-                                        <Link href="/username" className="font-bold mr-3">dorji_dev</Link>
-                                        <span>A simple, accessible foundation for building custom UIs that show and hide content, like togglable accordion panels.</span>
+                                        <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">dorji_dev</Link>
+                                        <span>{post?.data()?.caption}</span>
                                     </p>
-                                    <p className="text-gray-400 text-sm mt-2">2d</p>
+                                    <Moment fromNow className="text-gray-400 text-sm mt-2">
+                                        {post?.data()?.timeStamp.toDate()}
+                                    </Moment>
                                 </div>
                             </div>
                             
                             {/* comments */}
-                            <PostComment comments={comments}/>
+                            <PostComment comments={postComments}/>
                         </section>
 
                         {/* bottom action section */}
@@ -327,34 +237,48 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                                 <div className="flex mb-3 justify-between">
                                     <div className="flex space-x-4">
                                         {/* like button */}
-                                        {
-                                            hasLiked ? (
-                                                <span onClick={() => postLike()} className="reactBtn">
+                                        <button onClick={() => postLike()} className="reactBtn">
+                                            {
+                                                hasLiked ? (
                                                     <AiFillHeart className="reactBtnIcon text-[#FF69B4]"/>
-                                                </span>
-                                            ) : (
-                                                <span onClick={() => postLike()} className="reactBtn">
+                                                ) : (
                                                     <AiOutlineHeart className="reactBtnIcon"/>
-                                                </span>
-                                            )
-                                        }
+                                                )
+                                            }
+                                        </button>
                                         {/* comment button */}
-                                        <span className="reactBtn">
+                                        <button onClick={() => inputRef.current.focus()} className="reactBtn">
                                             <TbMessageCircle2 className="reactBtnIcon"/>
-                                        </span>
+                                        </button>
                                         {/* share button */}
-                                        <span className="reactBtn">
+                                        <button className="reactBtn">
                                             <FiSend className="w-7 h-7 rotate-[18deg]"/>
-                                        </span>
+                                        </button>
                                     </div>
                                     {/* save button */}
-                                    <span className="reactBtn">
-                                        <HiOutlineBookmark className="reactBtnIcon"/>                  
-                                    </span>
+                                    <button onClick={savePost} className="reactBtn">
+                                        {
+                                            hasSaved ? (
+                                                <RiBookmark3Fill className="reactBtnIcon text-instaBlue"/>
+                                            ):(
+                                                <RiBookmark3Line className="reactBtnIcon"/>
+                                            )
+                                        }              
+                                    </button>
                                 </div>
                                 {/* end of buttons */}
-                                <div className="mb-1"><span className="font-bold text-[14px]">345,000 likes</span></div>
-                                <div><span className="text-xs tracking-wider text-gray-400">2 DAYS AGO</span></div>
+                                {
+                                    likes.length > 0 && (
+                                        <div className="mb-1">
+                                            <span className="font-bold text-[14px]">
+                                                {`${likes.length} ${likes.length === 1 ? 'like':'likes'}`} 
+                                            </span>
+                                        </div>
+                                    )
+                                }
+                                <Moment fromNow className="text-xs tracking-wider text-gray-400 uppercase">
+                                    {post?.data()?.timeStamp.toDate()}
+                                </Moment>
                             </div>
                             {/* comment input */}
                             <form className="flex items-center border-t py-3 px-5" onSubmit={(e) => postComment(e)}>
@@ -365,6 +289,7 @@ const DetailedPost = ({postID, onModal=false}: Props) => {
                                     className="flex-1 text-[100%] focus:ring-0 border-none outline-none 
                                         placeholder:font-[600] placeholder:text-gray-400" 
                                     type="text" 
+                                    ref={inputRef}
                                     name="comment" 
                                     placeholder="Add a comment..."
                                     id="comment"

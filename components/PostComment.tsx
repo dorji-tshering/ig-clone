@@ -1,30 +1,15 @@
 // recursive post component
 import { Disclosure } from '@headlessui/react';
 import Link from 'next/link';
+import { Comment } from '../utils/types'
+import Moment from 'react-moment';
 
-type Props = {
-    data: string;
-    likes: number;
-    timeStamp: string;
-    username: string;
-    userImage: string;
-    uid: string;
-    replies?: {
-        data: string;
-        likes: number;
-        timeStamp: string;
-        username: string;
-        userImage: string;
-        uid: string;
-    }[];
-}[]
-
-const PostComment = ({comments}: {comments: Props}) => {
+const PostComment = ({comments}: {comments: Comment[]}) => {
 
     const reply = (ref: string) => {
         // reply code here
     }
-
+    
     return (
         <>
             {
@@ -32,18 +17,28 @@ const PostComment = ({comments}: {comments: Props}) => {
                     <div key={idx}>
                         <div className="flex mb-7">
                             <div className="mr-5">
-                                <Link href="/username" className="rounded-full">
+                                <Link href={{
+                                        pathname: `/${comment.username}`,
+                                        query: {
+                                            userId: comment.userId
+                                        }
+                                    }} as={`/${comment.username}`} className="rounded-full">
                                     <img src={comment.userImage} alt="" className="w-10 h-10  object-cover rounded-full" />
                                 </Link>
                             </div>
                             <div className="flex-1">
                                 <p>
-                                    <Link href="/username" className="font-bold mr-3">{comment.username}</Link>
-                                    <span>{comment.data}</span>
+                                    <Link href={{
+                                        pathname: `/${comment.username}`,
+                                        query: {
+                                            userId: comment.userId
+                                        }
+                                    }} as={`/${comment.username}`} className="font-bold mr-3">{comment.username}</Link>
+                                    <span>{comment.text}</span>
                                 </p>
                                 <div className="flex text-gray-400 text-sm mt-2">
-                                    <span className="mr-4">{comment.timeStamp}</span>
-                                    <span className="mr-4 font-bold">{comment.likes} likes</span>
+                                    <Moment fromNow className="mr-4">{comment.timeStamp?.toDate()}</Moment>
+                                    <span className="mr-4 font-bold">{comment.likes.length} likes</span>
                                     <button onClick={() => reply('ref')} className="font-bold">Reply</button>
                                 </div>
                             </div>

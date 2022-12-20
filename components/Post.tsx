@@ -1,26 +1,28 @@
-import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useState } from "react";
-import EmojiPicker from "./EmojiPicker";
+import { useSession } from "next-auth/react"
+import { FormEvent, useEffect, useState } from "react"
+import EmojiPicker from "./EmojiPicker"
 import { addDoc, collection, serverTimestamp, onSnapshot, 
-        query, orderBy, DocumentData, QueryDocumentSnapshot, setDoc, doc, deleteDoc } from 'firebase/firestore';
-import { db } from "../firebase";
-import Moment from 'react-moment';
-import { useContextualRouting } from 'next-use-contextual-routing';
-import { useRouter } from 'next/router';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { TbMessageCircle2 } from 'react-icons/tb';
-import { FiSend } from 'react-icons/fi';
-import { HiOutlineBookmark } from 'react-icons/hi';
-import { BsEmojiSmile } from 'react-icons/bs';
-import isMobile from '../utils/useMediaQuery';
-import { BiDotsHorizontalRounded } from 'react-icons/bi';
-import { postOptionsModalState } from '../atoms/postOptionsAtom';
-import { useSetRecoilState } from "recoil";
-import Link from "next/link";
+        query, orderBy, DocumentData, QueryDocumentSnapshot, doc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { db } from "../firebase"
+import Moment from 'react-moment'
+import { useContextualRouting } from 'next-use-contextual-routing'
+import { useRouter } from 'next/router'
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
+import { TbMessageCircle2 } from 'react-icons/tb'
+import { FiSend } from 'react-icons/fi'
+import { RiBookmark3Fill, RiBookmark3Line } from 'react-icons/ri'
+import { BsEmojiSmile } from 'react-icons/bs'
+import isMobile from '../utils/useMediaQuery'
+import { BiDotsHorizontalRounded } from 'react-icons/bi'
+import { postOptionsModalState } from '../atoms/postOptionsAtom'
+import { useSetRecoilState } from "recoil"
+import Link from "next/link"
+import { CurrentSession } from "../utils/types"
 
 interface PostData {
-    id: string,
+    postId: string,
     username: string, 
+    userId: string,
     avatar: string, 
     image: string,
     caption: string,
@@ -30,56 +32,90 @@ interface PostData {
 /**
  * Post component used in the `index/home page` composing the feeds and in the `single post page` for mobile devices.
  */
-const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) => {
+const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : PostData) => {
     const [showPicker, setShowPicker] = useState(false)
-    const {data: session}: any = useSession()
-    const [comment, setComment] = useState<string>('')
-    const [comments, setComments] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
-    const [likes, setLikes] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
+    const session = useSession().data as CurrentSession
+    const [comment, setComment] = useState('')
+    const [userComment, setUserComment] = useState<QueryDocumentSnapshot<DocumentData>[]>([]) // comments by current user
+    const [totalComments, setTotalComments] = useState(0) // total number of comments 
+    const [likes, setLikes] = useState<string[]>([])
     const [hasLiked, setHasLiked] = useState(false)
+    const [savedPosts, setSavedPosts] = useState<string[]>([])
+    const [hasSaved, setHasSaved] = useState(false)
     const { makeContextualHref, returnHref } = useContextualRouting()
     const router = useRouter()
     const isMb = isMobile()
     const setPostIdForOptions = useSetRecoilState(postOptionsModalState)
 
     // update comments
-    useEffect(() => onSnapshot(query(collection(db, 'posts', id, 'comments'), orderBy('timeStamp', 'desc')), 
-        snapShot => setComments(snapShot.docs)
-    ), [db, id]);
+    useEffect(() => 
+        onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), 
+            snapShot => {
+                setUserComment(snapShot.docs.filter(doc => doc.data().userId === session.user.id))
+                setTotalComments(snapShot.docs.length)
+            }
+        ), 
+    [])
 
     // update likes
-    useEffect(() => onSnapshot(collection(db, 'posts', id, 'likes'), snapshot => (
-        setLikes(snapshot.docs)
-    )), [db, id]);
+    useEffect(() => onSnapshot(doc(db, 'posts', postId), snapshot => (
+        setLikes(snapshot.data()?.likes)
+    )), [])
 
     // update hasLiked
     useEffect(() => {
-        setHasLiked(
-            likes.findIndex(
-                like => like.id === session?.user?.uid
-            ) !== -1 
-        );
-    }, [likes]);
+        setHasLiked(likes.includes(session.user.id))
+    }, [likes])
 
+    //update savePosts
+    useEffect(() => onSnapshot(doc(db, 'users', session.user.id), snapshot => (
+        setSavedPosts(snapshot.data()?.savedPosts)
+    )),[])
+
+    // update hasSaved
+    useEffect(() => {
+        setHasSaved(savedPosts.includes(postId))
+    },[savedPosts])
+
+    // post comment
     const postComment = async(e: FormEvent) => {
-        e.preventDefault();
-        const commentToSend = comment;
-        setComment(''); // avoid spamming
+        e.preventDefault()
+        const commentToSend = comment
+        setComment('') // avoid spamming
 
-        await addDoc(collection(db, 'posts', id, 'comments'), {
-            comment: commentToSend,
+        await addDoc(collection(db, 'posts', postId, 'comments'), {
+            text: commentToSend,
+            likes: [],
+            userId: session.user.id,
             username: session.user.username,
             userImage: session.user.image,
-            timeStamp: serverTimestamp()
+            parentColRef: `posts/${postId}/comments`,
+            timeStamp: serverTimestamp(),
         });
     }
 
+    // post like
     const postLike = async() => {
         if(hasLiked) {
-            await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid));
+            await updateDoc(doc(db, 'posts', postId), {
+                likes: likes.filter(like => like !== session.user.id)
+            })
         } else {
-            await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
-                username: session.user.username,
+            await updateDoc(doc(db, 'posts', postId), {
+                likes: arrayUnion(session.user.id),
+            })
+        }
+    }
+
+    // save post
+    const savePost = async () => {
+        if(hasSaved) {
+            await updateDoc(doc(db, 'users', session.user.id), {
+                savedPosts: savedPosts.filter(id => id !== postId)
+            })
+        }else {
+            await updateDoc(doc(db, 'users', session.user.id), {
+                savedPosts: arrayUnion(postId)
             })
         }
     }
@@ -97,15 +133,15 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
             }
             {/* Header */}
             <div className="flex items-center p-2 md:p-3">
-                <Link href="/username">
+                <Link href={`/${username}`}>
                     <img 
                         className="rounded-full h-10 w-10 object-contain p-1 mr-3 border" 
                         src={avatar} 
                         alt="user-avatar"
                     />
                 </Link>
-                <Link href='/username' className="flex-1 font-bold">{ username }</Link>
-                <button onClick={() => setPostIdForOptions(id)}>
+                <Link href={`/${username}`} className="font-bold">{ username }</Link>
+                <button className="ml-auto" onClick={() => setPostIdForOptions(postId)}>
                     <BiDotsHorizontalRounded className="h-8 w-8"/>
                 </button>
             </div>
@@ -137,12 +173,13 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                             className="reactBtn"
                             onClick={() => {
                                 isMb ? 
-                                    router.push(`/post/${'posID'}/comments`)
+                                    router.push(`/post/${postId}/comments`)
                                 :
                                     router.push(makeContextualHref({
                                         routeModalId: 'post',
-                                        currentPageURL: returnHref
-                                    }),`/post/postID`, {scroll: false})
+                                        currentPageURL: returnHref,
+                                        postId: postId
+                                    }),`/post/${postId}`, {scroll: false})
                                 
                             }}>
                             <TbMessageCircle2 className="reactBtnIcon"/>
@@ -153,8 +190,14 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                         </button>
                     </div>
                     {/* save button */}
-                    <button className="reactBtn">
-                        <HiOutlineBookmark className="reactBtnIcon"/>                  
+                    <button onClick={savePost} className="reactBtn">
+                        {
+                            hasSaved ? (
+                                <RiBookmark3Fill className="reactBtnIcon text-instaBlue"/>
+                            ):(
+                                <RiBookmark3Line className="reactBtnIcon"/>
+                            )
+                        }
                     </button>
                 </div>
 
@@ -167,35 +210,47 @@ const Post = ({ id, username, avatar, image, caption, timeStamp } : PostData) =>
                             <p className="font-bold mb-2">{likes.length} likes</p>
                         )
                     )}
+                    {/* caption */}
                     <p className="mb-2">
-                        <Link href="/href" className="font-bold mr-1 truncate">{username}</Link>{caption}
+                        <Link href={{
+                            pathname: `/${username}`,
+                            query: {userId: userId},
+                        }} as={`/${username}`} className="font-bold mr-1">{username}</Link>{caption}
                     </p>
-                    <p className="text-gray-500 mb-2">View all 120K comments</p>
+                    {
+                        totalComments > 0 && (
+                            <button 
+                                onClick={() => {
+                                    isMb ? 
+                                        router.push(`/post/${postId}/comments`)
+                                    :
+                                        router.push(makeContextualHref({
+                                            routeModalId: 'post',
+                                            currentPageURL: returnHref,
+                                            postId: postId
+                                        }),`/post/${postId}`, {scroll: false})
+                                    
+                                }}
+                                className="text-gray-500 mb-2">
+                                    {`View ${totalComments} ${totalComments === 1 ? 'comment' : 'comments'}`}
+                            </button>
+                        )
+                    }
                     {/* current user comments */}
-                    <p className='mb-3'>
-                        <span className='font-bold mr-2'>dorji_dev</span>
-                        <span>A simple, accessible foundation for building custom UIs that show and hide content, like togglable accordion panels.</span>
-                    </p>
+                    {userComment.length > 0 && 
+                        userComment.map((comment => (
+                            <p className='mb-2' key={comment.id}>
+                                <span className='font-bold mr-2'>{comment.data().username}</span>
+                            <span>{comment.data().text}</span>
+                        </p>
+                        ))) 
+                    }
                 </div>
-                {/* Comments */}
-                {/* {comments.length > 0 && 
-                    <div className="px-5 max-h-20 overflow-y-scroll scrollbar-thumb-black scrollbar-thin">
-                        { comments.map((comment => (
-                            <div className="flex items-center space-x-2 mb-2" key={comment.id}>
-                                <p className="text-sm flex-1">
-                                    <span className="font-[500]">{comment.data().username + ' '}</span>
-                                    {comment.data().comment}
-                                </p>
-                            </div>
-                        ))) }
-                    </div> 
-                } */}
 
                 {/* post timestamp */}
-                {/* <Moment fromNow className="px-5 mt-2 mb-5 md:mb-0 wordSpace block uppercase  text-[9px] text-gray-400">
+                <Moment fromNow className="px-5 mb-5 mt-4 md:mb-4 wordSpace block uppercase text-[10px] font-[500] text-gray-400">
                     {timeStamp.toDate()}
-                </Moment> */}
-                <p className="px-5 mb-5 md:mb-4 wordSpace block uppercase text-[10px] font-[500] text-gray-400">5 DAYS AGO</p>
+                </Moment>
                 
                 {/* Input box */}
                 <form className="hidden border-t py-2 md:flex items-center px-5" 

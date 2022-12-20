@@ -5,11 +5,11 @@ import { useRouter } from 'next/router';
 
 type Props = {
     onClose?: () => void, 
-    userID: string,
+    userId: string,
     onModal?: boolean
 }
 
-const Followers = ({onClose, userID, onModal=false}: Props) => {
+const Followers = ({onClose, userId, onModal=false}: Props) => {
     const router = useRouter()
     const followerLength = 0
     const loggedInUser = true

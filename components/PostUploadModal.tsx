@@ -70,7 +70,9 @@ const PostUploadModal = () => {
                             setOpenModal={setOpenModal} 
                             setFileSelectOpen={setFileSelectOpen} 
                             editedFile={editedFile}
-                            selectedFile={selectedFile} /> 
+                            selectedFile={selectedFile}
+                            setEditedFile={setEditedFile}
+                            setSelectedFile={setSelectedFile} /> 
                     }
                 </>
             </Modal>

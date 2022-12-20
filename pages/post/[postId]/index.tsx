@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 const PostPage = () => {
     const router = useRouter();
     const isMb = isMobile();
+    const postId = router.query.postId as string
 
     return (
         <div className="pageContent relative">
@@ -30,10 +31,11 @@ const PostPage = () => {
                             image='/images/hori.jpeg'
                             caption='Super glad that things are going really well right now.'
                             timeStamp='November 27, 2022 at 3:00:02 AM UTC+6'
+                            userId=''
                         />
                     </div>
                 ):(
-                    <DetailedPost postID="123"/>
+                    <DetailedPost postId={postId}/>
                 )
             }
         </div>

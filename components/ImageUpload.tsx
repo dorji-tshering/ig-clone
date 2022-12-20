@@ -1,50 +1,64 @@
-import { updateDoc } from 'firebase/firestore';
-import { uploadString } from 'firebase/storage';
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { MdOutlineArrowBack } from 'react-icons/md';
+import { db, storage } from '../firebase';
+import { CurrentSession } from '../utils/types';
 
 type Props = {
-    setEditorOpen: Dispatch<SetStateAction<boolean>>;
-    setCaptionModalOpen: Dispatch<SetStateAction<boolean>>;
-    setOpenModal: Dispatch<SetStateAction<boolean>>;
-    setFileSelectOpen: Dispatch<SetStateAction<boolean>>;
-    editedFile: any;
+    setEditorOpen: Dispatch<SetStateAction<boolean>>
+    setCaptionModalOpen: Dispatch<SetStateAction<boolean>>
+    setOpenModal: Dispatch<SetStateAction<boolean>>
+    setFileSelectOpen: Dispatch<SetStateAction<boolean>>
+    setSelectedFile: Dispatch<SetStateAction<any>>
+    setEditedFile: Dispatch<SetStateAction<any>>
+    editedFile: any
     selectedFile: any
 }
 
-const ImageUpload = ({ setEditorOpen, setCaptionModalOpen, setOpenModal, editedFile, selectedFile }: Props) => {
-    const [caption, setCaption] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const spaceRef = useRef(0);
-
-    const {data: session}: any = useSession();
+const ImageUpload = ({ 
+    setEditorOpen, setCaptionModalOpen, setFileSelectOpen, setOpenModal, 
+    editedFile, selectedFile, setSelectedFile, setEditedFile}: Props) => {
+    const [caption, setCaption] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
+    // ref to allow only single space between caption words
+    const spaceRef = useRef(0)
+    const session = useSession().data as CurrentSession
 
     const uploadPost = async () => {
-        if(loading) return;
-        setLoading(true);
+        // avoid re-upload on double clicking upload button
+        if(loading) return 
+        setLoading(true)
          
-        // upload data to firestore, doc ID will be auto-generated
-        // const docRef = await addDoc(collection(db, 'posts'), {
-        //     username: session?.user.username,
-        //     caption: captionRef.current.value,
-        //     profileImg: session?.user.image,
-        //     timeStamp: serverTimestamp(),
-        // });
+        //upload data to firestore, doc ID will be auto-generated
+        const docRef = await addDoc(collection(db, 'posts'), {
+            caption: caption,
+            likes: [],
+            username: session.user.username,
+            userImage: session.user.image,
+            userId: session.user.id,
+            timeStamp: serverTimestamp(),
+        });
 
-        // // upload image/videos to firebase storage and update the document
-        // const imageRef = ref(storage, `posts/image/${docRef.id}`);
+        // upload image/videos to firebase storage and update the document
+        const imageRef = ref(storage, `posts/image/${docRef.id}`)
 
-        // await uploadString(imageRef, selectedFile, "data_url").then(async () => {
-        //     const downloadURL = await getDownloadURL(imageRef);
-        //     await updateDoc(doc(db, 'posts', docRef.id), {
-        //         image: downloadURL,
-        //     })
-        // });
+        await uploadString(imageRef, selectedFile, "data_url").then(async () => {
+            const downloadURL = await getDownloadURL(imageRef)
+            await updateDoc(doc(db, 'posts', docRef.id), {
+                postImage: downloadURL,
+            })
+        });
 
-        //setOpen(false);
-        setOpenModal(false);
-        setLoading(false);
+        // reset everything after upload is completed
+        setOpenModal(false)
+        setEditorOpen(false)
+        setCaptionModalOpen(false)
+        setFileSelectOpen(true)
+        setSelectedFile(null)
+        setEditedFile(null)
+        setLoading(false)
     }
 
 

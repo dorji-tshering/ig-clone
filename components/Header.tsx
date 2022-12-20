@@ -21,7 +21,7 @@ const Header = () => {
     const router = useRouter()
     const openUploadModal = useSetRecoilState(uploadModalState)
     const { makeContextualHref, returnHref } = useContextualRouting()
-
+    
     return (
        <div className="shadow-sm border-b bg-white sticky top-0 z-50 h-[54px]">
              <div className="flex justify-between h-full items-center mx-6 md:max-w-4xl lg:max-w-6xl md:mx-auto">
@@ -112,7 +112,7 @@ const Header = () => {
                             </div>
                             {/* profile link */}
                             <div className="dNavWrapper">
-                                <Tooltip className="mt-[-1.5px]" style="light" content={`Profile @${session?.user?.username}`} placement="bottom" animation="duration-1000">
+                                <Tooltip className="mt-[-1.5px]" style="light" content={`@${session?.user?.username}`} placement="bottom" animation="duration-1000">
                                     <button onClick={() => router.push(`/${session?.user?.username}`)} 
                                         className="h-12 w-12 flex items-center justify-center cursor-pointer
                                         bg-transparent ml-0 hover:bg-gray-100 rounded-full group">

@@ -10,6 +10,8 @@ import Notifications from "./Notifications"
 const RoutedModal = () => {
     const router = useRouter()
     const modalName = router.query.routeModalId as string
+    const postId = router.query.postId as string
+    const userId = router.query.userId as string
     const followers = modalName === 'followers'
     const following = modalName === 'following'
     const post = modalName === 'post'
@@ -28,7 +30,7 @@ const RoutedModal = () => {
                     followers && (
                         <Followers 
                             onClose={() => router.push(router.query.currentPageURL as string, undefined, {scroll: false})}
-                            userID="userId"
+                            userId={userId}
                             onModal={true}/>
                     )
                 }
@@ -36,14 +38,14 @@ const RoutedModal = () => {
                     following && (
                         <Following 
                             onClose={() => router.push(router.query.currentPageURL as string, undefined, {scroll: false})}
-                            userID="userId"
+                            userId={userId}
                             onModal={true}/>
                     )
                 }
                 {
                     post && (
                         <DetailedPost 
-                            postID="postId"
+                            postId={postId}
                             onModal={true}/>
                     )
                 }
