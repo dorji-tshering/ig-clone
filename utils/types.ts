@@ -6,7 +6,6 @@ export type CurrentSession = {
         id: string
         followers: string[]
         following: string[]
-        likedPosts: string[]
         savedPosts: string[]
     },
     expires: Session['expires']

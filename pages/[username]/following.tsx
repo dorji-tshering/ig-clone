@@ -7,7 +7,7 @@ const FollowingPage = () => {
 
     return (
         <div className="pb-16 md:mt-5 md:w-fit md:mx-auto">
-            <Following onClose={() => router.back()} userID="userid"/>
+            <Following onClose={() => router.back()} userId="userid"/>
         </div>
     )
 }

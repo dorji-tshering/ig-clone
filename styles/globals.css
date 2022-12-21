@@ -40,9 +40,12 @@
 }
 
 .profileContentContainer {
-    @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4
-    gap-3 px-4 mb-5
+    @apply flex flex-wrap justify-center md:px-4
 } 
+
+.profileContentContainer > div {
+    @apply basis-[33.333333%] sm:basis-[25%] xl:basis-[20%]
+}
 
 .pageContent {
     @apply mt-5 md:mt-10 pb-20 md:pb-14

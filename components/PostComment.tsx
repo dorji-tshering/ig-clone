@@ -9,7 +9,7 @@ const PostComment = ({comments}: {comments: Comment[]}) => {
     const reply = (ref: string) => {
         // reply code here
     }
-    
+
     return (
         <>
             {
@@ -17,23 +17,13 @@ const PostComment = ({comments}: {comments: Comment[]}) => {
                     <div key={idx}>
                         <div className="flex mb-7">
                             <div className="mr-5">
-                                <Link href={{
-                                        pathname: `/${comment.username}`,
-                                        query: {
-                                            userId: comment.userId
-                                        }
-                                    }} as={`/${comment.username}`} className="rounded-full">
-                                    <img src={comment.userImage} alt="" className="w-10 h-10  object-cover rounded-full" />
+                                <Link href={`/${comment.username}`} className="rounded-full">
+                                    <img src={comment.userImage} alt="commenter image" className="w-10 h-10  object-cover rounded-full" />
                                 </Link>
                             </div>
                             <div className="flex-1">
                                 <p>
-                                    <Link href={{
-                                        pathname: `/${comment.username}`,
-                                        query: {
-                                            userId: comment.userId
-                                        }
-                                    }} as={`/${comment.username}`} className="font-bold mr-3">{comment.username}</Link>
+                                    <Link href={`/${comment.username}`} className="font-bold mr-3">{comment.username}</Link>
                                     <span>{comment.text}</span>
                                 </p>
                                 <div className="flex text-gray-400 text-sm mt-2">

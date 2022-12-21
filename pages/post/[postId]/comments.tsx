@@ -1,198 +1,63 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
-import { MdKeyboardBackspace } from 'react-icons/md';
-import PostComment from '../../../components/PostComment';
+import { addDoc, arrayUnion, collection, doc, getDoc, increment, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore'
+import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { FormEvent, useEffect, useState } from 'react'
+import { MdKeyboardBackspace } from 'react-icons/md'
+import PostComment from '../../../components/PostComment'
+import { db } from '../../../firebase'
+import { Comment, CurrentSession } from '../../../utils/types'
+import useSWR from 'swr'
 
-const comments = [
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-                replies: [
-                    {
-                        data: 'Wow you look so so cool YO!',
-                        likes: 20,
-                        timeStamp: '3d',
-                        username: 'dorji_dev',
-                        userImage: '/images/dorji.jpg',
-                        uid: '1234',
-                    },
-                ]
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-    {
-        data: 'Wow you look so so cool YO!',
-        likes: 20,
-        timeStamp: '3d',
-        username: 'dorji_dev',
-        userImage: '/images/dorji.jpg',
-        uid: '1234',
-        replies: [
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            },
-            {
-                data: 'Wow you look so so cool YO!',
-                likes: 20,
-                timeStamp: '3d',
-                username: 'dorji_dev',
-                userImage: '/images/dorji.jpg',
-                uid: '1234',
-            }
-        ]
-    },
-];
+const fetchPost = async (postPath: string) => {
+    return await getDoc(doc(db, postPath))
+}
 
 const Comments = () => {
-    const [comment, setComment] = useState<string | undefined>();
+    const [comment, setComment] = useState('');
+    const [postComments, setPostComments] = useState<Comment[]>([]);
     const router = useRouter();
+    const postId = router.query.postId as string
+    const session = useSession().data as CurrentSession
+    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost)
+console.log(postId)
+    useEffect(() => 
+        onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
+            setPostComments(snapshot.docs.map(doc => {
+                return {
+                    id: doc.id,
+                    text: doc.data().text,
+                    likes: doc.data().likes,
+                    timeStamp: doc.data().timeStamp,
+                    userImage: doc.data().userImage,
+                    username: doc.data().username,
+                    userId: doc.data().userId,
+                    parentColRef: doc.data().parentColRef,
+                    replies: doc.data().replies
+                }
+            }))
+        }
+    ),[])
 
-    const postComment = async (e: FormEvent) => {
-        // post comment code
+    // post comment
+    const postComment = async(e: FormEvent) => {
+        e.preventDefault()
+        const commentToSend = comment
+        setComment('') // avoid spamming
+
+        await addDoc(collection(db, 'posts', postId, 'comments'), {
+            text: commentToSend,
+            likes: [],
+            userId: session.user.id,
+            username: session.user.username,
+            userImage: session.user.image,
+            parentColRef: `posts/${postId}/comments`,
+            timeStamp: serverTimestamp(),
+        });
+
+        await updateDoc(doc(db, 'posts', postId), {
+            commentCount: increment(1)
+        })
     }
 
     return (
@@ -210,7 +75,7 @@ const Comments = () => {
                 {/* comment input */}
                 <section className="flex p-4 items-center bg-[#EFEEEE]">
                     <span className="mr-4">
-                        <img src="/images/dorji.jpg" className="h-9 w-9 object-cover rounded-full" alt="current user image" />
+                        <img src={session.user.image as string} className="h-9 w-9 object-cover rounded-full" alt="current user image" />
                     </span>
                     <form className="border rounded-full flex grow items-center py-3 px-5 bg-white" onSubmit={(e) => postComment(e)}>
                             <input 
@@ -219,7 +84,6 @@ const Comments = () => {
                                 type="text" 
                                 name="comment" 
                                 placeholder="Add a comment..."
-                                id="comment"
                                 value={comment}
                                 autoComplete="off"
                                 onChange={(e) => setComment(e.target.value)} />
@@ -233,14 +97,14 @@ const Comments = () => {
                 <section className="px-4 py-6">
                     <div className="flex border-b pb-6">
                         <div className="mr-5">
-                            <Link href="/username" className="rounded-full">
-                                <img src="/images/dorji.jpg" alt="" className="object-cover rounded-full w-9 h-9" />
+                            <Link href={`/${post?.data()?.username}`} className="rounded-full">
+                                <img src={post?.data()?.userImage} alt="" className="object-cover rounded-full w-9 h-9" />
                             </Link>
                         </div>
                         <div className="flex-1">
                             <p>
-                                <Link href="/username" className="font-bold mr-3">dorji_dev</Link>
-                                <span>A simple, accessible foundation for building custom UIs that show and hide content, like togglable accordion panels.</span>
+                                <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
+                                <span>{post?.data()?.caption}</span>
                             </p>
                             <p className="text-gray-400 text-sm mt-2">2d</p>
                         </div>
@@ -248,7 +112,7 @@ const Comments = () => {
                 </section>
                 {/* comments */}
                 <section className="px-5 py-2">
-                    <PostComment comments={comments}/>
+                    <PostComment comments={postComments}/>
                 </section>
             </div>
         </div>

@@ -10,14 +10,13 @@ const Home = () => {
     const status = useSession().status
 
     // create default username for first time sign in
-    if(session && !session.user.username && status === 'authenticated' || !session.user.followers
-        || !session.user.following || !session.user.likedPosts || !session.user.savedPosts) {
+    if(session && !session.user.username && status === 'authenticated' && !session.user.followers
+        && !session.user.following && !session.user.savedPosts) {
         const docRef = doc(db, `users/${session.user.id}`)
         setDoc(docRef, {
             username: session.user.name?.split(' ').join('').toLowerCase() as string,
             followers: [],
             following: [],
-            likedPosts: [],
             savedPosts: [],
         }, {merge: true})
         session.user.username = session.user.name?.split(' ').join('').toLowerCase() as string
@@ -27,7 +26,7 @@ const Home = () => {
         <div className="pageContent">
             <Head>
                 <title>InstaClone</title>
-                <meta name="description" content="Instagram clone homepage" />
+                <meta name="description" content="An instagram clone built with Nextjs and Tailwind" />
                 <link rel="icon" href="/favicon.ico" />
             </Head> 
             <Feed/>

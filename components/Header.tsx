@@ -14,9 +14,10 @@ import { TbSearch } from 'react-icons/tb'
 import { useState } from 'react'
 import InstantSearch from './InstantSearch'
 import { useContextualRouting } from 'next-use-contextual-routing'
+import { CurrentSession } from '../utils/types'
 
 const Header = () => {
-    const {data: session}: any = useSession()
+    const session = useSession().data as CurrentSession
     const [searchText, setSearchText] = useState<string | null>(null)
     const router = useRouter()
     const openUploadModal = useSetRecoilState(uploadModalState)

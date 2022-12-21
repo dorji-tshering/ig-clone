@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { addDoc, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -38,13 +38,14 @@ const ImageUpload = ({
             username: session.user.username,
             userImage: session.user.image,
             userId: session.user.id,
+            commentCount: 0,
             timeStamp: serverTimestamp(),
         });
 
         // upload image/videos to firebase storage and update the document
         const imageRef = ref(storage, `posts/image/${docRef.id}`)
 
-        await uploadString(imageRef, selectedFile, "data_url").then(async () => {
+        await uploadString(imageRef, editedFile ?? selectedFile, "data_url").then(async () => {
             const downloadURL = await getDownloadURL(imageRef)
             await updateDoc(doc(db, 'posts', docRef.id), {
                 postImage: downloadURL,

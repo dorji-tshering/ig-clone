@@ -1,49 +1,30 @@
 import { useEffect, useState } from "react"
-import { faker } from '@faker-js/faker';
-import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase";
-
-interface User {
-    userId: string,
-    username: string,
-    email: string,
-    avatar: string,
-    password: string,
-    birthdate: Date,
-    registeredAt: Date,
-}
+import { useSession } from 'next-auth/react'
+import { arrayUnion, collection, doc, DocumentData, DocumentSnapshot, getDocs, onSnapshot, query, QueryDocumentSnapshot, updateDoc, where } from "firebase/firestore"
+import { db } from "../firebase"
+import { CurrentSession } from '../utils/types'
+import Link from "next/link"
 
 function Suggestions() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [suggestions, setSuggestions] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
+    const session = useSession().data as CurrentSession
 
-    
-    useEffect(() => {
-        const USERS: User[] = [];
+    // get users not followed by the current user
+    useEffect(() => 
+        onSnapshot(query(collection(db, 'users')), snapshot => {
+            setSuggestions(snapshot.docs.filter(user => user.id !== session.user.id && !user.data().followers.includes(session.user.id)))
+        }),
+    [])
 
-        function createRandomUser(): User {
-            return {
-              userId: faker.datatype.uuid(),
-              username: faker.internet.userName(),
-              email: faker.internet.email(),
-              avatar: faker.image.avatar(),
-              password: faker.internet.password(),
-              birthdate: faker.date.birthdate(),
-              registeredAt: faker.date.past(),
-            };
-          }
-          
-          Array.from({ length: 7 }).forEach(() => {
-            USERS.push(createRandomUser());
-          });
-          setUsers(USERS);
-
-    }, []);
-
-    // useEffect(()=>{
-    //     getDocs(collection(db,'users')).then((doc)=>{
-    //         setSuggestions(doc.docs.map((doc) => ({...doc.data()})))
-    //     })
-    // },[])
+    // follow suggested user
+    const follow = async (userId: string) => {
+        await updateDoc(doc(db, 'users', session.user.id), {
+            following: arrayUnion(userId)
+        })
+        await updateDoc(doc(db, 'users', userId), {
+            followers: arrayUnion(session.user.id)
+        })
+    }
 
     return (
         <div className='mt-4 ml-10'>
@@ -52,13 +33,15 @@ function Suggestions() {
                 <button className='text-gray-600 font-semibold'>See All</button>
             </div>
             {
-                users.map(profile=>(
-                    <div key={profile.userId} className="flex items-center justify-between mt-3">
-                        <img className='w-10 h-10 rounded-full border p-[2px]' src={profile.avatar} alt="" />
+                suggestions.map(user=>(
+                    <div key={user.id} className="flex items-center justify-between mt-3">
+                        <Link href={`/${user.data().username}`}>
+                            <img className='w-10 h-10 rounded-full border p-[2px]' src={user.data().image} alt="" />
+                        </Link>
                         <div className="flex-1 ml-4">
-                            <h2 className='font-semibold text-sm'>{profile.username}</h2>
+                            <Link href={`/${user.data().username}`} className='font-semibold text-sm'>{user.data().username}</Link>
                         </div>
-                        <button className='text-instaBlue text-sm  font-bold'>Follow</button>
+                        <button onClick={() => follow(user.id)} className='text-instaBlue text-sm  font-bold'>Follow</button>
                     </div>
                 ))
             }

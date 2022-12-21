@@ -2,7 +2,6 @@
  * Post component used by post page and routedModal on desktop  
  */ 
 import Link from 'next/link'
-import useSWR from 'swr'
 import classNames from 'classnames'
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
@@ -17,7 +16,7 @@ import { useSetRecoilState } from 'recoil'
 import { onModalState } from '../atoms/onModalAtom'
 import EmojiPicker from './EmojiPicker'
 import { db } from '../firebase'
-import { addDoc, arrayUnion, collection, doc, getDoc, onSnapshot, orderBy, query, QueryDocumentSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { addDoc, arrayRemove, arrayUnion, collection, doc, DocumentData, DocumentSnapshot, getDoc, increment, onSnapshot, orderBy, query, QueryDocumentSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore'
 import Moment from 'react-moment'
 import { Comment } from '../utils/types'
 import { useSession } from 'next-auth/react'
@@ -28,26 +27,23 @@ type Props = {
     onModal?: boolean
 }
 
-const fetchPost = async(posdId: string) => {
-    return await getDoc(doc(db, 'posts', posdId))
-}
-
 /**
  * Single post component for device-width > 768px. Used by `RoutedModal` component and `/post/[postID]` path.
  */
 const DetailedPost = ({postId, onModal=false}: Props) => {
     const [comment, setComment] = useState<string>('')
     const [postComments, setPostComments] = useState<Comment[]>([])
+    const [post, setPost] = useState<DocumentSnapshot<DocumentData>>()
     const openPostIdForOptions = useSetRecoilState(postOptionsModalState)
     const [showPicker,setShowPicker] = useState(false)
-    const [likes, setLikes] = useState<string[]>([]) // post likes
+    const [likes, setLikes] = useState<string[]>([])
     const [hasLiked, setHasLiked] = useState(false)
     const [savedPosts, setSavedPosts] = useState<string[]>([])
     const [hasSaved, setHasSaved] = useState(false)
-    const follows = false
+    const [following, setFollowing] = useState<string[]>([]) // field of current user
+    const [follows, setFollows] = useState(false)
     const setOnRoutedModal = useSetRecoilState (onModalState)
     const session = useSession().data as CurrentSession
-    const {data: post, isLoading} = useSWR(postId, fetchPost)
     const inputRef = useRef<any>(null)
 
     // update whether the post is on routed modal or not
@@ -58,10 +54,11 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
         }
     },[])
 
-    // update likes
-    useEffect(() => onSnapshot(doc(db, 'posts', postId), snapshot => (
+    // update likes and post
+    useEffect(() => onSnapshot(doc(db, 'posts', postId), snapshot => {
+        setPost(snapshot)
         setLikes(snapshot.data()?.likes)
-    )), [])
+    }), [])
 
     // update hasLiked
     useEffect(() => {
@@ -87,25 +84,46 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
         }
     ),[])
 
-    //update savePosts
-    useEffect(() => onSnapshot(doc(db, 'users', session.user.id), snapshot => (
+    //listen to savePosts and following field changes for current user
+    useEffect(() => onSnapshot(doc(db, 'users', session.user.id), snapshot => {
         setSavedPosts(snapshot.data()?.savedPosts)
-    )),[])
+        setFollowing(snapshot.data()?.following)
+    }),[])
 
     // update hasSaved
     useEffect(() => {
         setHasSaved(savedPosts.includes(postId))
     },[savedPosts])
  
-    const follow = () => {
-        // follow other user
+    // update follows
+    useEffect(() => {
+        setFollows(following.includes(post?.data()?.userId))
+    },[following])
+
+    // follow other user {update followers and following of both current user and post user}
+    const follow = async () => {
+        if(follows) {
+            await updateDoc(doc(db, 'users', session.user.id), {
+                following: arrayRemove(post?.data()?.userId)
+            })
+            await updateDoc(doc(db, 'users', post?.data()?.userId), {
+                followers: arrayRemove(session.user.id)
+            })
+        }else {
+            await updateDoc(doc(db, 'users', session.user.id), {
+                following: arrayUnion(post?.data()?.userId)
+            })
+            await updateDoc(doc(db, 'users', post?.data()?.userId), {
+                followers: arrayUnion(session.user.id)
+            })
+        }
     }
 
     // post like
     const postLike = async() => {
         if(hasLiked) {
             await updateDoc(doc(db, 'posts', postId), {
-                likes: likes.filter(like => like !== session.user.id)
+                likes: arrayRemove(session.user.id)
             })
         } else {
             await updateDoc(doc(db, 'posts', postId), {
@@ -129,13 +147,17 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
             parentColRef: `posts/${postId}/comments`,
             timeStamp: serverTimestamp(),
         });
+
+        await updateDoc(doc(db, 'posts', postId), {
+            commentCount: increment(1)
+        })
     }
 
     // save post
     const savePost = async () => {
         if(hasSaved) {
             await updateDoc(doc(db, 'users', session.user.id), {
-                savedPosts: savedPosts.filter(id => id !== postId)
+                savedPosts: arrayRemove(postId)
             })
         }else {
             await updateDoc(doc(db, 'users', session.user.id), {
@@ -143,8 +165,6 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
             })
         }
     }
-
-    if(isLoading) return <></>
 
     return (
         <div className="text-center">
@@ -189,11 +209,18 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                                         {post?.data()?.username}
                                     </Link>
                                     {
-                                        !follows && (
-                                            <>
-                                                <span className="mx-2 text-gray-400">&bull;</span>
-                                                <button className="text-instaBlue font-[600]" onClick={follow}>Follow</button>
-                                            </>
+                                        (post?.data()?.userId !== session.user.id) && (
+                                            follows ? (
+                                                <>
+                                                    <span className="mx-2 text-gray-400">&bull;</span>
+                                                    <button onClick={follow} className="text-gray-500 font-[600]">Following</button>
+                                                </>
+                                            ):(
+                                                <>
+                                                    <span className="mx-2 text-gray-400">&bull;</span>
+                                                    <button onClick={follow} className="text-instaBlue font-[600]">Follow</button>
+                                                </>
+                                            )
                                         )
                                     }
                                 </div>
@@ -217,7 +244,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                                 </div>
                                 <div className="flex-1">
                                     <p>
-                                        <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">dorji_dev</Link>
+                                        <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
                                         <span>{post?.data()?.caption}</span>
                                     </p>
                                     <Moment fromNow className="text-gray-400 text-sm mt-2">
@@ -227,7 +254,9 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                             </div>
                             
                             {/* comments */}
-                            <PostComment comments={postComments}/>
+                            {
+                                postComments && <PostComment comments={postComments}/>
+                            }
                         </section>
 
                         {/* bottom action section */}

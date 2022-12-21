@@ -1,15 +1,25 @@
 // single post page
-import DetailedPost from '../../../components/DetailedPost';
-import Post from '../../../components/Post';
-import { useRouter } from 'next/router';
-import isMobile from '../../../utils/useMediaQuery';
-import { MdKeyboardBackspace } from 'react-icons/md';
-import { useEffect } from 'react';
+import DetailedPost from '../../../components/DetailedPost'
+import Post from '../../../components/Post'
+import { useRouter } from 'next/router'
+import isMobile from '../../../utils/useMediaQuery'
+import { MdKeyboardBackspace } from 'react-icons/md'
+import useSWR from 'swr'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../../../firebase'
+
+const fetchPost = async (postPath: string) => {
+    return await getDoc(doc(db, postPath))
+}
 
 const PostPage = () => {
     const router = useRouter();
     const isMb = isMobile();
     const postId = router.query.postId as string
+
+    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost)
+
+    if(isLoading) return <></>
 
     return (
         <div className="pageContent relative">
@@ -25,13 +35,13 @@ const PostPage = () => {
                             </div>
                         </section>
                         <Post
-                            id='hello' 
-                            username='bumie' 
-                            avatar='/images/dorji.jpg'
-                            image='/images/hori.jpeg'
-                            caption='Super glad that things are going really well right now.'
-                            timeStamp='November 27, 2022 at 3:00:02 AM UTC+6'
-                            userId=''
+                            postId={postId}
+                            username={post?.data()?.username}
+                            userImage={post?.data()?.userImage}
+                            postImage={post?.data()?.postImage}
+                            caption={post?.data()?.caption}
+                            timeStamp={post?.data()?.timeStamp}
+                            commentCount={post?.data()?.commentCount}
                         />
                     </div>
                 ):(

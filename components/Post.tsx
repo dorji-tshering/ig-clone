@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react"
 import { FormEvent, useEffect, useState } from "react"
 import EmojiPicker from "./EmojiPicker"
 import { addDoc, collection, serverTimestamp, onSnapshot, 
-        query, orderBy, DocumentData, QueryDocumentSnapshot, doc, updateDoc, arrayUnion } from 'firebase/firestore'
+        query, orderBy, DocumentData, QueryDocumentSnapshot, doc, updateDoc, arrayUnion, increment, arrayRemove } from 'firebase/firestore'
 import { db } from "../firebase"
 import Moment from 'react-moment'
 import { useContextualRouting } from 'next-use-contextual-routing'
@@ -22,22 +22,21 @@ import { CurrentSession } from "../utils/types"
 interface PostData {
     postId: string,
     username: string, 
-    userId: string,
-    avatar: string, 
-    image: string,
+    userImage: string, 
+    postImage: string,
     caption: string,
+    commentCount: number,
     timeStamp: any
 }
 
 /**
  * Post component used in the `index/home page` composing the feeds and in the `single post page` for mobile devices.
  */
-const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : PostData) => {
+const Post = ({ postId, username, userImage, postImage, commentCount, caption, timeStamp } : PostData) => {
     const [showPicker, setShowPicker] = useState(false)
     const session = useSession().data as CurrentSession
     const [comment, setComment] = useState('')
     const [userComment, setUserComment] = useState<QueryDocumentSnapshot<DocumentData>[]>([]) // comments by current user
-    const [totalComments, setTotalComments] = useState(0) // total number of comments 
     const [likes, setLikes] = useState<string[]>([])
     const [hasLiked, setHasLiked] = useState(false)
     const [savedPosts, setSavedPosts] = useState<string[]>([])
@@ -52,7 +51,6 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
         onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), 
             snapShot => {
                 setUserComment(snapShot.docs.filter(doc => doc.data().userId === session.user.id))
-                setTotalComments(snapShot.docs.length)
             }
         ), 
     [])
@@ -92,13 +90,17 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
             parentColRef: `posts/${postId}/comments`,
             timeStamp: serverTimestamp(),
         });
+
+        await updateDoc(doc(db, 'posts', postId), {
+            commentCount: increment(1)
+        })
     }
 
     // post like
     const postLike = async() => {
         if(hasLiked) {
             await updateDoc(doc(db, 'posts', postId), {
-                likes: likes.filter(like => like !== session.user.id)
+                likes: arrayRemove(session.user.id)
             })
         } else {
             await updateDoc(doc(db, 'posts', postId), {
@@ -111,7 +113,7 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
     const savePost = async () => {
         if(hasSaved) {
             await updateDoc(doc(db, 'users', session.user.id), {
-                savedPosts: savedPosts.filter(id => id !== postId)
+                savedPosts: arrayRemove(postId)
             })
         }else {
             await updateDoc(doc(db, 'users', session.user.id), {
@@ -136,7 +138,7 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
                 <Link href={`/${username}`}>
                     <img 
                         className="rounded-full h-10 w-10 object-contain p-1 mr-3 border" 
-                        src={avatar} 
+                        src={userImage} 
                         alt="user-avatar"
                     />
                 </Link>
@@ -149,7 +151,7 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
             {/* Post image */}
             <img 
                 className="object-cover w-full"
-                src={image} 
+                src={postImage} 
                 alt="post-image" />
             {/* bottom section */}
             <section className="pt-5">
@@ -180,7 +182,6 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
                                         currentPageURL: returnHref,
                                         postId: postId
                                     }),`/post/${postId}`, {scroll: false})
-                                
                             }}>
                             <TbMessageCircle2 className="reactBtnIcon"/>
                         </button>
@@ -212,13 +213,10 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
                     )}
                     {/* caption */}
                     <p className="mb-2">
-                        <Link href={{
-                            pathname: `/${username}`,
-                            query: {userId: userId},
-                        }} as={`/${username}`} className="font-bold mr-1">{username}</Link>{caption}
+                        <Link href={`/${username}`} className="font-bold mr-1">{username}</Link>{caption}
                     </p>
                     {
-                        totalComments > 0 && (
+                        commentCount > 0 && (
                             <button 
                                 onClick={() => {
                                     isMb ? 
@@ -231,25 +229,27 @@ const Post = ({ postId, username, userId, avatar, image, caption, timeStamp } : 
                                         }),`/post/${postId}`, {scroll: false})
                                     
                                 }}
-                                className="text-gray-500 mb-2">
-                                    {`View ${totalComments} ${totalComments === 1 ? 'comment' : 'comments'}`}
+                                className="text-gray-500">
+                                    {`View ${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`}
                             </button>
                         )
                     }
                     {/* current user comments */}
-                    {userComment.length > 0 && 
-                        userComment.map((comment => (
-                            <p className='mb-2' key={comment.id}>
-                                <span className='font-bold mr-2'>{comment.data().username}</span>
-                            <span>{comment.data().text}</span>
-                        </p>
-                        ))) 
-                    }
+                    <div className="[&>:nth-child(1)]:mt-2">
+                        {userComment.length > 0 && 
+                            userComment.map((comment => (
+                                <p className='mb-2' key={comment.id}>
+                                    <span className='font-bold mr-2'>{comment.data().username}</span>
+                                    <span>{comment.data().text}</span>
+                                </p>
+                            ))) 
+                        }
+                    </div>
                 </div>
 
                 {/* post timestamp */}
                 <Moment fromNow className="px-5 mb-5 mt-4 md:mb-4 wordSpace block uppercase text-[10px] font-[500] text-gray-400">
-                    {timeStamp.toDate()}
+                    {timeStamp?.toDate()}
                 </Moment>
                 
                 {/* Input box */}
