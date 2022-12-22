@@ -12,7 +12,7 @@
     "@emoji-mart/data": "^1.0.8",
     "@emoji-mart/react": "^1.0.1",
     "@faker-js/faker": "^7.6.0",
-    "@headlessui/react": "^0.0.0-insiders.426cbf3",
+    "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^2.0.13",
     "@next-auth/firebase-adapter": "^1.0.3",
     "@tanem/react-nprogress": "^5.0.19",
