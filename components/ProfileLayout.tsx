@@ -75,10 +75,10 @@ const ProfileLayout = ({ children }: Props) => {
     if(!curProfile) return <></>
 
     return (
-        <div className="pageContent">
-            <div className="sm:pt-5">
+        <div className="pb-10">
+            <div className="bg-white shadow-mainShadow">
                 {/* profile meta-data */}
-                <section className="flex px-5 pb-5 sm:p-0 justify-between sm:justify-center">
+                <section className="flex py-5 md:py-10 px-5 justify-between sm:justify-center">
                     <div className="mr-5 sm:mr-10">
                         <div className="flex justify-center items-center flex-col sm:h-full">
                             {
@@ -134,7 +134,9 @@ const ProfileLayout = ({ children }: Props) => {
                                             rounded-md border mr-2`}>
                                             {follows ? 'Following':'Follow'}
                                         </button>
-                                        <button className="py-1 px-4 font-[600] border border-solid border-gray-200 rounded-md">Message</button>
+                                        <button 
+                                            onClick={() => router.push(`/direct/t/${curProfile.id + session.user.id}`)}
+                                            className="py-1 px-4 font-[600] border border-solid border-gray-200 rounded-md">Message</button>
                                     </div>
                                 )
                             }
@@ -171,14 +173,18 @@ const ProfileLayout = ({ children }: Props) => {
                         </div>
                     </div>
                 </section>
-                {/* mobile markup */}
-                <div className="sm:hidden my-5 px-4">
+                {/* mobile markups */}
+                <div className="sm:hidden mb-5 px-4">
                         <p className="font-bold text-lg mb-1">{curProfile.data().name}</p>
                         <p>{curProfile.data().bio}</p>
                 </div>
-                <section className="sm:hidden border border-solid border-gray-300 border-r-0 border-l-0 py-4">
+                <section className="sm:hidden border-t py-4">
                     <div className="flex text-center">
-                        <div className="w-[33.3%]"><span className="font-bold sm:mr-1 block">{totalPosts}</span><span className="text-gray-400">posts</span></div>
+                        <div className="w-[33.3%]">
+                            <span className="font-bold sm:mr-1 block">
+                                {totalPosts}</span><span className="text-gray-400">posts
+                            </span>
+                        </div>
                         <Link 
                             className="w-[33.3%]" 
                             href={makeContextualHref({
@@ -205,16 +211,16 @@ const ProfileLayout = ({ children }: Props) => {
                     </div>
                 </section>
                 {/* link tabs */}
-                <section className="mt-16 flex justify-center border-t border-solid border-t-gray-200">
+                <section className="flex justify-center border-t border-solid border-t-gray-200">
                     <Link href={`/${curProfile.data().username}`} className={classNames(
                         'profileTabLink', router.asPath === `/${curProfile.data().username}` ? 
-                        'border-t-black' : 'border-t-transparent text-gray-400'
+                        'border-b-instaBlue text-instaBlue' : 'border-b-transparent text-gray-400'
                     )}>
                         <BiGridAlt className="mr-2 h-8 w-8 sm:h-4 sm:w-4"/> <span className="hidden sm:block">POSTS</span>
                     </Link>
                     <Link href={`/${curProfile.data().username}/likes`} className={classNames(
                         'profileTabLink', router.asPath === `/${curProfile.data().username}/likes` ? 
-                        'border-t-black' : 'border-t-transparent text-gray-400'
+                        'border-b-instaBlue text-instaBlue' : 'border-b-transparent text-gray-400'
                     )}>
                         <BiHeart className="mr-2 h-8 w-8 sm:h-[14px] sm:w-[14px]"/> <span className="hidden sm:block">LIKES</span>
                     </Link>
@@ -222,17 +228,16 @@ const ProfileLayout = ({ children }: Props) => {
                         curProfile.id === session.user.id && (
                             <Link href={`/${curProfile.data().username}/saved`} className={classNames(
                                 'profileTabLink', router.asPath === `/${curProfile.data().username}/saved` ? 
-                                'border-t-black' : 'border-t-transparent text-gray-400'
+                                'border-b-instaBlue text-instaBlue' : 'border-b-transparent text-gray-400'
                             )}>
                                 <HiOutlineBookmark className="mr-2 h-8 w-8 sm:h-4 sm:w-4"/> <span className="hidden sm:block">SAVED</span>
                             </Link>
                         ) 
                     }
                 </section>
-
                 {/* page content */}
-                {children}
             </div>
+            {children}
         </div>
     )
 }

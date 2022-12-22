@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react"
+import { ReactElement, useEffect, useRef, useState } from "react"
 import Header from "./Header"
 import { useRouter } from 'next/router'
 import MobileBottomNav from "./MobileBottomNav"
@@ -10,6 +10,8 @@ import SwitchAccountModal from "./Message/SwitchAccountModal"
 import NewMessageModal from "./Message/NewMessageModal"
 import { useSession } from "next-auth/react"
 import Notice from '../components/Notice'
+import { usePreserveScroll } from '../utils/usePreserveScroll'
+import isMobile from '../utils/useMediaQuery'
 
 const Layout = ({children}: {children: ReactElement}) => {
     const {data: session, status} = useSession()
@@ -27,7 +29,9 @@ const Layout = ({children}: {children: ReactElement}) => {
     return (
         <main>
             {session && <Header/>}
-            {children}
+            <div>
+                {children}
+            </div>
             {session && <MobileBottomNav/>}
             <PostUploadModal/>
             <ProfileImageUpload/>

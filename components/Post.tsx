@@ -123,7 +123,7 @@ const Post = ({ postId, username, userImage, postImage, commentCount, caption, t
     }
 
     return (
-        <div className={`bg-white ${!router.query.postId && 'border rounded-md shadow-sm'} relative`}>
+        <div className={`bg-white rounded-md shadow-mainShadow relative`}>
             {/* show emoji picker */}
             {
                 showPicker && (
@@ -248,9 +248,11 @@ const Post = ({ postId, username, userImage, postImage, commentCount, caption, t
                 </div>
 
                 {/* post timestamp */}
-                <Moment fromNow className="px-5 mb-5 mt-4 md:mb-4 wordSpace block uppercase text-[10px] font-[500] text-gray-400">
-                    {timeStamp?.toDate()}
-                </Moment>
+                <div className="px-5 pb-4 pt-2 wordSpace block uppercase text-[10px] font-[500] text-gray-400">
+                    <Moment fromNow>
+                        {timeStamp?.toDate()}
+                    </Moment>
+                </div>
                 
                 {/* Input box */}
                 <form className="hidden border-t py-2 md:flex items-center px-5" 

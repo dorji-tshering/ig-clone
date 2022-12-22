@@ -10,14 +10,14 @@ const Home = () => {
     const status = useSession().status
 
     // create default username for first time sign in
-    if(session && !session.user.username && status === 'authenticated' && !session.user.followers
-        && !session.user.following && !session.user.savedPosts) {
+    if(session && !session.user.username && status === 'authenticated') {
         const docRef = doc(db, `users/${session.user.id}`)
         setDoc(docRef, {
             username: session.user.name?.split(' ').join('').toLowerCase() as string,
             followers: [],
             following: [],
             savedPosts: [],
+            bio: ''
         }, {merge: true})
         session.user.username = session.user.name?.split(' ').join('').toLowerCase() as string
     }

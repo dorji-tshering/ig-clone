@@ -49,15 +49,15 @@ const Likes: NextPageWithLayout = () => {
     if(!curProfile || loading) return <></>
 
     return (
-        <div className="my-12">
+        <div className="profileContentWrapper">
             {
                 likedPosts.length > 0 ? (
                     <>
                         {
                             curProfile.id === session.user.id ? (
-                                <p className="text-center text-gray-400 mb-8">Posts you have liked</p>
+                                <p className="text-center text-gray-500 text-lg font-bold mb-8">Posts you have liked</p>
                             ):(
-                                <p className="text-center text-gray-400 mb-8">Posts liked by 
+                                <p className="text-center text-gray-500 text-lg font-bold mb-8">Posts liked by 
                                     <span className="text-black font-bold ml-1">{curProfile.data().username}</span>
                                 </p>
                             )
@@ -78,7 +78,7 @@ const Likes: NextPageWithLayout = () => {
                                                     })
                                                 }
                                                 as={isMb ? undefined : `/post/${post.id}`} 
-                                                className="group relative h-full w-full block overflow-hidden">
+                                                className="group relative rounded-lg h-full w-full block overflow-hidden">
                                                 <img src={post.data().postImage} alt="post image" className="object-cover h-full w-full 
                                                 group-hover:scale-125 transition-all duration-300 ease-in-out"/>
                                                 <div className="hidden group-hover:flex absolute inset-0 justify-center 

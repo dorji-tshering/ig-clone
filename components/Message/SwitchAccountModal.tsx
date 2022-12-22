@@ -4,9 +4,12 @@ import { useRecoilState } from "recoil"
 import { MdOutlineClose } from 'react-icons/md'
 import Link from "next/link"
 import { RiCheckboxCircleFill } from 'react-icons/ri'
+import { CurrentSession } from '../../utils/types'
+import { useSession } from 'next-auth/react'
 
 const SwitchAccountModal = () => {
     const [open, setOpen] = useRecoilState(switchAccountState)
+    const session = useSession().data as CurrentSession
 
     return (
         <Modal
@@ -23,13 +26,13 @@ const SwitchAccountModal = () => {
                 </div>
                 {/* active account */}
                 <div className='p-5 flex items-center mb-10'>
-                    <Link onClick={() => setOpen(false)} href='/username' className='mr-3'>
+                    <Link onClick={() => setOpen(false)} href={`/${session?.user.username}`} className='mr-3'>
                         <img 
-                            src="/images/dorji.jpg" 
+                            src={session?.user.image as string}
                             alt="current user image"
-                            className='h-[56px] w-[56px] rounded-full' />
+                            className='h-[56px] w-[56px] rounded-full border p-[2px]' />
                     </Link>
-                    <p className='font-bold'>dorji_dev</p>
+                    <p className='font-bold'>{session?.user.username}</p>
                     <div className='ml-auto w-fit'><RiCheckboxCircleFill size={24} className='text-instaBlue' /></div>
                 </div>
                 {/* footer */}

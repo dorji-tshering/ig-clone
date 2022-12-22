@@ -51,15 +51,15 @@ const Profile: NextPageWithLayout = () => {
     if(!curProfile || loading) return <></>
 
     return (
-        <div className="my-12">
+        <div className="profileContentWrapper">
             {
                 posts.length > 0 ? (
                     <>
                         {
                             curProfile.id === session.user.id ? (
-                                <p className="text-center text-gray-400 mb-8">Your posts</p>
+                                <p className="text-center text-gray-500 mb-8 text-lg font-bold">Your posts</p>
                             ):(
-                                <p className="text-center text-gray-400 mb-8">
+                                <p className="text-center text-gray-500 mb-8 text-lg font-bold">
                                     <span className="font-bold text-black mr-1">{curProfile.data().username}</span>'s posts
                                 </p>
                             )
@@ -80,7 +80,7 @@ const Profile: NextPageWithLayout = () => {
                                                     })
                                                 }
                                                 as={isMb ? undefined : `/post/${post.id}`} 
-                                                className="group relative h-full w-full block overflow-hidden">
+                                                className="group relative rounded-lg h-full w-full block overflow-hidden">
                                                 <img src={post.data().postImage} alt="post image" className="object-cover h-full w-full 
                                                 group-hover:scale-125 transition-all duration-300 ease-in-out"/>
                                                 <div className="hidden group-hover:flex absolute inset-0 justify-center 

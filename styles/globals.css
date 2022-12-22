@@ -35,8 +35,13 @@
 }
 
 .profileTabLink {
-    @apply flex items-center grow sm:grow-0 sm:mx-8 py-4 border-t-[2px] border-solid
+    @apply flex items-center grow sm:grow-0 sm:mx-8 py-4 border-b-[2px]
     focus:outline-none tracking-[2px] justify-center font-[600] text-sm
+}
+
+.profileContentWrapper {
+    @apply bg-white shadow-mainShadow rounded-lg mx-2 md:mx-10
+    py-10 px-3 md:px-8 mt-7 mb-14 md:my-12
 }
 
 .profileContentContainer {
@@ -44,11 +49,11 @@
 } 
 
 .profileContentContainer > div {
-    @apply basis-[33.333333%] sm:basis-[25%] xl:basis-[20%]
+    @apply basis-[50%] sm:basis-[33.3333%] lg:basis-[25%]
 }
 
 .pageContent {
-    @apply mt-5 md:mt-10 pb-20 md:pb-14
+    @apply mt-5 md:mt-10 pb-28 md:pb-14
 }
 
 .wordSpace {
@@ -75,8 +80,12 @@
     @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
 }
 
+body {
+    background-color: #F1F3F4;
+}
+
 :root {
-    @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 overflow-y-scroll
+    @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
 }
 
 :root {

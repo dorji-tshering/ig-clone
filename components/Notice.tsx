@@ -17,7 +17,7 @@ const Notice = () => {
                         transition={{
                             y: {type: 'spring', stiffness: 300, damping: 30, duration: 2 }
                         }}
-                        className={`bg-gray-900 fixed top-2 z-[100] right-0 
+                        className={`bg-gray-900 fixed top-2 z-[1000] right-0 
                         left-0 mx-auto w-fit text-gray-200 flex rounded-md max-w-[300px] overflow-hidden`}>
                         <p className='px-5 py-3'>{notice.message}</p>
                         <button onClick={() => setNotice({

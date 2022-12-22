@@ -36,7 +36,7 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
                 </div>
                 <input
                     className={classNames(
-                        'block w-full h-[35px] bg-[#e8eaed] border-0 focus:ring-0 focus:outline-0 pl-10',
+                        'block w-full h-[35px] bg-[#e8eaed] border-0 focus:ring-0 focus:outline-0 pl-10 pr-5',
                         onSearchPage && 'rounded-md'
                     )}
                     arai-label="Search"

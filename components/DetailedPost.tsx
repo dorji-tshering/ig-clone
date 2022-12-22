@@ -165,13 +165,13 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
             })
         }
     }
-
+    
     return (
         <div className="text-center">
             <div className={classNames(
                 'rounded-md overflow-hidden inline-block text-left',
                 onModal && 'w-auto max-w-[80vw] h-[85vh] xl:h-[90vh]',
-                !onModal && 'w-auto max-w-4xl lg:max-w-6xl h-[500px] mx-auto border',
+                !onModal && 'w-auto max-w-4xl lg:max-w-6xl h-[500px] mx-auto shadow-mainShadow',
             )}>
                 {/* post container */}
                 <div className='flex h-full w-full'>

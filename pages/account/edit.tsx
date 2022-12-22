@@ -25,7 +25,7 @@ const EditProfile = () => {
                 </div>
             </section>
             {/* edit form */}
-            <form className="py-12 border rounded-sm mx-3 md:max-w-[70%] md:mx-auto" onSubmit={(e) => submitForm(e)}>
+            <form className="py-12 bg-white shadow-mainShadow rounded-lg mx-3 md:max-w-[70%] md:mx-auto" onSubmit={(e) => submitForm(e)}>
                 <div className='flex px-5 md:px-10 md:justify-center items-center mb-8'>
                     <aside className='md:basis-2/5 mr-4 md:mb-0 md:mr-10'>
                         <button onClick={() => openModal(true)} className='md:block md:ml-auto'>

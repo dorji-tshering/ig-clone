@@ -1,11 +1,13 @@
 import { IoCallOutline, IoVideocamOutline, IoInformationCircleOutline } from 'react-icons/io5'
 import { useRouter } from 'next/router'
 import { BsEmojiSmile } from 'react-icons/bs'
-import { AiOutlineHeart } from 'react-icons/ai'
+import { AiOutlineHeart, AiOutlineWechat } from 'react-icons/ai'
 import { HiOutlinePhoto } from 'react-icons/hi2'
 import { useState } from 'react'
 import EmojiPicker from '../EmojiPicker'
 import { MdKeyboardBackspace } from 'react-icons/md'
+import { CurrentSession } from '../../utils/types'
+import { useSession } from 'next-auth/react'
 
 /**
  * Component to display and allow a user to chat with other users.
@@ -16,6 +18,7 @@ const ChatRoom = () => {
     const router = useRouter()
     const [message, setMessage] = useState<string>('')
     const [showPicker, setShowPicker] = useState(false)
+    const session = useSession().data as CurrentSession
 
     return (
         <div className='flex flex-col h-full relative'>
@@ -29,12 +32,14 @@ const ChatRoom = () => {
                     />
                 )
             }
-            <header className="flex border-b px-5 md:px-10 py-5">
+            <header className="flex border-b px-5 md:px-8 py-5 sticky top-0 bg-white md:rounded-tr-lg">
                 <button className='md:hidden mr-3' onClick={() => router.back()}><MdKeyboardBackspace size={24}/></button>
-                <button onClick={() => router.push('/username')}>
-                    <img src="/images/dorji.jpg" alt="chat user image" className='h-8 w-8 rounded-full' />
+                <button onClick={() => router.push(`/${session.user.username}`)}>
+                    <img src={session.user.image as string} alt="chat user image" className='h-8 w-8 rounded-full' />
                 </button>
-                <button onClick={() => router.push('/username')} className='font-bold text-lg ml-4'>dorji_dev</button>
+                <button onClick={() => router.push(`/${session.user.username}`)} className='font-bold text-lg ml-4'>
+                    {session.user.username}
+                </button>
                 <div className="grow flex justify-end">
                     <button className='hidden md:block'><IoCallOutline size={23}/></button>
                     <button className="ml-4 hidden md:block"><IoVideocamOutline size={26}/></button>
@@ -42,12 +47,17 @@ const ChatRoom = () => {
                 </div>
             </header>
             {/* messages section */}
-            <section className='grow'></section>
+            <section className='grow flex flex-col items-center justify-center p-10 text-center text-gray-500'>
+                <div className="flex items-center justify-center w-32 h-32 rounded-full bg-gray-50 mb-10">
+                    <AiOutlineWechat size={50}/>
+                </div>
+                <p>Feature <span className="font-bold">coming soon!</span> You can still play with the UI though.</p>
+            </section>
             {/* message input */}
-            <section className='p-6'>
+            <section className='px-5 py-5 md:px-8'>
                 <div className='flex border rounded-full px-5 py-2 items-center'>
                     <button onClick={() => setShowPicker(true)}><BsEmojiSmile size={24}/></button>
-                    <div className='grow mx-5'>
+                    <div className='grow mx-1'>
                         <input 
                             type="text" 
                             className="w-full border-0 focus:ring-0" 

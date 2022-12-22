@@ -27,23 +27,27 @@ function Suggestions() {
     }
 
     return (
-        <div className='mt-4 ml-10'>
-            <div className="flex justify-between text-sm mb-5">
-                <h3 className='text-sm font-bold text-gray-400'>Suggestions for you</h3>
-                <button className='text-gray-600 font-semibold'>See All</button>
+        <div className="mt-6">
+            <div className="flex justify-between mb-5">
+                <h3 className='font-bold text-gray-400'>Suggestions for you</h3>
+                {/* <button className='text-gray-600 font-semibold'>See All</button> */}
             </div>
             {
-                suggestions.map(user=>(
-                    <div key={user.id} className="flex items-center justify-between mt-3">
-                        <Link href={`/${user.data().username}`}>
-                            <img className='w-10 h-10 rounded-full border p-[2px]' src={user.data().image} alt="" />
-                        </Link>
-                        <div className="flex-1 ml-4">
-                            <Link href={`/${user.data().username}`} className='font-semibold text-sm'>{user.data().username}</Link>
+                suggestions.length > 0 ? (
+                    suggestions.map(user=>(
+                        <div key={user.id} className="flex items-center justify-between mt-3">
+                            <Link href={`/${user.data().username}`}>
+                                <img className='w-10 h-10 rounded-full border p-[2px]' src={user.data().image} alt="" />
+                            </Link>
+                            <div className="flex-1 ml-4">
+                                <Link href={`/${user.data().username}`} className='font-semibold'>{user.data().username}</Link>
+                            </div>
+                            <button onClick={() => follow(user.id)} className='text-instaBlue font-bold'>Follow</button>
                         </div>
-                        <button onClick={() => follow(user.id)} className='text-instaBlue text-sm  font-bold'>Follow</button>
-                    </div>
-                ))
+                    ))
+                ):(
+                    <p className="text-gray-400">No suggestions to show for now</p>
+                )
             }
         </div>
     )

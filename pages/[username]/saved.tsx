@@ -65,12 +65,12 @@ const Saved: NextPageWithLayout = () => {
     if(!curProfile || loading) return <></>
 
     return (
-        <div className="my-12">
+        <div className="profileContentWrapper">
             {
                 curProfile.id === session.user.id ? (
                     savedPosts.length > 0? (
                         <>
-                            <p className="text-center text-gray-400 mb-8">Only you can see your saved posts</p>
+                            <p className="text-center text-gray-500 mb-8 text-lg font-bold">Only you can see your saved posts</p>
                             <div className="profileContentContainer">
                                 {
                                     savedPosts.map(post => (
@@ -87,7 +87,7 @@ const Saved: NextPageWithLayout = () => {
                                                         })
                                                     }
                                                     as={isMb ? undefined : `/post/${post.id}`} 
-                                                    className="group relative h-full w-full block overflow-hidden">
+                                                    className="group relative rounded-lg h-full w-full block overflow-hidden">
                                                     <img src={post.data().postImage} alt="post image" className="object-cover h-full w-full 
                                                     group-hover:scale-125 transition-all duration-300 ease-in-out"/>
                                                     <div className="hidden group-hover:flex absolute inset-0 justify-center 

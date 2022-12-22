@@ -1,14 +1,25 @@
-import Modal from "./Modal";
-import { postOptionsModalState } from '../atoms/postOptionsAtom';
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useRouter } from 'next/router';
-import { onModalState } from '../atoms/onModalAtom';
+import Modal from "./Modal"
+import { postOptionsModalState } from '../atoms/postOptionsAtom'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { useRouter } from 'next/router'
+import { onModalState } from '../atoms/onModalAtom'
+import { noticeState } from "../atoms/noticeAtom"
 
 const PostOptionsModal = () => {
     const [postId, setPostIdForOptions] = useRecoilState(postOptionsModalState);
     const onRoutedModal = useRecoilValue(onModalState);
     const router = useRouter();
     const myPost = false;
+    const setNotice = useSetRecoilState(noticeState)
+
+    const copyLink = () => {
+        navigator.clipboard.writeText(
+            window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + `/post/${postId}`)
+        setNotice({
+            show: true,
+            message: 'Post link copied successfully'
+        })
+    }
 
     return (
         <Modal
@@ -35,9 +46,7 @@ const PostOptionsModal = () => {
                     </button>
                 }
                 <button 
-                    onClick={() => navigator.clipboard.writeText(
-                        window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + `/post/${postId}`
-                    )}
+                    onClick={copyLink}
                     className="py-4 border-b font-[500]">Copy link</button>
                 <button 
                     onClick={() => setPostIdForOptions(null)} 

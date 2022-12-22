@@ -8,11 +8,11 @@ function MiniProfile() {
     const session = useSession().data as CurrentSession
 
     return (
-        <div className='flex items-center justify-between mt-5 ml-10'>
+        <div className='flex items-center'>
             <Link href={`/${session.user.username}`}>
-                <img className='rounded-full border p-[2px] w-16 h-16' src={session?.user?.image as string} alt="current user image" />
+                <img className='rounded-full border p-[2px] w-14 h-14' src={session?.user?.image as string} alt="current user image" />
             </Link>
-            <div className="flex-1 mx-4">
+            <div className="ml-3">
                 <Link href={`/${session.user.username}`} className='font-bold'>{session?.user?.username}</Link>
                 <h3 className='text-sm text-gray-400'>Welcome to Instagram</h3>
             </div>
@@ -21,7 +21,7 @@ function MiniProfile() {
                     // redirect without reloading the page
                     const data = await signOut({redirect: false, callbackUrl: '/auth/signin'})
                     router.push(data.url)
-                }} className='text-instaBlue text-sm font-bold'>Sign Out</button>
+                }} className='text-instaBlue font-bold mt-2 block ml-auto'>Sign out</button>
         </div>
     )
 }

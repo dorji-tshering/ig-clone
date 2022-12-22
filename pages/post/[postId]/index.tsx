@@ -26,7 +26,7 @@ const PostPage = () => {
             {
                 isMb ? (
                     <div>
-                        <section className="h-[50px] bg-white px-4 border-b -mt-5 sticky z-10 top-[53px]">
+                        <section className="h-[50px] bg-white px-4 border-b -mt-5 sticky z-10 top-[53px] mb-5">
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <h1 className="text-xl font-bold">Photo</h1>
                             </div>
