@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import Followers from "./Followers"
 import Following from './Following'
 import DetailedPost from './DetailedPost'
-import { useState } from "react"
 import Notifications from "./Notifications"
 
 const RoutedModal = () => {

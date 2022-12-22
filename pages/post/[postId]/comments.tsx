@@ -20,7 +20,7 @@ const Comments = () => {
     const postId = router.query.postId as string
     const session = useSession().data as CurrentSession
     const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost)
-console.log(postId)
+
     useEffect(() => 
         onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
             setPostComments(snapshot.docs.map(doc => {

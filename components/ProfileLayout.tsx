@@ -146,7 +146,7 @@ const ProfileLayout = ({ children }: Props) => {
                                 href={makeContextualHref({
                                     routeModalId: 'followers',
                                     currentPageURL: returnHref,
-                                    userID: curProfile.id,
+                                    userId: curProfile.id,
                                 })}
                                 as={`/${curProfile.data().username}/followers`}
                                 scroll={false}>
@@ -158,7 +158,7 @@ const ProfileLayout = ({ children }: Props) => {
                                 href={makeContextualHref({
                                     routeModalId: 'following',
                                     currentPageURL: returnHref,
-                                    userID: curProfile.id,
+                                    userId: curProfile.id,
                                 })}
                                 as={`/${curProfile.data().username}/following`}
                                 scroll={false}>
@@ -183,7 +183,8 @@ const ProfileLayout = ({ children }: Props) => {
                             className="w-[33.3%]" 
                             href={makeContextualHref({
                                 routeModalId: 'followers',
-                                currentPageURL: returnHref
+                                currentPageURL: returnHref,
+                                userId: curProfile.id
                             })}
                             as={`/${curProfile.data().username}/followers`}
                             scroll={false}>
@@ -195,7 +196,8 @@ const ProfileLayout = ({ children }: Props) => {
                             className="w-[33.3%]" 
                             href={makeContextualHref({
                                 routeModalId: 'following',
-                                currentPageURL: returnHref
+                                currentPageURL: returnHref,
+                                userId: curProfile.id
                             })}
                             as={`/${curProfile.data().username}/following`}
                             scroll={false}>
