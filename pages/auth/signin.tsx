@@ -49,7 +49,7 @@ function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>,
 
     return (
         <>
-            <div className="md:flex md:flex-col md:items-center md:justify-center md:-mt-10 h-screen overflow-y-auto 
+            <div className="flex justify-center items-center flex-col h-full overflow-y-auto 
                 px-5 text-center py-10">
                 <div className="bg-white rounded-lg shadow-mainShadow px-5 py-8 sm:p-14">
                     <img className='w-40 mx-auto' src="/images/instagram-logo.png" alt="Instagram logo" />

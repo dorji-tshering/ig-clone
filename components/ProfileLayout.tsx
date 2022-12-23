@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../firebase'
 import { CurrentSession } from '../utils/types' 
+import ContentLoader from '../contentLoaders/ContentLoader'
 
 type Props = { 
     children: React.ReactElement
@@ -71,8 +72,9 @@ const ProfileLayout = ({ children }: Props) => {
         }
     }
     
-
-    if(!curProfile) return <></>
+    if(!curProfile) return (
+        <div className='flex items-center justify-center h-[250px]'><ContentLoader/></div>
+    )
 
     return (
         <div className="pb-10">
@@ -82,7 +84,7 @@ const ProfileLayout = ({ children }: Props) => {
                     <div className="mr-5 sm:mr-10">
                         <div className="flex justify-center items-center flex-col sm:h-full">
                             {
-                                curProfile.id === session.user.id ? (
+                                curProfile?.id === session.user.id ? (
                                     <div className="w-[80px] sm:w-[150px] pt-[100%] relative">
                                         <button className="rounded-full overflow-hidden h-full absolute inset-0" 
                                             onClick={uploadProfileImage}>

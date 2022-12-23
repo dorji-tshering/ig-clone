@@ -32,7 +32,7 @@ interface PostData {
 /**
  * Post component used in the `index/home page` composing the feeds and in the `single post page` for mobile devices.
  */
-const Post = ({ postId, username, userImage, postImage, commentCount, caption, timeStamp } : PostData) => {
+const Post = ({postId, username, userImage, postImage, commentCount, caption, timeStamp } : PostData) => {
     const [showPicker, setShowPicker] = useState(false)
     const session = useSession().data as CurrentSession
     const [comment, setComment] = useState('')

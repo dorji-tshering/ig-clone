@@ -7,7 +7,7 @@ import { CurrentSession } from '../utils/types'
 import { uploadModalState } from '../atoms/uploadModalAtom'
 import { useSetRecoilState } from 'recoil'
 import { MdAddToPhotos } from 'react-icons/md'
-import PostLoader from '../contentLoaders/PostLoader'
+import FeedPostLoader from '../contentLoaders/FeedPostLoader'
 
 const Posts = () => {
     const [posts, setPosts] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
@@ -25,11 +25,7 @@ const Posts = () => {
     [])
 
     if(loading) return (
-        <>
-            {
-                Array.from({length: 4}).map(_ => <PostLoader/>)
-            }
-        </>
+       Array.from({length: 5}).map(_ => <FeedPostLoader/>)
     )
 
     return (

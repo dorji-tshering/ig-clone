@@ -12,8 +12,8 @@ const Features = () => {
                 <h2 className="text-lg text-gray-600 font-bold mb-3">Current Features</h2>
                 <ul className="text-[#334155]">
                     {
-                        currentFeatures.map(feature => (
-                            <li className="pl-4 relative before:content-[''] before:h-[5px] before:w-[5px] before:bg-gray-500
+                        currentFeatures.map((feature, idx) => (
+                            <li key={idx} className="pl-4 relative before:content-[''] before:h-[5px] before:w-[5px] before:bg-gray-500
                                 before:inline-block before:rounded-full before:absolute
                                 before:top-[10px] before:left-0 leading-7">
                                 {feature}
@@ -26,8 +26,8 @@ const Features = () => {
                 <h2 className="text-xl text-gray-600 font-bold mb-3">To Be Implemented</h2>
                 <ul className="text-[#334155]">
                     {
-                        toBeImplemented.map(feature => (
-                            <li className="pl-4 relative before:content-[''] before:h-[5px] before:w-[5px] before:bg-gray-500
+                        toBeImplemented.map((feature, idx) => (
+                            <li key={idx} className="pl-4 relative before:content-[''] before:h-[5px] before:w-[5px] before:bg-gray-500
                                 before:inline-block before:rounded-full before:absolute
                                 before:top-[10px] before:left-0 leading-7">
                                 {feature}

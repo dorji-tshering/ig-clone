@@ -13,6 +13,7 @@ import { CurrentSession } from "../../utils/types"
 import { useRouter } from "next/router"
 import { collection, DocumentData, onSnapshot, query, QueryDocumentSnapshot, where } from "firebase/firestore"
 import { db } from "../../firebase"
+import ContentLoader from "../../contentLoaders/ContentLoader"
 
 const Likes: NextPageWithLayout = () => {
     const [loading, setLoading] = useState(false)
@@ -26,10 +27,8 @@ const Likes: NextPageWithLayout = () => {
 
     // get and set current user profile
     useEffect(() => {
-        setLoading(true)
         const unsubscribe = onSnapshot(query(collection(db, 'users'), where('username', '==', username)), snapshot => {
             setCurProfile(snapshot.docs[0])
-            setLoading(false)
         })
         return unsubscribe
     },[username])
@@ -46,8 +45,11 @@ const Likes: NextPageWithLayout = () => {
         }
     },[curProfile])
 
-    if(!curProfile || loading) return <></>
-
+    if(loading || !curProfile) return (
+        <div className='flex items-center justify-center h-[300px]'>
+            <ContentLoader/>
+        </div>
+    )
     return (
         <div className="profileContentWrapper">
             {

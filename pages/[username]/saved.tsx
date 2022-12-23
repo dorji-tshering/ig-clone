@@ -13,6 +13,7 @@ import { collection, doc, DocumentData, getDoc, onSnapshot, query, QueryDocument
 import { db } from "../../firebase";
 import { useSession } from "next-auth/react";
 import { CurrentSession } from "../../utils/types";
+import ContentLoader from "../../contentLoaders/ContentLoader";
 
 const Saved: NextPageWithLayout = () => {
     const [savedPosts, setSavedPosts] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
@@ -27,10 +28,8 @@ const Saved: NextPageWithLayout = () => {
 
     // get and set current user profile
     useEffect(() => {
-        setLoading(true)
         const unsubscribe = onSnapshot(query(collection(db, 'users'), where('username', '==', username)), snapshot => {
             setCurProfile(snapshot.docs[0])
-            setLoading(false)
         })
         return unsubscribe
     },[username])
@@ -38,6 +37,7 @@ const Saved: NextPageWithLayout = () => {
     // get and set saved posts
     useEffect(() => {
         if(curProfile) {
+            setLoading(true)
             const unsubscribe = onSnapshot((doc(db, 'users', curProfile.id)), snapshot => {
                 const savedPostsPromise = snapshot.data()?.savedPosts.map((postId: string) => {
                     return getDoc(doc(db, 'posts', postId))
@@ -46,6 +46,7 @@ const Saved: NextPageWithLayout = () => {
                     setSavedPosts(savedPosts)
                     savedPosts.forEach(post => {
                         setSavedPostIds((savedIds) => [...savedIds, post.id])
+                        setLoading(false)
                     })
                 })
             })
@@ -53,6 +54,7 @@ const Saved: NextPageWithLayout = () => {
         }
     },[curProfile])
 
+    // listen to changes on saved posts
     useEffect(() => {
         if(savedPostIds.length > 0) {
             const unsubscribe = onSnapshot(query(collection(db, 'posts'), where('__name__', 'in', savedPostIds)), snapshot => {
@@ -62,7 +64,11 @@ const Saved: NextPageWithLayout = () => {
         }
     },[savedPostIds])
 
-    if(!curProfile || loading) return <></>
+    if(loading || !curProfile) return (
+        <div className='flex items-center justify-center h-[300px]'>
+            <ContentLoader/>
+        </div>
+    )
 
     return (
         <div className="profileContentWrapper">
