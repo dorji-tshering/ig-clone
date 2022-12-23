@@ -5,6 +5,9 @@ import { FcGoogle } from 'react-icons/fc'
 import { ImTwitter } from 'react-icons/im'
 import { useSetRecoilState } from "recoil";
 import { noticeState } from '../../atoms/noticeAtom'
+import { VscLinkExternal } from 'react-icons/vsc'
+import { useSession } from "next-auth/react"
+import { useEffect } from "react";
 
 // possible signin errors
 const errors = {
@@ -23,40 +26,59 @@ const errors = {
 };
 
 function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>) {
-    const error = useRouter().query.error as keyof typeof errors
+    const router = useRouter()
+    const error = router.query.error as keyof typeof errors
     const setNotice = useSetRecoilState(noticeState)
+    const {status} = useSession()
 
-    if(error) {
-        setNotice({
-            show: true,
-            message: errors[error] ?? errors['default']
-        })
+    if(status === 'authenticated') {
+        router.push('/')
+        return
     }
+
+    useEffect(() => {
+        if(error) {
+            setNotice({
+                show: true,
+                message: errors[error] ?? errors['default']
+            })
+        }
+    }, [error])
+
+    if(status === 'loading') return <></>
 
     return (
         <>
             <div className="md:flex md:flex-col md:items-center md:justify-center md:-mt-10 h-screen overflow-y-auto 
                 px-5 text-center py-10">
-                <img className='w-40 mx-auto' src="/images/instagram-logo.png" alt="Instagram logo" />
-                <p className="text-sm text-gray-500 mt-3">
-                    This is not a <span className='text-black font-[500]'>REAL</span> app, it is built for educational purposes only
-                </p>
-                <h2 className="text-sm mt-5 font-bold text-gray-400">SIGN IN</h2>
-                <div className="mt-4 border rounded-lg px-5 py-5 w-full sm:max-w-[400px] sm:mx-auto">
-                    {Object.values(providers).map((provider) => (
-                        <div key={provider.name} className='first:mb-4'>
-                            <button className='py-3 border rounded-lg font-[500] w-full flex items-center justify-center
-                                text-gray-700 hover:border-gray-400 transition-all duration-500' 
-                                onClick={() => 
-                                    SignIntoProvider(provider.id, {callbackUrl: "/"})
-                                }>
-                                Sign in with {provider.id === 'twitter' ? 'Twitter' : provider.name}
-                                { provider.id === 'twitter' && <span className='ml-3 text-[#1D9BEE]'><ImTwitter size={20}/></span> }
-                                { provider.id === 'google' && <span className='ml-3'><FcGoogle size={20}/></span> }
-                            </button>
-                        </div>
-                    ))}
+                <div className="bg-white rounded-lg shadow-mainShadow px-5 py-8 sm:p-14">
+                    <img className='w-40 mx-auto' src="/images/instagram-logo.png" alt="Instagram logo" />
+                    <p className="text-sm text-gray-500 mt-3">
+                        This is not a <span className='text-black font-[500]'>REAL</span> app, it is built for educational purposes only
+                    </p>
+                    <h2 className="text-sm mt-5 font-bold text-gray-400">SIGN IN</h2>
+                    <div className="mt-4 border rounded-lg px-5 py-5 w-full sm:max-w-[400px] sm:mx-auto">
+                        {Object.values(providers).map((provider) => (
+                            <div key={provider.name} className='first:mb-4'>
+                                <button className='py-3 border rounded-lg font-[500] w-full flex items-center justify-center
+                                    text-gray-700 hover:border-gray-400 transition-all duration-500' 
+                                    onClick={() => 
+                                        SignIntoProvider(provider.id, {callbackUrl: "/"})
+                                    }>
+                                    Sign in with {provider.id === 'twitter' ? 'Twitter' : provider.name}
+                                    { provider.id === 'twitter' && <span className='ml-3 text-[#1D9BEE]'><ImTwitter size={20}/></span> }
+                                    { provider.id === 'google' && <span className='ml-3'><FcGoogle size={20}/></span> }
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-10">
+                        <a href="https://github.com/dorji-tshering/ig-clone" target="_blank" className="text-gray-500 w-fit mx-auto flex items-center justify-center hover:text-instaBlue">
+                            Github<VscLinkExternal className="inline ml-2" strokeWidth={.8} size={12}/>
+                        </a>
+                    </div>
                 </div>
+                <p className="mt-10 text-gray-400">By <a className="text-gray-700 underline" href="https://dorji-dev.vercel.app" target="_blank">Dorji Tshering</a></p>
             </div>
         </>
     )

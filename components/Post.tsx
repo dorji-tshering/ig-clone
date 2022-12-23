@@ -229,13 +229,13 @@ const Post = ({ postId, username, userImage, postImage, commentCount, caption, t
                                         }),`/post/${postId}`, {scroll: false})
                                     
                                 }}
-                                className="text-gray-500">
+                                className="text-gray-500 mb-2">
                                     {`View ${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`}
                             </button>
                         )
                     }
                     {/* current user comments */}
-                    <div className="[&>:nth-child(1)]:mt-2">
+                    <div>
                         {userComment.length > 0 && 
                             userComment.map((comment => (
                                 <p className='mb-2' key={comment.id}>

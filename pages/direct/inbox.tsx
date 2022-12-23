@@ -10,15 +10,14 @@ import { AiOutlineWechat } from "react-icons/ai"
 const Inbox = () => {
     const openNewMessageModal = useSetRecoilState(newMessageModalState)
     const isMb = isMobile()
-    const inbox = false
+    const inbox = true
 
     return (
-        <div className="md:px-5 mx-auto md:max-w-[800px] h-[calc(100vh-100px)] md:mt-5 md:pb-14">
-            <div className="shadow-mainShadow md:rounded-lg bg-white flex h-full">
+        <div className="md:px-5 mx-auto md:max-w-[800px] bg-white h-full md:h-[calc(100vh-100px)]\ md:mt-5 md:pb-14">
+            <div className="md:shadow-mainShadow md:rounded-lg flex md:h-full">
                 <Left>
-                    <div className="mb-10">
                         {
-                            inbox ? (
+                            false ? (
                                 <></>
                             ):(
                                 // skeleton
@@ -47,28 +46,25 @@ const Inbox = () => {
                                 </>
                             )
                         }
-                    </div>
                 </Left>
                 {
                     !isMb && (
                         <Right>
-                            <div className="my-10 grow overflow-y-auto">
-                                {
-                                    inbox ? (
-                                        <div></div>
-                                    ):(
-                                        <div className='flex flex-col justify-center items-center h-full'>
-                                            <div className='w-[96px] h-[96px] border-2 border-black rounded-full flex 
-                                                justify-center items-center mb-4'>
-                                                <FiSend className='rotate-[20deg] relative -left-1' size={44}/>
-                                            </div>
-                                            <h1 className='text-2xl mb-2'>Your Messages</h1>
-                                            <p className='text-gray-400 mb-8 text-center'>Send private photos and messages to a friend or group.</p>
-                                            <button onClick={() => openNewMessageModal(true)}className='px-4 py-2 bg-instaBlue text-white rounded-md font-bold'>Send Message</button>
+                            {
+                                false ? (
+                                    <ChatRoom/>
+                                ):(
+                                    <div className='flex flex-col justify-center items-center h-full'>
+                                        <div className='w-[96px] h-[96px] border-2 border-black rounded-full flex 
+                                            justify-center items-center mb-4'>
+                                            <FiSend className='rotate-[20deg] relative -left-1' size={44}/>
                                         </div>
-                                    )
-                                }
-                            </div>
+                                        <h1 className='text-2xl mb-2'>Your Messages</h1>
+                                        <p className='text-gray-400 mb-8 text-center'>Send private photos and messages to a friend or group.</p>
+                                        <button onClick={() => openNewMessageModal(true)}className='px-4 py-2 bg-instaBlue text-white rounded-md font-bold'>Send Message</button>
+                                    </div>
+                                )
+                            }
                         </Right>
                     )
                 }

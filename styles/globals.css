@@ -53,7 +53,7 @@
 }
 
 .pageContent {
-    @apply mt-5 md:mt-10 pb-28 md:pb-14
+    @apply mt-5 md:mt-10 pb-20 md:pb-14
 }
 
 .wordSpace {
@@ -73,7 +73,7 @@
 }
 
 .editDiv input, .editDiv textarea {
-    @apply border-gray-200 rounded-[4px]
+    @apply border-gray-200 rounded-[4px] focus:ring-instaBlue focus:border-instaBlue
 }
 
 .useScrollbar {
@@ -92,4 +92,8 @@ body {
     font-family: 'Figtree', sans-serif;
     font-size: 14px;
     color: #333;
+}
+
+html, body, #__next, main {
+    height: 100%;
 }

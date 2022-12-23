@@ -10,12 +10,12 @@ import SwitchAccountModal from "./Message/SwitchAccountModal"
 import NewMessageModal from "./Message/NewMessageModal"
 import { useSession } from "next-auth/react"
 import Notice from '../components/Notice'
-import { usePreserveScroll } from '../utils/usePreserveScroll'
 import isMobile from '../utils/useMediaQuery'
 
 const Layout = ({children}: {children: ReactElement}) => {
     const {data: session, status} = useSession()
     const router = useRouter()
+    
 
     // secure unauthorized contents
     useEffect(() => {
@@ -24,15 +24,18 @@ const Layout = ({children}: {children: ReactElement}) => {
         }
     },[status])
 
+    console.log(router.query.chatId)
+
     if(router.pathname !== '/auth/signin' && status === 'unauthenticated' || status === 'loading') return <></>
 
     return (
-        <main>
+        <main className="flex flex-col">
             {session && <Header/>}
-            <div>
+            <div className="min-h-[54px]"></div>
+            <div className="grow">
                 {children}
             </div>
-            {session && <MobileBottomNav/>}
+            {session && !router.query.chatId && <MobileBottomNav/>}
             <PostUploadModal/>
             <ProfileImageUpload/>
             <RoutedModal/>

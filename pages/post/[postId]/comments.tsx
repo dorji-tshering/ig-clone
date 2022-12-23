@@ -93,27 +93,29 @@ const Comments = () => {
                                 type="submit">Post</button>
                     </form>
                 </section>
-                {/* caption */}
-                <section className="px-4 py-6">
-                    <div className="flex border-b pb-6">
-                        <div className="mr-5">
-                            <Link href={`/${post?.data()?.username}`} className="rounded-full">
-                                <img src={post?.data()?.userImage} alt="" className="object-cover rounded-full w-9 h-9" />
-                            </Link>
+                <div className="bg-white mb-5 shadow-mainShadow">
+                    {/* caption */}
+                    <section className="px-4 py-6">
+                        <div className="flex border-b pb-6">
+                            <div className="mr-5">
+                                <Link href={`/${post?.data()?.username}`} className="rounded-full">
+                                    <img src={post?.data()?.userImage} alt="" className="object-cover rounded-full w-9 h-9" />
+                                </Link>
+                            </div>
+                            <div className="flex-1">
+                                <p>
+                                    <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
+                                    <span>{post?.data()?.caption}</span>
+                                </p>
+                                <p className="text-gray-400 text-sm mt-2">2d</p>
+                            </div>
                         </div>
-                        <div className="flex-1">
-                            <p>
-                                <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
-                                <span>{post?.data()?.caption}</span>
-                            </p>
-                            <p className="text-gray-400 text-sm mt-2">2d</p>
-                        </div>
-                    </div>
-                </section>
-                {/* comments */}
-                <section className="px-5 py-2">
-                    <PostComment comments={postComments}/>
-                </section>
+                    </section>
+                    {/* comments */}
+                    <section className="px-5 py-2">
+                        <PostComment comments={postComments}/>
+                    </section>
+                </div>
             </div>
         </div>
     )

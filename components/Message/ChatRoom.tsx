@@ -21,18 +21,8 @@ const ChatRoom = () => {
     const session = useSession().data as CurrentSession
 
     return (
-        <div className='flex flex-col h-full relative'>
-            {
-                showPicker && (
-                    <EmojiPicker
-                        onClose={() => setShowPicker(false)}
-                        onSelect={(emoji) => setMessage(prevMessage => prevMessage + emoji.native)}
-                        customStyles='w-fit mx-auto left-0 right-0'
-                        bottom='bottom-[75px]'
-                    />
-                )
-            }
-            <header className="flex border-b px-5 md:px-8 py-5 sticky top-0 bg-white md:rounded-tr-lg">
+        <>
+            <header className="flex border-b px-5 md:px-8 py-5 sticky top-[54px] md:top-0 bg-white md:rounded-tr-lg">
                 <button className='md:hidden mr-3' onClick={() => router.back()}><MdKeyboardBackspace size={24}/></button>
                 <button onClick={() => router.push(`/${session.user.username}`)}>
                     <img src={session.user.image as string} alt="chat user image" className='h-8 w-8 rounded-full' />
@@ -47,15 +37,31 @@ const ChatRoom = () => {
                 </div>
             </header>
             {/* messages section */}
-            <section className='grow flex flex-col items-center justify-center p-10 text-center text-gray-500'>
-                <div className="flex items-center justify-center w-32 h-32 rounded-full bg-gray-50 mb-10">
-                    <AiOutlineWechat size={50}/>
+            <section className='flex-1 flex flex-col items-center justify-center px-10 py-5 text-center text-gray-500'>
+                <div className="mb-10">
+                    <div className="flex items-center mx-auto justify-center w-32 h-32 rounded-full bg-gray-50 mb-10">
+                        <AiOutlineWechat size={50}/>
+                    </div>
+                    <p>Feature <span className="font-bold">coming soon!</span> You can still play with the UI though.</p>
                 </div>
-                <p>Feature <span className="font-bold">coming soon!</span> You can still play with the UI though.</p>
+                
+
+
+
             </section>
             {/* message input */}
-            <section className='px-5 py-5 md:px-8'>
-                <div className='flex border rounded-full px-5 py-2 items-center'>
+            <section className='px-5 py-3 md:px-8 sticky bottom-0 bg-white border-t'>
+                {
+                    showPicker && (
+                        <EmojiPicker
+                            onClose={() => setShowPicker(false)}
+                            onSelect={(emoji) => setMessage(prevMessage => prevMessage + emoji.native)}
+                            customStyles='w-fit mx-auto left-0 right-0'
+                            bottom='bottom-[75px]'
+                        />
+                    )
+                }
+                <div className='flex border rounded-full px-3 py-1 items-center'>
                     <button onClick={() => setShowPicker(true)}><BsEmojiSmile size={24}/></button>
                     <div className='grow mx-1'>
                         <input 
@@ -70,7 +76,7 @@ const ChatRoom = () => {
                     <button><AiOutlineHeart size={24}/></button>
                 </div>
             </section>
-        </div>
+        </>
     )
 }
 

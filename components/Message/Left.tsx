@@ -18,8 +18,8 @@ const Left = ({children}: {children: React.ReactNode}) => {
     const session = useSession().data as CurrentSession
 
     return (
-        <div className="basis-full md:rounded-tl-lg md:basis-2/5 md:border-r overflow-y-auto">
-            <section className='sticky h-[64px] border-b px-5 top-0 bg-white'>
+        <div className="basis-full md:rounded-tl-lg md:basis-2/5 md:border-r md:overflow-y-auto pb-24">
+            <section className='sticky h-[64px] border-b px-5 top-[54px] md:top-0 bg-white'>
                 <div className='float-left z-10 relative md:hidden h-full flex items-center'>
                     <button onClick={() => router.back()}>
                         <MdKeyboardBackspace size={26}/>

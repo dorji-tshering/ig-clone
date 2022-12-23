@@ -3,18 +3,21 @@ import { useSetRecoilState } from "recoil"
 import { profileImageUploadState } from "../../atoms/profileImageUploadAtom"
 import { MdKeyboardBackspace } from 'react-icons/md'
 import { useRouter } from 'next/router'
+import { CurrentSession } from "../../utils/types"
+import { useSession } from 'next-auth/react'
 
 
 const EditProfile = () => {
     const openModal = useSetRecoilState(profileImageUploadState)
     const router = useRouter()
+    const session = useSession().data as CurrentSession
 
     const submitForm = async (e: FormEvent) => {
         e.preventDefault()
     }
 
     return (
-        <div className="pageContent">
+        <div className="pb-24">
             {/* header in mobile view */}
             <section className='h-[60px] sticky top-[53px] -mt-5 md:hidden bg-white border-b px-5 mb-5'>
                 <div className='float-left relative h-full flex items-center z-10'>
@@ -25,18 +28,18 @@ const EditProfile = () => {
                 </div>
             </section>
             {/* edit form */}
-            <form className="py-12 bg-white shadow-mainShadow rounded-lg mx-3 md:max-w-[70%] md:mx-auto" onSubmit={(e) => submitForm(e)}>
+            <form className="py-12 bg-white shadow-mainShadow rounded-bl-lg rounded-br-lg mx-3 md:max-w-[70%] md:mx-auto" onSubmit={(e) => submitForm(e)}>
                 <div className='flex px-5 md:px-10 md:justify-center items-center mb-8'>
                     <aside className='md:basis-2/5 mr-4 md:mb-0 md:mr-10'>
                         <button onClick={() => openModal(true)} className='md:block md:ml-auto'>
                             <img 
-                                src="/images/dorji.jpg" 
+                                src={session.user.image as string} 
                                 alt="profile image"
                                 className='h-12 w-12 rounded-full' />
                         </button>
                     </aside>
                     <div className='editDiv'>
-                        <h1 className='font-[500] text-2xl'>dorji_dev</h1>
+                        <h1 className='font-[500] text-2xl'>{session.user.username}</h1>
                         <button onClick={() => openModal(true)} className='font-bold text-instaBlue'>Change profile photo</button>
                     </div>
                 </div>

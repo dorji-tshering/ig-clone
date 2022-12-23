@@ -68,7 +68,7 @@ const Followers = ({onClose, userId, onModal=false}: Props) => {
 
     return (
         <div className={`mb-6 ${!onModal && 'mt-6 rounded-lg shadow-mainShadow bg-white pb-5'} md:mx-auto md:w-[500px] text-center`}>
-            <div className={`h-[50px] px-4 border-b sticky ${onModal ? 'top-0':'top-[53px] md:rounded-tr-lg md:rounded-tl-lg'}`}>
+            <div className={`h-[50px] px-4 border-b bg-white sticky ${onModal ? 'top-0':'top-[53px] md:rounded-tr-lg md:rounded-tl-lg'}`}>
                 <div className="flex items-center justify-center h-full w-full absolute inset-0">
                     <h1 className="font-bold text-xl">Followers</h1>
                 </div>

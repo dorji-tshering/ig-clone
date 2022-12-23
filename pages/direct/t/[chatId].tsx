@@ -36,7 +36,7 @@ const ChatPage = () => {
     }, [])
 
     return (
-        <div className="md:px-5 mx-auto md:max-w-[800px] h-[calc(100vh-100px)] md:mt-5 md:pb-14">
+        <div className="md:px-5 mx-auto md:max-w-[800px] h-full md:h-[calc(100vh-100px)] md:mt-5 md:pb-14">
             <div className="shadow-mainShadow bg-white md:rounded-lg flex h-full">
                 {
                     !isMb && (

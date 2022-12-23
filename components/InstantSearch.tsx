@@ -12,7 +12,7 @@ import isMobile from '../utils/useMediaQuery';
 const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
     const [active, setActive] = useState(false);
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState(false);
+    const [searchResults, setSearchResults] = useState(true);
     const ref = useRef<any>(null)
     const isMb = isMobile();
 
@@ -27,7 +27,7 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
 
     return (
         <>
-            <div className={`${onSearchPage && 'sticky top-16 py-6 flex items-center bg-white z-20 border-b -mt-5'}`}>
+            <div className={`${onSearchPage && 'sticky top-16 py-6 flex items-center bg-white z-20'} ${active && 'border-b'}`}>
                 <div className={classNames(
                     'absolute flex pl-3 items-center pointer-events-none h-[35px]', 
                     !onSearchPage && 'inset-y-0'
@@ -52,12 +52,12 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
             {
                 active && (
                     <div className={classNames(
-                        'bg-white min-h-[100px] md:max-h-[350px] overflow-y-auto useScrollbar w-full flex flex-col py-4'
+                        'min-h-[100px] md:max-h-[350px] overflow-y-auto useScrollbar w-full flex bg-white flex-col py-4'
                         )}
                         ref={ref}>
                         {
                             searchResults ? (
-                                <>
+                                <div className="">
                                     <Link onClick={() => setActive(false)} href="/post/sdf" className="flex items-center px-5 py-4 hover:bg-gray-100">
             <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
                 <img src="/images/dorji.jpg" className="absolute inset-0 object-cover" alt="" />
@@ -103,7 +103,7 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
                                             <p className="font-[500] text-gray-500">Dorji Tshering</p>
                                         </div>
                                     </Link>
-                                </>
+                                </div>
                             ):(
                                 query && query.trim().length > 0 ? (
                                     <div className="py-12 text-center font-[500] text-gray-500">

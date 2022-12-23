@@ -5,7 +5,7 @@ const Activity = () => {
     const router = useRouter()
 
     return (
-        <div className='pb-16 md:mt-5 md:w-fit md:mx-auto'>
+        <div className='pb-24 md:w-fit md:mx-auto'>
             <Notifications onClose={() => router.back()}/>
         </div>
     )
