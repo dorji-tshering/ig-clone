@@ -7,6 +7,7 @@ import { CurrentSession } from '../utils/types'
 import { uploadModalState } from '../atoms/uploadModalAtom'
 import { useSetRecoilState } from 'recoil'
 import { MdAddToPhotos } from 'react-icons/md'
+import PostLoader from '../contentLoaders/PostLoader'
 
 const Posts = () => {
     const [posts, setPosts] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
@@ -23,7 +24,13 @@ const Posts = () => {
         ),
     [])
 
-    if(loading) return <></>
+    if(loading) return (
+        <>
+            {
+                Array.from({length: 4}).map(_ => <PostLoader/>)
+            }
+        </>
+    )
 
     return (
         <div className={`sm:max-w-lg md:max-w-xl mx-auto ${session ? 'lg:max-w-none' : 'lg:max-w-2xl'}`}>

@@ -15,6 +15,7 @@ import { useState } from 'react'
 import InstantSearch from './InstantSearch'
 import { useContextualRouting } from 'next-use-contextual-routing'
 import { CurrentSession } from '../utils/types'
+import { MdOutlineFeaturedPlayList } from 'react-icons/md'
 
 const Header = () => {
     const session = useSession().data as CurrentSession
@@ -60,8 +61,15 @@ const Header = () => {
                             </button>
                         </Tooltip>
                     </div>
-                    { session ? 
-                        <>
+                    {/* feature icon */}
+                    <div className="!mx-1">
+                        <Tooltip className="mt-[2px]" style="light" content="Features" placement="bottom" animation="duration-1000">
+                            <button className="relative dNavBtn group" onClick={() => router.push('/application/features')}>
+                                <MdOutlineFeaturedPlayList className="h-8 text-instaBlue w-8 md:w-6 md:h-6 dNavIcon"/>
+                            </button>
+                        </Tooltip>
+                    </div>
+
                             {/* mobile search icon */}
                             <button onClick={() => router.push('/search')} className="md:hidden">
                                 <TbSearch className="w-8 h-8"/>
@@ -124,8 +132,7 @@ const Header = () => {
                                             transition-all duration-75 ease-in-out" />
                                     </button>
                                 </Tooltip>
-                            </div>
-                        </> : <button type="button" className="font-bold" onClick={() => signIn()}>Signin</button> }        
+                            </div>     
                 </div>
             </div>
        </div>

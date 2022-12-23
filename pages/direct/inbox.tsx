@@ -13,8 +13,8 @@ const Inbox = () => {
     const inbox = true
 
     return (
-        <div className="md:px-5 mx-auto md:max-w-[800px] bg-white h-full md:h-[calc(100vh-100px)]\ md:mt-5 md:pb-14">
-            <div className="md:shadow-mainShadow md:rounded-lg flex md:h-full">
+        <div className="md:px-5 mx-auto md:max-w-[800px] bg-white md:bg-transparent h-full md:h-[calc(100vh-100px)] md:mt-5 md:pb-14">
+            <div className="md:shadow-mainShadow md:rounded-lg md:bg-white flex md:h-full">
                 <Left>
                         {
                             false ? (

@@ -62,7 +62,6 @@ const Comments = () => {
 
     return (
         <div className="pb-16 relative md:max-w-[500px] md:mx-auto">
-            <div className="md:border-x md:border-b md:rounded md">
                 {/* top section */}
                 <section className="sticky bg-white top-[53px] h-[50px] px-4 border-b">
                     <div className="absolute inset-0 flex justify-center items-center">
@@ -93,7 +92,7 @@ const Comments = () => {
                                 type="submit">Post</button>
                     </form>
                 </section>
-                <div className="bg-white mb-5 shadow-mainShadow">
+                <div className="bg-white mb-5 shadow-mainShadow md:rounded-bl-lg md:rounded-br-lg">
                     {/* caption */}
                     <section className="px-4 py-6">
                         <div className="flex border-b pb-6">
@@ -116,7 +115,6 @@ const Comments = () => {
                         <PostComment comments={postComments}/>
                     </section>
                 </div>
-            </div>
         </div>
     )
 }

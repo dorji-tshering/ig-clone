@@ -123,7 +123,7 @@ const Post = ({ postId, username, userImage, postImage, commentCount, caption, t
     }
 
     return (
-        <div className={`bg-white rounded-md shadow-mainShadow relative`}>
+        <div className={`bg-white rounded-lg shadow-mainShadow relative`}>
             {/* show emoji picker */}
             {
                 showPicker && (
