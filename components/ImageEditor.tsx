@@ -1,16 +1,16 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { MdOutlineArrowBack } from 'react-icons/md';
-import PostDiscardAlert from './PostDiscardAlert';
-import * as htmlToImage from 'html-to-image';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { MdOutlineArrowBack } from 'react-icons/md'
+import PostDiscardAlert from './PostDiscardAlert'
+import * as htmlToImage from 'html-to-image'
 
 type Props = {
-    setFileSelectOpen: Dispatch<SetStateAction<boolean>>;
-    setEditorOpen: Dispatch<SetStateAction<boolean>>;
-    setCaptionModalOpen: Dispatch<SetStateAction<any>>;
-    selectedFile: any;
-    setEditedFile: Dispatch<SetStateAction<any>>;
-    editedFile: any;
-    setSelectedFile: Dispatch<SetStateAction<any>>;
+    setFileSelectOpen: Dispatch<SetStateAction<boolean>>
+    setEditorOpen: Dispatch<SetStateAction<boolean>>
+    setCaptionModalOpen: Dispatch<SetStateAction<any>>
+    selectedFile: any
+    setEditedFile: Dispatch<SetStateAction<any>>
+    editedFile: any
+    setSelectedFile: Dispatch<SetStateAction<any>>
     editorOpen: boolean
     captionModalOpen: boolean
 }
@@ -33,15 +33,15 @@ const ImageEditor = ({
         setSelectedFile,
         editorOpen, 
         captionModalOpen }: Props) => {
-    const [alertChanges, setAlertChanges] = useState(false);
-    const [filter, setFilter] = useState('');
+    const [alertChanges, setAlertChanges] = useState(false)
+    const [filter, setFilter] = useState('')
     const mainImageRef = useRef<HTMLImageElement | null>(null)
 
     const onNext = () => {
         htmlToImage.toPng(mainImageRef.current!).then(dataURl => {
             setEditedFile(dataURl)
-            setEditorOpen(false); 
-            setCaptionModalOpen(true);
+            setEditorOpen(false)
+            setCaptionModalOpen(true)
         })
     }
 
@@ -83,9 +83,9 @@ const ImageEditor = ({
             </header>
             <div className="flex flex-col md:flex-row">
                 <div className='md:basis-2/3 md:max-h-[550px] flex justify-center items-center'>
-                    <figure ref={mainImageRef} className={`${filter} h-full`}>
+                    <figure ref={mainImageRef} className={`${filter}`}>
                             <img  src={editedFile ?? selectedFile} 
-                            className={`h-full max-h-[400px] md:max-h-fit object-contain`} 
+                            className={`h-full max-h-[400px] md:max-h-[550px] object-contain`} 
                             alt="post image" />
                     </figure>
                 </div>
@@ -98,7 +98,7 @@ const ImageEditor = ({
                         imageFilters.map((filter, idx) => (
                             <figure key={idx} onClick={() => setFilter(filter)} 
                                 className={filter + ' min-w-[75px] sm:min-w-[90px] md:min-w-[auto]'}>
-                                <img src={editedFile || selectedFile} className='md:h-full object-cover relative' alt={`filter ${filter}`} />
+                                <img src={editedFile || selectedFile} className='md:h-full object-contain relative' alt={`filter ${filter}`} />
                             </figure>
                         ))
                     }

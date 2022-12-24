@@ -167,12 +167,6 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
             })
         }
     }
-    
-    if(!post) return (
-        <div className='flex justify-center p-16'>
-            <ContentLoader/>
-        </div>
-    )
 
     return (
         <div className="text-center">
@@ -184,18 +178,26 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                 {/* post container */}
                 <div className='flex h-full w-full'>
                     {/* left/top section */}
-                    <div className="bg-black h-full flex items-center">
-                        <Image 
-                            src={post?.data()?.postImage} 
-                            width={800}
-                            height={900}
-                            quality={100}
-                            style={{height: '100%', width: 'auto'}}
-                            alt="post image" 
-                            className={classNames(
-                            'object-contain', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
-                        )}/>
-                    </div>
+                    {
+                        post ? (
+                            <div className="bg-black h-full flex items-center">
+                                <Image 
+                                    src={post?.data()?.postImage} 
+                                    width={800}
+                                    height={900}
+                                    quality={100}
+                                    style={{height: '100%', width: 'auto'}}
+                                    alt="post image" 
+                                    className={classNames(
+                                    'object-contain', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
+                                )}/>
+                            </div>
+                        ):(
+                            <div className='flex justify-center items-center border-r w-[400px] bg-white'>
+                                <ContentLoader/>
+                            </div>
+                        )
+                    }
                     {/* right/bottom section */}
                     <div className={classNames(
                         'bg-white flex flex-col scrollbar-none w-auto relative',
@@ -215,62 +217,81 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                         </div>
                         {/* top section */}
                         <section className="flex justify-between items-center p-5 border-b">
-                            <div className="flex items-center">
-                                <Link href={`/${post?.data()?.username}`} className="mr-5 rounded-full">
-                                    <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="h-10 w-10 object-cover rounded-full"/>
-                                </Link>
-                                <div> 
-                                    <Link href={`/${post?.data()?.username}`} className="font-bold">
-                                        {post?.data()?.username}
-                                    </Link>
-                                    {
-                                        (post?.data()?.userId !== session.user.id) && (
-                                            follows ? (
-                                                <>
-                                                    <span className="mx-2 text-gray-400">&bull;</span>
-                                                    <button onClick={follow} className="text-gray-500 font-[600]">Following</button>
-                                                </>
-                                            ):(
-                                                <>
-                                                    <span className="mx-2 text-gray-400">&bull;</span>
-                                                    <button onClick={follow} className="text-instaBlue font-[600]">Follow</button>
-                                                </>
-                                            )
-                                        )
-                                    }
-                                </div>
-                            </div>
-                            <div className="flex items-center">
-                                <button onClick={() => {
-                                    openPostIdForOptions(postId)
-                                    }}><BiDotsHorizontalRounded size={26}/>
-                                </button>
-                            </div>
+                            {
+                                post ? (
+                                    <>
+                                        <div className="flex items-center">
+                                            <Link href={`/${post?.data()?.username}`} className="mr-5 rounded-full">
+                                                <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="h-10 w-10 object-cover rounded-full"/>
+                                            </Link>
+                                            <div> 
+                                                <Link href={`/${post?.data()?.username}`} className="font-bold">
+                                                    {post?.data()?.username}
+                                                </Link>
+                                                {
+                                                    (post?.data()?.userId !== session.user.id) && (
+                                                        follows ? (
+                                                            <>
+                                                                <span className="mx-2 text-gray-400">&bull;</span>
+                                                                <button onClick={follow} className="text-gray-500 font-[600]">Following</button>
+                                                            </>
+                                                        ):(
+                                                            <>
+                                                                <span className="mx-2 text-gray-400">&bull;</span>
+                                                                <button onClick={follow} className="text-instaBlue font-[600]">Follow</button>
+                                                            </>
+                                                        )
+                                                    )
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <button onClick={() => {
+                                                openPostIdForOptions(postId)
+                                                }}><BiDotsHorizontalRounded size={26}/>
+                                            </button>
+                                        </div>
+                                    </>
+                                ):(
+                                    <div className='flex justify-center w-full'>
+                                        <ContentLoader/>
+                                    </div>
+                                )
+                            }
                         </section>
 
                         {/* middle scrollable comment section */}
                         <section className="p-5 overflow-y-auto scrollbar-none flex-1">
-                            {/* caption */}
-                            <div className="flex mb-7">
-                                <div className="mr-5">
-                                    <Link href={`/${post?.data()?.username}`} className="rounded-full">
-                                        <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="object-cover rounded-full w-10 h-10" />
-                                    </Link>
-                                </div>
-                                <div className="flex-1">
-                                    <p>
-                                        <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
-                                        <span>{post?.data()?.caption}</span>
-                                    </p>
-                                    <Moment fromNow className="text-gray-400 text-sm mt-2">
-                                        {post?.data()?.timeStamp.toDate()}
-                                    </Moment>
-                                </div>
-                            </div>
-                            
-                            {/* comments */}
                             {
-                                postComments && <PostComment comments={postComments}/>
+                                postComments && post ? (
+                                    <>
+                                        {/* caption */}
+                                        <div className="flex mb-7">
+                                            <div className="mr-5">
+                                                <Link href={`/${post?.data()?.username}`} className="rounded-full">
+                                                    <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="object-cover rounded-full w-10 h-10" />
+                                                </Link>
+                                            </div>
+                                            <div className="flex-1">
+                                                <p>
+                                                    <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
+                                                    <span>{post?.data()?.caption}</span>
+                                                </p>
+                                                <Moment fromNow className="text-gray-400 text-sm mt-2">
+                                                    {post?.data()?.timeStamp.toDate()}
+                                                </Moment>
+                                            </div>
+                                        </div>
+                                        {/* comments */}
+                                        {
+                                            postComments && <PostComment comments={postComments}/>
+                                        }
+                                    </>
+                                ):(
+                                    <div className='flex w-full justify-center mt-14'>
+                                        <ContentLoader/>
+                                    </div>
+                                )
                             }
                         </section>
 

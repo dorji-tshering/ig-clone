@@ -66,7 +66,7 @@ const Likes: NextPageWithLayout = () => {
                         }
                         <div className="profileContentContainer">
                             {
-                                likedPosts.map(post => (
+                                likedPosts.map((post, idx) => (
                                     <div className="relative aspect-square mb-4" key={post.id}>
                                         <div className="h-full w-full p-2">
                                             <Link href={
@@ -86,6 +86,7 @@ const Likes: NextPageWithLayout = () => {
                                                     width={400}
                                                     height={400}
                                                     quality={80}
+                                                    priority={idx < 8 ? true : false}
                                                     sizes="50vw"
                                                     alt="post image" 
                                                     className="object-cover h-full w-full 

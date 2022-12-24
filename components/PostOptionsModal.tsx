@@ -19,6 +19,7 @@ const PostOptionsModal = () => {
             show: true,
             message: 'Post link copied successfully'
         })
+        setPostIdForOptions(null)
     }
 
     return (

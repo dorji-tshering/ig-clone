@@ -79,7 +79,7 @@ const Saved: NextPageWithLayout = () => {
                             <p className="text-center text-gray-500 mb-8 text-lg font-bold">Only you can see your saved posts</p>
                             <div className="profileContentContainer">
                                 {
-                                    savedPosts.map(post => (
+                                    savedPosts.map((post,idx) => (
                                         <div className="relative aspect-square mb-4" key={post.id}>
                                             <div className="h-full w-full p-2">
                                                 <Link href={
@@ -99,6 +99,7 @@ const Saved: NextPageWithLayout = () => {
                                                         width={400}
                                                         height={400}
                                                         quality={80}
+                                                        priority={idx < 8 ? true : false}
                                                         sizes="50vw"
                                                         alt="post image" 
                                                         className="object-cover h-full w-full 
