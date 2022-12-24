@@ -1,10 +1,10 @@
-import { addDoc, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { MdOutlineArrowBack } from 'react-icons/md';
-import { db, storage } from '../firebase';
-import { CurrentSession } from '../utils/types';
+import { addDoc, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadString } from 'firebase/storage'
+import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { MdOutlineArrowBack } from 'react-icons/md'
+import { db, storage } from '../firebase'
+import { CurrentSession } from '../utils/types'
 
 type Props = {
     setEditorOpen: Dispatch<SetStateAction<boolean>>
@@ -62,7 +62,6 @@ const ImageUpload = ({
         setLoading(false)
     }
 
-
     // allow only single space between characters
     const updateCaption = (e: ChangeEvent<HTMLTextAreaElement>) => {
         let lastChar = e.target.value.charAt(e.target.value.length - 1);
@@ -99,10 +98,10 @@ const ImageUpload = ({
                         {loading ? 'Uploading...' : 'Upload post'}
                 </button>
             </header>
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row md:h-[550px] md:max-h-[550px]">
                 {/* edited image */}
-                <section>
-                    <img src={editedFile ?? selectedFile} className="max-h-[400px] mx-auto" alt="edited post image" />
+                <section className='md:h-full md:w-full md:flex md:items-center md:justify-center md:border-r'>
+                    <img src={editedFile ?? selectedFile} className="max-h-[400px] md:max-h-[550px] mx-auto" alt="edited post image" />
                 </section>
                 {/* caption */}
                 <section className="px-8 pt-8 md:pr-0 md:pb-8 min-w-[250px] flex flex-col justify-center">

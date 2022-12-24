@@ -95,7 +95,7 @@ const Comments = () => {
                 <div className="bg-white mb-5 shadow-mainShadow md:rounded-bl-lg md:rounded-br-lg">
                     {/* caption */}
                     <section className="px-4 py-6">
-                        <div className="flex border-b pb-6">
+                        <div className={`flex pb-6 border-b`}>
                             <div className="mr-5">
                                 <Link href={`/${post?.data()?.username}`} className="rounded-full">
                                     <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="" className="object-cover rounded-full w-9 h-9" />
