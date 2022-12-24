@@ -44,7 +44,7 @@ const Header = () => {
                         <div className="relative hidden md:block h-[35px] min-w-[200px]
                             transition-all ease-in-out duration-100 ml-6 mr-auto 
                             focus-within:flex-1">
-                            <div className="focus-within:shadow-searchShadow rounded-md overflow-hidden">
+                            <div className="focus-within:shadow-mainShadow rounded-md overflow-hidden">
                                 <InstantSearch/>
                             </div>
                         </div>

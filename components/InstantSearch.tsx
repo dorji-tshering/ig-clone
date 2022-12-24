@@ -1,28 +1,50 @@
-import { Combobox } from "@headlessui/react"
-import Link from "next/link";
-import classNames from 'classnames';
-import { useEffect, useRef, useState } from "react";
-import { TbSearch } from 'react-icons/tb';
-import { useRouter } from 'next/router';
-import isMobile from '../utils/useMediaQuery';
+import Link from "next/link"
+import classNames from 'classnames'
+import { useEffect, useRef, useState } from "react"
+import { TbSearch } from 'react-icons/tb'
+import isMobile from '../utils/useMediaQuery'
+import client from '../utils/typeSense'
+import { collection, onSnapshot } from "firebase/firestore"
+import { db } from "../firebase"
+import ContentLoader from '../contentLoaders/ContentLoader'
 
 /**
  * Search component
  */
 const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
-    const [active, setActive] = useState(false);
-    const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState(true);
+    const [active, setActive] = useState(false)
+    const [query, setQuery] = useState<string>('')
+    const [searchResults, setSearchResults] = useState<any[]>()
     const ref = useRef<any>(null)
-    const isMb = isMobile();
+    const isMb = isMobile()
+    const [loading, setLoading] = useState(false)
 
-    const router = useRouter();
-
-    useEffect(() => {
-        const autoComplete = async (query: string) => {
-            // search api code
+    // listen to user document changes and update the search collection
+    useEffect(() => onSnapshot(collection(db, 'users'), snapshot => {
+        let searchDocuments: {}[] = []
+        snapshot.docs.map(doc => {
+            searchDocuments.push({
+                id: doc.id,
+                ...doc.data()
+            })
+        })
+        if(searchDocuments.length > 0) {
+            client.collections('users').documents().import(searchDocuments, {action: 'upsert'})
         }
-        autoComplete(query)
+    }),[])
+
+    // 
+    useEffect(() => {
+        if(query) {
+            setLoading(true)
+            client.collections('users').documents().search({
+                'q': query,
+                'query_by'  : 'name',
+            }).then(result => {
+                setSearchResults(result.hits)
+                setLoading(false)
+            })
+        }
     }, [query])
 
     return (
@@ -56,61 +78,30 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
                         )}
                         ref={ref}>
                         {
-                            searchResults ? (
-                                <div className="">
-                                    <Link onClick={() => setActive(false)} href="/post/sdf" className="flex items-center px-5 py-4 hover:bg-gray-100">
-            <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
-                <img src="/images/dorji.jpg" className="absolute inset-0 object-cover" alt="" />
-            </div>
-            <div className="flex flex-col justify-center">
-                <p className="font-bold">dorji_dev</p>
-                <p className="font-[500] text-gray-500">Dorji Tshering</p>
-            </div>
-                                    </Link>
-                                    <Link onClick={() => setActive(false)}  href="/post/sadfasf" className="flex items-center px-5 py-4 hover:bg-gray-100">
-                                        <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
-                                            <img src="/images/dorji.jpg" className="absolute inset-0 object-cover" alt="" />
-                                        </div>
-                                        <div className="flex flex-col justify-center">
-                                            <p className="font-bold">dorji_dev</p>
-                                            <p className="font-[500] text-gray-500">Dorji Tshering</p>
-                                        </div>
-                                    </Link>
-                                    <Link onClick={() => setActive(false)} href="/" className="flex items-center px-5 py-4 hover:bg-gray-100">
-                                        <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
-                                            <img src="/images/dorji.jpg" className="absolute inset-0 object-cover" alt="" />
-                                        </div>
-                                        <div className="flex flex-col justify-center">
-                                            <p className="font-bold">dorji_dev</p>
-                                            <p className="font-[500] text-gray-500">Dorji Tshering</p>
-                                        </div>
-                                    </Link>
-                                    <Link onClick={() => setActive(false)} href="/" className="flex items-center px-5 py-4 hover:bg-gray-100">
-                                        <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
-                                            <img src="/images/dorji.jpg" className="absolute inset-0 object-cover" alt="" />
-                                        </div>
-                                        <div className="flex flex-col justify-center">
-                                            <p className="font-bold">dorji_dev</p>
-                                            <p className="font-[500] text-gray-500">Dorji Tshering</p>
-                                        </div>
-                                    </Link>
-                                    <Link onClick={() => setActive(false)} href="/" className="flex items-center px-5 py-4 hover:bg-gray-100">
-                                        <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
-                                            <img src="/images/dorji.jpg" className="absolute inset-0 object-cover" alt="" />
-                                        </div>
-                                        <div className="flex flex-col justify-center">
-                                            <p className="font-bold">dorji_dev</p>
-                                            <p className="font-[500] text-gray-500">Dorji Tshering</p>
-                                        </div>
-                                    </Link>
-                                </div>
+                            loading ? (
+                                <div className="flex justify-center items-center"><ContentLoader/></div>
                             ):(
-                                query && query.trim().length > 0 ? (
-                                    <div className="py-12 text-center font-[500] text-gray-500">
-                                        <p>Nothing Found for <span className="font-bold text-black">{query}</span></p>
-                                    </div>
+                                query && searchResults && searchResults?.length > 0 ? (
+                                    searchResults.map(result => (
+                                        <Link key={result.document.id} onClick={() => setActive(false)} 
+                                            href={`/${result.document.username}`} className="flex items-center px-5 py-4 hover:bg-gray-100">
+                                            <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
+                                                <img src={result.document.image} className="absolute inset-0 object-cover" alt="" />
+                                            </div>
+                                            <div className="flex flex-col justify-center">
+                                                <p className="font-bold">{result.document.username}</p>
+                                                <p className="font-[500] text-gray-500">{result.document.name}</p>
+                                            </div>
+                                        </Link>
+                                    ))
                                 ):(
-                                    <div className="py-12 text-center font-[500] text-gray-500"><p>Start searching...</p></div>
+                                    query && query.trim().length > 0 ? (
+                                        <div className="py-12 text-center font-[500] text-gray-500">
+                                            <p>Nothing Found for <span className="font-bold text-black">{query}</span></p>
+                                        </div>
+                                    ):(
+                                        <div className="py-12 text-center font-[500] text-gray-500"><p>Start searching...</p></div>
+                                    )
                                 )
                             )
                         }

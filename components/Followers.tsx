@@ -7,10 +7,11 @@ import { arrayRemove, arrayUnion, collection, doc, DocumentData, onSnapshot, que
 import { db } from '../firebase'
 import { CurrentSession } from '../utils/types'
 import { useSession } from 'next-auth/react'
+import ContentLoader from '../contentLoaders/ContentLoader'
 
 type Props = {
     onClose?: () => void, 
-    userId: string,
+    userId?: string,
     onModal?: boolean
 }
 
@@ -64,7 +65,11 @@ const Followers = ({onClose, userId, onModal=false}: Props) => {
         }
     }
 
-    if(!userId || loading) return <></>
+    if(!userId || loading) return (
+        <div className='flex justify-center p-16'>
+            <ContentLoader/>
+        </div>
+    )
 
     return (
         <div className={`mb-6 ${!onModal && 'mt-6 rounded-lg shadow-mainShadow bg-white pb-5'} md:mx-auto md:w-[500px] text-center`}>

@@ -9,11 +9,11 @@ export const currentFeatures = [
     'View who follows you and whom you are following from your profile page.',
     'Like and comment counts of a post.',
     'Real-time updates of everything you do like following, commenting, or liking a post.',
-    'Sign in with either Facebook or Google account.'
+    'Sign in with either Facebook or Google account.',
+    'Search users by their profile name.'
 ]
 
 export const toBeImplemented = [
-    'Search functionality.',
     'Edit profile details like username or profile image.',
     'Create or update bio.',
     'Chat functionality.',

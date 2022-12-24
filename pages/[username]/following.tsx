@@ -8,18 +8,13 @@ import { useEffect, useState } from 'react'
 const FollowingPage = () => {
     const router = useRouter()
     const username = router.query.username as string
-    const [loading, setLoading] = useState(false)
     const [user, setUser] = useState<QueryDocumentSnapshot<DocumentData>>()
 
     useEffect(() => {
-        setLoading(true)
         getDocs(query(collection(db, 'users'), where('username', '==', username))).then(snapshot => {
             setUser(snapshot.docs[0])
-            setLoading(false)
         })
     },[])
-
-    if(!user || loading) return <></>
 
     return (
         <div className="pb-16 md:mt-5 md:w-fit md:mx-auto">

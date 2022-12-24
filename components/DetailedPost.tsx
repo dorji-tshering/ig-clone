@@ -21,6 +21,7 @@ import Moment from 'react-moment'
 import { Comment } from '../utils/types'
 import { useSession } from 'next-auth/react'
 import { CurrentSession } from '../utils/types'
+import ContentLoader from '../contentLoaders/ContentLoader'
 
 type Props = {
     postId: string,
@@ -54,7 +55,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
         }
     },[])
 
-    // update likes and post
+    // set and listen to post and likes
     useEffect(() => onSnapshot(doc(db, 'posts', postId), snapshot => {
         setPost(snapshot)
         setLikes(snapshot.data()?.likes)
@@ -166,6 +167,12 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
         }
     }
     
+    if(!post) return (
+        <div className='flex justify-center p-16'>
+            <ContentLoader/>
+        </div>
+    )
+
     return (
         <div className="text-center">
             <div className={classNames(
