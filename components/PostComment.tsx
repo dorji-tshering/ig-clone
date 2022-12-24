@@ -18,7 +18,7 @@ const PostComment = ({comments}: {comments: Comment[]}) => {
                         <div className="flex mb-7">
                             <div className="mr-5">
                                 <Link href={`/${comment.username}`} className="rounded-full">
-                                    <img src={comment.userImage} alt="commenter image" className="w-10 h-10  object-cover rounded-full" />
+                                    <img src={comment.userImage ?? '/images/placeholder.png'} alt="commenter image" className="w-10 h-10  object-cover rounded-full" />
                                 </Link>
                             </div>
                             <div className="flex-1">

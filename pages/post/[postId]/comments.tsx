@@ -19,7 +19,7 @@ const Comments = () => {
     const router = useRouter();
     const postId = router.query.postId as string
     const session = useSession().data as CurrentSession
-    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost)
+    const {data: post} = useSWR(`posts/${postId}`, fetchPost)
 
     useEffect(() => 
         onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
@@ -74,7 +74,7 @@ const Comments = () => {
                 {/* comment input */}
                 <section className="flex p-4 items-center bg-[#EFEEEE]">
                     <span className="mr-4">
-                        <img src={session.user.image as string} className="h-9 w-9 object-cover rounded-full" alt="current user image" />
+                        <img src={session.user.image as string ?? '/images/placeholder.png'} className="h-9 w-9 object-cover rounded-full" alt="current user image" />
                     </span>
                     <form className="border rounded-full flex grow items-center py-3 px-5 bg-white" onSubmit={(e) => postComment(e)}>
                             <input 
@@ -98,7 +98,7 @@ const Comments = () => {
                         <div className="flex border-b pb-6">
                             <div className="mr-5">
                                 <Link href={`/${post?.data()?.username}`} className="rounded-full">
-                                    <img src={post?.data()?.userImage} alt="" className="object-cover rounded-full w-9 h-9" />
+                                    <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="" className="object-cover rounded-full w-9 h-9" />
                                 </Link>
                             </div>
                             <div className="flex-1">

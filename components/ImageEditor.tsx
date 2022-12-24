@@ -83,7 +83,7 @@ const ImageEditor = ({
             </header>
             <div className="flex flex-col md:flex-row">
                 <div className='md:basis-2/3 md:max-h-[550px] flex justify-center items-center'>
-                    <figure ref={mainImageRef} className={`${filter}`}>
+                    <figure ref={mainImageRef} className={`${filter} h-full`}>
                             <img  src={editedFile ?? selectedFile} 
                             className={`h-full max-h-[400px] md:max-h-fit object-contain`} 
                             alt="post image" />

@@ -18,6 +18,7 @@ import { postOptionsModalState } from '../atoms/postOptionsAtom'
 import { useSetRecoilState } from "recoil"
 import Link from "next/link"
 import { CurrentSession } from "../utils/types"
+import Image from 'next/image'
 
 interface PostData {
     postId: string,
@@ -123,7 +124,7 @@ const Post = ({postId, username, userImage, postImage, commentCount, caption, ti
     }
 
     return (
-        <div className={`bg-white rounded-lg shadow-mainShadow relative`}>
+        <div className={`bg-white md:rounded-lg md:shadow-mainShadow relative`}>
             {/* show emoji picker */}
             {
                 showPicker && (
@@ -138,7 +139,7 @@ const Post = ({postId, username, userImage, postImage, commentCount, caption, ti
                 <Link href={`/${username}`}>
                     <img 
                         className="rounded-full h-10 w-10 object-contain p-1 mr-3 border" 
-                        src={userImage} 
+                        src={userImage ?? '/images/placeholder.png'} 
                         alt="user-avatar"
                     />
                 </Link>
@@ -149,8 +150,13 @@ const Post = ({postId, username, userImage, postImage, commentCount, caption, ti
             </div>
 
             {/* Post image */}
-            <img 
-                className="object-cover w-full"
+            <Image 
+                className="object-contain"
+                width={900}
+                height={800}
+                quality={100}
+                sizes="(max-width: 767px) 100vw,
+                    (min-width: 768px) 70vw"
                 src={postImage} 
                 alt="post-image" />
             {/* bottom section */}

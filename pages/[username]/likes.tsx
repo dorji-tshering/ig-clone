@@ -5,7 +5,6 @@ import ProfileLayout from "../../components/ProfileLayout"
 import type { NextPageWithLayout } from '../_app'
 import { BsHeartFill } from 'react-icons/bs'
 import { AiTwotoneMessage } from 'react-icons/ai'
-import { useRecoilState } from "recoil"
 import { useSession } from 'next-auth/react'
 import { useContextualRouting } from 'next-use-contextual-routing'
 import isMobile from "../../utils/useMediaQuery"
@@ -14,6 +13,7 @@ import { useRouter } from "next/router"
 import { collection, DocumentData, onSnapshot, query, QueryDocumentSnapshot, where } from "firebase/firestore"
 import { db } from "../../firebase"
 import ContentLoader from "../../contentLoaders/ContentLoader"
+import Image from 'next/image'
 
 const Likes: NextPageWithLayout = () => {
     const [loading, setLoading] = useState(false)
@@ -81,8 +81,15 @@ const Likes: NextPageWithLayout = () => {
                                                 }
                                                 as={isMb ? undefined : `/post/${post.id}`} 
                                                 className="group relative rounded-lg h-full w-full block overflow-hidden">
-                                                <img src={post.data().postImage} alt="post image" className="object-cover h-full w-full 
-                                                group-hover:scale-125 transition-all duration-300 ease-in-out"/>
+                                                <Image 
+                                                    src={post.data().postImage} 
+                                                    width={400}
+                                                    height={400}
+                                                    quality={80}
+                                                    sizes="50vw"
+                                                    alt="post image" 
+                                                    className="object-cover h-full w-full 
+                                                    group-hover:scale-125 transition-all duration-300 ease-in-out"/>
                                                 <div className="hidden group-hover:flex absolute inset-0 justify-center 
                                                     items-center bg-black/30 text-white font-bold">
                                                     <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>

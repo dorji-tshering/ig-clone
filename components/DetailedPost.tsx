@@ -22,6 +22,7 @@ import { Comment } from '../utils/types'
 import { useSession } from 'next-auth/react'
 import { CurrentSession } from '../utils/types'
 import ContentLoader from '../contentLoaders/ContentLoader'
+import Image from 'next/image'
 
 type Props = {
     postId: string,
@@ -184,7 +185,14 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                 <div className='flex h-full w-full'>
                     {/* left/top section */}
                     <div className="bg-black h-full flex items-center">
-                        <img src={post?.data()?.postImage} alt="" className={classNames(
+                        <Image 
+                            src={post?.data()?.postImage} 
+                            width={800}
+                            height={900}
+                            quality={100}
+                            style={{height: '100%', width: 'auto'}}
+                            alt="post image" 
+                            className={classNames(
                             'object-contain', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
                         )}/>
                     </div>
@@ -209,7 +217,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                         <section className="flex justify-between items-center p-5 border-b">
                             <div className="flex items-center">
                                 <Link href={`/${post?.data()?.username}`} className="mr-5 rounded-full">
-                                    <img src={post?.data()?.userImage} alt="post user image" className="h-10 w-10 object-cover rounded-full"/>
+                                    <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="h-10 w-10 object-cover rounded-full"/>
                                 </Link>
                                 <div> 
                                     <Link href={`/${post?.data()?.username}`} className="font-bold">
@@ -246,7 +254,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                             <div className="flex mb-7">
                                 <div className="mr-5">
                                     <Link href={`/${post?.data()?.username}`} className="rounded-full">
-                                        <img src={post?.data()?.userImage} alt="post user image" className="object-cover rounded-full w-10 h-10" />
+                                        <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="object-cover rounded-full w-10 h-10" />
                                     </Link>
                                 </div>
                                 <div className="flex-1">

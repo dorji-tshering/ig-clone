@@ -10,7 +10,7 @@ function MiniProfile() {
     return (
         <div className='flex items-center'>
             <Link href={`/${session.user.username}`}>
-                <img className='rounded-full border p-[2px] w-14 h-14' src={session?.user?.image as string} alt="current user image" />
+                <img className='rounded-full border p-[2px] w-14 h-14' src={session?.user?.image as string ?? '/images/placeholder.png'} alt="current user image" />
             </Link>
             <div className="ml-3">
                 <Link href={`/${session.user.username}`} className='font-bold'>{session?.user?.username}</Link>

@@ -7,6 +7,7 @@ import { MdKeyboardBackspace } from 'react-icons/md'
 import useSWR from 'swr'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../../firebase'
+import FeedPostLoader from '../../../contentLoaders/FeedPostLoader'
 
 const fetchPost = async (postPath: string) => {
     return await getDoc(doc(db, postPath))
@@ -19,7 +20,11 @@ const PostPage = () => {
 
     const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost)
 
-    if(isLoading) return <></>
+    if(isLoading && isMb) return (
+        <div className='mt-5'>
+            <FeedPostLoader/>
+        </div>
+    )
 
     return (
         <div className="pageContent relative">

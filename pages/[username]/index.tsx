@@ -1,20 +1,21 @@
 // default profile page with post content
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useState } from 'react';
-import type { NextPageWithLayout } from '../_app';
-import ProfileLayout from '../../components/ProfileLayout';
-import Link from 'next/link';
-import { BsHeartFill } from 'react-icons/bs';
-import { AiTwotoneMessage, AiOutlinePlus } from 'react-icons/ai';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { uploadModalState } from '../../atoms/uploadModalAtom';
-import isMobile from "../../utils/useMediaQuery";
-import { useContextualRouting } from 'next-use-contextual-routing';
-import { collection, DocumentData, getDocs, onSnapshot, query, QueryDocumentSnapshot, where } from 'firebase/firestore';
-import { db } from '../../firebase';
-import { CurrentSession } from '../../utils/types';
-import ContentLoader from '../../contentLoaders/ContentLoader';
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { ReactElement, useEffect, useState } from 'react'
+import type { NextPageWithLayout } from '../_app'
+import ProfileLayout from '../../components/ProfileLayout'
+import Link from 'next/link'
+import { BsHeartFill } from 'react-icons/bs'
+import { AiTwotoneMessage, AiOutlinePlus } from 'react-icons/ai'
+import { useSetRecoilState } from 'recoil'
+import { uploadModalState } from '../../atoms/uploadModalAtom'
+import isMobile from "../../utils/useMediaQuery"
+import { useContextualRouting } from 'next-use-contextual-routing'
+import { collection, DocumentData, onSnapshot, query, QueryDocumentSnapshot, where } from 'firebase/firestore'
+import { db } from '../../firebase'
+import { CurrentSession } from '../../utils/types'
+import ContentLoader from '../../contentLoaders/ContentLoader'
+import Image from 'next/image'
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter()
@@ -84,8 +85,15 @@ const Profile: NextPageWithLayout = () => {
                                                 }
                                                 as={isMb ? undefined : `/post/${post.id}`} 
                                                 className="group relative rounded-lg h-full w-full block overflow-hidden">
-                                                <img src={post.data().postImage} alt="post image" className="object-cover h-full w-full 
-                                                group-hover:scale-125 transition-all duration-300 ease-in-out"/>
+                                                <Image 
+                                                    src={post.data().postImage} 
+                                                    width={400}
+                                                    height={400}
+                                                    quality={80}
+                                                    sizes="50vw"
+                                                    alt="post image" 
+                                                    className="object-cover h-full w-full 
+                                                    group-hover:scale-125 transition-all duration-300 ease-in-out"/>
                                                 <div className="hidden group-hover:flex absolute inset-0 justify-center 
                                                     items-center bg-black/30 text-white font-bold">
                                                     <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>
