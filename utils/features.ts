@@ -10,7 +10,8 @@ export const currentFeatures = [
     'Like and comment counts of a post.',
     'Real-time updates of everything you do like following, commenting, or liking a post.',
     'Sign in with either Twitter or Google account.',
-    'Search users by their profile name.'
+    'Search users by their profile name.',
+    'Delete account along with all the associated data.'
 ]
 
 export const toBeImplemented = [
