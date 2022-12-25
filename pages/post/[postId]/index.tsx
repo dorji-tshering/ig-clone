@@ -8,6 +8,7 @@ import useSWR from 'swr'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import FeedPostLoader from '../../../contentLoaders/FeedPostLoader'
+import { Data } from 'emoji-mart'
 
 const fetchPost = async (postPath: string) => {
     return await getDoc(doc(db, postPath))
@@ -18,11 +19,20 @@ const PostPage = () => {
     const isMb = isMobile()
     const postId = router.query.postId as string
 
-    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost, {refreshInterval: 1000})
+    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost, {refreshInterval: 5000})
 
     if(isLoading && isMb) return (
         <div className='mt-5'>
             <FeedPostLoader/>
+        </div>
+    )
+
+    if(post?.data() === undefined) return (
+        <div className='flex items-center flex-col justify-center px-5 h-full bg-white'>
+            <h1 className='px-7 py-3 bg-gray-700 rounded-full text-gray-100 mb-10'>Post Not Found</h1>
+            <div className='w-full max-w-[400px] shadow-mainShadow p-10 rounded-md'>
+                <p className='text-gray-600'>Seems like the post with the given <span className='font-bold'>id</span> is either removed or doesn't exist.</p>
+            </div>
         </div>
     )
 

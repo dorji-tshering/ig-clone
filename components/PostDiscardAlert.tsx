@@ -1,5 +1,3 @@
-
-
 type Props = {
     discard: Function
     cancel: Function

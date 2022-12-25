@@ -20,7 +20,7 @@ const Comments = () => {
     const router = useRouter();
     const postId = router.query.postId as string
     const session = useSession().data as CurrentSession
-    const {data: post} = useSWR(`posts/${postId}`, fetchPost)
+    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -65,6 +65,15 @@ const Comments = () => {
         })
     }
 
+    if(!isLoading && !post?.data()) return (
+        <div className='flex items-center flex-col justify-center px-5 h-full bg-white'>
+            <h1 className='px-7 py-3 bg-gray-700 rounded-full text-gray-100 mb-10'>Post Not Found</h1>
+            <div className='w-full max-w-[400px] shadow-mainShadow p-10 rounded-md'>
+                <p className='text-gray-600'>Seems like the post with the given <span className='font-bold'>id</span> is either removed or doesn't exist.</p>
+            </div>
+        </div>
+    )
+
     return (
         <div className="pb-16 relative md:max-w-[500px] md:mx-auto">
                 {/* top section */}
@@ -99,22 +108,30 @@ const Comments = () => {
                 </section>
                 <div className="bg-white mb-5 shadow-mainShadow md:rounded-bl-lg md:rounded-br-lg">
                     {/* caption */}
-                    <section className="px-4 py-6">
-                        <div className={`flex pb-6 border-b`}>
-                            <div className="mr-5">
-                                <Link href={`/${post?.data()?.username}`} className="rounded-full">
-                                    <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="" className="object-cover rounded-full w-9 h-9" />
-                                </Link>
+                    {
+                        post ? (
+                            <section className="px-4 py-6">
+                                <div className={`flex pb-6 border-b`}>
+                                    <div className="mr-5">
+                                        <Link href={`/${post?.data()?.username}`} className="rounded-full">
+                                            <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="" className="object-cover rounded-full w-9 h-9" />
+                                        </Link>
+                                    </div>
+                                    <div className="flex-1">
+                                        <p>
+                                            <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
+                                            <span>{post?.data()?.caption}</span>
+                                        </p>
+                                        <p className="text-gray-400 text-sm mt-2">2d</p>
+                                    </div>
+                                </div>
+                            </section>
+                        ):(
+                            <div className='flex justify-center pt-10 mb-20'>
+                                <ContentLoader/>
                             </div>
-                            <div className="flex-1">
-                                <p>
-                                    <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
-                                    <span>{post?.data()?.caption}</span>
-                                </p>
-                                <p className="text-gray-400 text-sm mt-2">2d</p>
-                            </div>
-                        </div>
-                    </section>
+                        )
+                    }
                     {/* comments */}
                     <section className="px-5 py-2">
                         {

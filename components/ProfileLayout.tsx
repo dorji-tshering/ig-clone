@@ -25,6 +25,7 @@ const ProfileLayout = ({ children }: Props) => {
     const openProfileUploadModal = useSetRecoilState(profileImageUploadState)
     const { makeContextualHref, returnHref } = useContextualRouting()
     const profileImage = true
+    const [profileExist, setProfileExist] = useState(true)
     const router = useRouter()
 
     const username = router.query.username as string
@@ -32,8 +33,13 @@ const ProfileLayout = ({ children }: Props) => {
     // get the user data of current profile
     useEffect(() => 
         onSnapshot(query(collection(db, 'users'), where('username', '==', username)), snapshot => {
-            setCurProfile(snapshot.docs[0])
-            setFollows(snapshot.docs[0].data().followers.includes(session.user.id))
+            if(snapshot.docs[0] === undefined) {
+                setProfileExist(false)
+            }else {
+                !profileExist && setProfileExist(true)
+                setCurProfile(snapshot.docs[0])
+                setFollows(snapshot.docs[0].data().followers.includes(session.user.id))
+            }
         }),
     [username])
 
@@ -71,6 +77,15 @@ const ProfileLayout = ({ children }: Props) => {
             // upload image code
         }
     }
+
+    if(!profileExist) return (
+        <div className='flex items-center flex-col justify-center px-5 h-full bg-white'>
+            <h1 className='px-7 py-3 bg-gray-700 rounded-full text-gray-100 mb-10'>User Not Found</h1>
+            <div className='w-full max-w-[400px] shadow-mainShadow p-10 rounded-md'>
+                <p className='text-gray-600'>Seems like the user with the given <span className='font-bold'>id</span> is either removed or doesn't exist.</p>
+            </div>
+        </div>
+    )
     
     if(!curProfile) return (
         <div className='flex items-center justify-center h-[250px]'><ContentLoader/></div>

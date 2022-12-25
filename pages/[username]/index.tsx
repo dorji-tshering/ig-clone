@@ -54,7 +54,7 @@ const Profile: NextPageWithLayout = () => {
             <ContentLoader/>
         </div>
     )
-
+    
     return (
         <div className="profileContentWrapper">
             {

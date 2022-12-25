@@ -32,7 +32,7 @@ const Posts = () => {
         <div className={`sm:max-w-lg md:max-w-xl mx-auto ${session ? 'lg:max-w-none' : 'lg:max-w-2xl'}`}>
             {
                 posts.length === 0 ? (
-                    <div className='flex flex-col items-center mt-20 lg:mt-0 mx-5 py-10 md:py-20 rounded-md border'>
+                    <div className='flex flex-col items-center mt-20 lg:mt-0 mx-5 py-10 md:py-20 rounded-md bg-white shadow-mainShadow'>
                         <button onClick={() => openUploadModal(true)} className='w-32 h-32 flex justify-center items-center bg-instaBlue/5 rounded-full'>
                             <MdAddToPhotos className='text-instaBlue' size={36}/>
                         </button>
