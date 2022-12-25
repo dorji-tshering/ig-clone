@@ -139,9 +139,8 @@ const ProfileLayout = ({ children }: Props) => {
                                         </Link>
                                         <button 
                                             onClick={async () =>  {
-                                                // redirect without reloading the page
-                                                const data = await signOut({redirect: false, callbackUrl: '/auth/signin'})
-                                                router.push(data.url)
+                                                await signOut()
+                                                router.push('/auth/signin')
                                             }}
                                             className="font-bold text-instaBlue mt-3 xs:mt-0 w-fit">Logout</button>
                                     </div>   

@@ -19,8 +19,10 @@ function MiniProfile() {
             <button 
                 onClick={async () =>  {
                     // redirect without reloading the page
-                    const data = await signOut({redirect: false, callbackUrl: '/auth/signin'})
-                    router.push(data.url)
+                    // const data = await signOut({redirect: false, callbackUrl: '/auth/signin'})
+                    // router.push(data.url)
+                    await signOut()
+                    router.push('/auth/signin')
                 }} className='text-instaBlue font-bold mt-2 block ml-auto'>Sign out</button>
         </div>
     )

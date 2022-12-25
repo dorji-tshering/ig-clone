@@ -3,11 +3,11 @@ import { ClientSafeProvider, getProviders, LiteralUnion, signIn as SignIntoProvi
 import { useRouter } from 'next/router'
 import { FcGoogle } from 'react-icons/fc'
 import { ImTwitter } from 'react-icons/im'
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil"
 import { noticeState } from '../../atoms/noticeAtom'
 import { VscLinkExternal } from 'react-icons/vsc'
 import { useSession } from "next-auth/react"
-import { useEffect } from "react";
+import { useEffect } from "react"
 
 // possible signin errors
 const errors = {
@@ -31,11 +31,6 @@ function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>,
     const setNotice = useSetRecoilState(noticeState)
     const {status} = useSession()
 
-    if(status === 'authenticated') {
-        router.push('/')
-        return
-    }
-
     useEffect(() => {
         if(error) {
             setNotice({
@@ -44,6 +39,11 @@ function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>,
             })
         }
     }, [error])
+
+    if(status === 'authenticated') {
+        router.push('/')
+        return
+    }
 
     if(status === 'loading') return <></>
 
@@ -73,8 +73,10 @@ function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>,
                         ))}
                     </div>
                     <div className="mt-10">
-                        <a href="https://github.com/dorji-tshering/ig-clone" target="_blank" className="text-gray-500 w-fit mx-auto flex items-center justify-center hover:text-instaBlue">
-                            Github<VscLinkExternal className="inline ml-2" strokeWidth={.8} size={12}/>
+                        <a 
+                            href="https://github.com/dorji-tshering/ig-clone" target="_blank" 
+                            className="text-gray-600 w-fit mx-auto flex items-center justify-center hover:text-instaBlue hover:underline">
+                            Github<VscLinkExternal className="inline ml-2 text-gray-400" strokeWidth={.8} size={12}/>
                         </a>
                     </div>
                 </div>

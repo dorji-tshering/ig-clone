@@ -58,7 +58,7 @@ const Profile: NextPageWithLayout = () => {
     return (
         <div className="profileContentWrapper">
             {
-                posts.length > 0 ? (
+                posts.length > 0 && posts[0].data() ? ( // extra check to ensure document data is not undefined
                     <>
                         {
                             curProfile.id === session.user.id ? (
@@ -87,7 +87,7 @@ const Profile: NextPageWithLayout = () => {
                                                 as={isMb ? undefined : `/post/${post.id}`} 
                                                 className="group relative rounded-lg h-full w-full block overflow-hidden">
                                                 <Image 
-                                                    src={post.data().postImage} 
+                                                    src={post.data().postImage ?? placeholder} // avoid errors on post upload: see ImageUpload component
                                                     width={400}
                                                     height={400}
                                                     placeholder="blur"

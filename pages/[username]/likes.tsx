@@ -54,7 +54,7 @@ const Likes: NextPageWithLayout = () => {
     return (
         <div className="profileContentWrapper">
             {
-                likedPosts.length > 0 ? (
+                likedPosts.length > 0 && likedPosts[0].data() ? (  // extra check to ensure document data is not undefined
                     <>
                         {
                             curProfile.id === session.user.id ? (
@@ -83,7 +83,7 @@ const Likes: NextPageWithLayout = () => {
                                                 as={isMb ? undefined : `/post/${post.id}`} 
                                                 className="group relative rounded-lg h-full w-full block overflow-hidden">
                                                 <Image 
-                                                    src={post.data().postImage ?? placeholder} // avoid errors on post upload: see ImageUpload component
+                                                    src={post.data().postImage}
                                                     width={400}
                                                     height={400}
                                                     quality={80}
@@ -114,9 +114,9 @@ const Likes: NextPageWithLayout = () => {
                     </>
                 ):(
                     curProfile.id === session.user.id ? (
-                        <p className="text-center text-gray-400">You don't have any liked post</p>
+                        <p className="text-center py-16 text-gray-400">You don't have any liked post</p>
                     ):(
-                        <p className="text-center text-gray-400">This user doesn't have any liked post</p>
+                        <p className="text-center py-16 text-gray-400">This user doesn't have any liked post</p>
                     )
                 )
             }

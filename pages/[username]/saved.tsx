@@ -44,6 +44,10 @@ const Saved: NextPageWithLayout = () => {
                     return getDoc(doc(db, 'posts', postId))
                 })
                 Promise.all(savedPostsPromise).then(savedPosts => {
+                    if(savedPosts.length === 0) {
+                        setLoading(false)
+                        return
+                    }
                     setSavedPosts(savedPosts)
                     savedPosts.forEach(post => {
                         setSavedPostIds((savedIds) => [...savedIds, post.id])
@@ -75,7 +79,7 @@ const Saved: NextPageWithLayout = () => {
         <div className="profileContentWrapper">
             {
                 curProfile.id === session.user.id ? (
-                    savedPosts.length > 0? (
+                    savedPosts.length > 0 && savedPosts[0].data() ? ( // extra check to ensure document data is not undefined
                         <>
                             <p className="text-center text-gray-500 mb-8 text-lg font-bold">Only you can see your saved posts</p>
                             <div className="profileContentContainer">
@@ -126,10 +130,10 @@ const Saved: NextPageWithLayout = () => {
                             </div>
                         </>
                     ):(
-                        <p className="text-center text-gray-400">You don't have any saved posts yet</p>
+                        <p className="text-center py-16 text-gray-400">You don't have any saved posts yet</p>
                     )
                 ):(
-                    <p className="text-center text-gray-400">You don't have access to this content</p>
+                    <p className="text-center py-16 text-gray-400">You don't have access to this content</p>
                 )
             }
         </div>
