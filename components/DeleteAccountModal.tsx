@@ -19,7 +19,7 @@ const DeleteAccountModal = () => {
         setDeleting(true)
         // delete comments by the current user
         const comments = await getDocs(query(collection(db, 'comments'), where('userId', '==', session.user.id)))
-        comments.docs.length > 0 && comments.docs.forEach(async (comment) => {
+        comments.docs.length > 0 && comments.docs.forEach(async(comment) => {
             await deleteDoc(doc(db, 'comments', comment.id))
             const post = await getDoc(doc(db, 'posts', comment.data().postId))
             if(post.exists()) {
@@ -49,7 +49,6 @@ const DeleteAccountModal = () => {
         accounts.forEach(async(account) => {
             await deleteDoc(doc(db, 'accounts', account.id))
         })
-        //delete user
 
         // delete session/sessions of current user
         const sessions = await getDocs(query(collection(db, 'sessions'), where('userId', '==', session.user.id)))
@@ -57,7 +56,7 @@ const DeleteAccountModal = () => {
             await deleteDoc(doc(db, 'sessions', session.id))
         })
 
-        // delete current user
+        // delete current user and sign out
         await deleteDoc(doc(db, 'users', session.user.id))
         await signOut()
         setDeleting(false)
