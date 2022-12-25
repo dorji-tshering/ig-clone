@@ -16,6 +16,7 @@ export type Comment = {
     text: string
     likes: string[]
     timeStamp: any
+    postId: string
     userImage: string
     username: string
     userId: string

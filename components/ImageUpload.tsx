@@ -31,7 +31,7 @@ const ImageUpload = ({
         if(loading) return 
         setLoading(true)
          
-        //upload data to firestore, doc ID will be auto-generated
+        //upload post data to firestore, doc ID will be auto-generated
         const docRef = await addDoc(collection(db, 'posts'), {
             caption: caption,
             likes: [],
@@ -43,7 +43,7 @@ const ImageUpload = ({
         });
 
         // upload image/videos to firebase storage and update the document
-        const imageRef = ref(storage, `posts/image/${docRef.id}`)
+        const imageRef = ref(storage, `posts/images/${session.user.id}/${docRef.id}`)
 
         await uploadString(imageRef, editedFile ?? selectedFile, "data_url").then(async () => {
             const downloadURL = await getDownloadURL(imageRef)

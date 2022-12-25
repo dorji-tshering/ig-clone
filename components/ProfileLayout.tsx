@@ -8,10 +8,11 @@ import { useSetRecoilState } from 'recoil'
 import { profileImageUploadState } from '../atoms/profileImageUploadAtom'
 import { useContextualRouting } from 'next-use-contextual-routing'
 import { useEffect, useState } from 'react'
-import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, collection, doc, DocumentData, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../firebase'
 import { CurrentSession } from '../utils/types' 
 import ContentLoader from '../contentLoaders/ContentLoader'
+import { deleteAccountState } from '../atoms/deleteAccoutAtom'
 
 type Props = { 
     children: React.ReactElement
@@ -24,6 +25,7 @@ const ProfileLayout = ({ children }: Props) => {
     const [totalPosts, setTotalPosts] = useState(0)
     const openProfileUploadModal = useSetRecoilState(profileImageUploadState)
     const { makeContextualHref, returnHref } = useContextualRouting()
+    const openDeleteAccountModal = useSetRecoilState(deleteAccountState)
     const profileImage = true
     const [profileExist, setProfileExist] = useState(true)
     const router = useRouter()
@@ -185,15 +187,29 @@ const ProfileLayout = ({ children }: Props) => {
                             </Link>
                         </div>
                         <div className="hidden sm:block">
-                            <p className="font-bold text-xl mb-1">{curProfile.data().name}</p>
+                            <div className='flex items-center'>
+                                <p className="font-bold text-xl mb-1">{curProfile.data().name}</p>
+                                {
+                                    curProfile.id === session.user.id && (
+                                        <button onClick={() => openDeleteAccountModal(true)} className='ml-5 text-sm text-red-500'>Delete account</button>
+                                    )
+                                }
+                            </div>
                             <p>{curProfile.data().bio}</p>
                         </div>
                     </div>
                 </section>
                 {/* mobile markups */}
                 <div className="sm:hidden mb-5 px-4">
+                    <div className='flex items-center'>
                         <p className="font-bold text-lg mb-1">{curProfile.data().name}</p>
-                        <p>{curProfile.data().bio}</p>
+                        {
+                            curProfile.id === session.user.id && (
+                                <button onClick={() => openDeleteAccountModal(true)} className='ml-5 text-sm text-red-500'>Delete account</button>
+                            )
+                        }
+                    </div>
+                    <p>{curProfile.data().bio}</p>
                 </div>
                 <section className="sm:hidden border-t py-4">
                     <div className="flex text-center">

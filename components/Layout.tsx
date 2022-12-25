@@ -10,6 +10,7 @@ import SwitchAccountModal from "./Message/SwitchAccountModal"
 import NewMessageModal from "./Message/NewMessageModal"
 import { useSession } from "next-auth/react"
 import Notice from '../components/Notice'
+import DeleteAccountModal from "./DeleteAccountModal"
 
 const Layout = ({children}: {children: ReactElement}) => {
     const {data: session, status} = useSession()
@@ -39,6 +40,7 @@ const Layout = ({children}: {children: ReactElement}) => {
             <SwitchAccountModal/>
             <NewMessageModal/>
             <Notice/>
+            <DeleteAccountModal/>
         </main>
     )
 }

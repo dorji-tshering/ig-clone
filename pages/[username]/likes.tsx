@@ -83,7 +83,7 @@ const Likes: NextPageWithLayout = () => {
                                                 as={isMb ? undefined : `/post/${post.id}`} 
                                                 className="group relative rounded-lg h-full w-full block overflow-hidden">
                                                 <Image 
-                                                    src={post.data().postImage} 
+                                                    src={post.data().postImage ?? placeholder} // avoid errors on post upload: see ImageUpload component
                                                     width={400}
                                                     height={400}
                                                     quality={80}

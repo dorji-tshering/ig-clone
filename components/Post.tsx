@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react"
 import { FormEvent, useEffect, useState } from "react"
 import EmojiPicker from "./EmojiPicker"
 import { addDoc, collection, serverTimestamp, onSnapshot, 
-        query, orderBy, DocumentData, QueryDocumentSnapshot, doc, updateDoc, arrayUnion, increment, arrayRemove } from 'firebase/firestore'
+        query, orderBy, DocumentData, QueryDocumentSnapshot, doc, updateDoc, arrayUnion, increment, arrayRemove, where } from 'firebase/firestore'
 import { db } from "../firebase"
 import Moment from 'react-moment'
 import { useContextualRouting } from 'next-use-contextual-routing'
@@ -19,6 +19,7 @@ import { useSetRecoilState } from "recoil"
 import Link from "next/link"
 import { CurrentSession } from "../utils/types"
 import Image from 'next/image'
+import placeholder from "../utils/rgbDataUrl"
 
 interface PostData {
     index?: number,
@@ -38,7 +39,7 @@ const Post = ({index, postId, username, userImage, postImage, commentCount, capt
     const [showPicker, setShowPicker] = useState(false)
     const session = useSession().data as CurrentSession
     const [comment, setComment] = useState('')
-    const [userComment, setUserComment] = useState<QueryDocumentSnapshot<DocumentData>[]>([]) // comments by current user
+    const [userComments, setUserComments] = useState<QueryDocumentSnapshot<DocumentData>[]>([]) // comments by current user
     const [likes, setLikes] = useState<string[]>([])
     const [hasLiked, setHasLiked] = useState(false)
     const [savedPosts, setSavedPosts] = useState<string[]>([])
@@ -50,9 +51,9 @@ const Post = ({index, postId, username, userImage, postImage, commentCount, capt
 
     // update comments
     useEffect(() => 
-        onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), 
+        onSnapshot(query(collection(db, 'comments'), where('postId', '==', postId), orderBy('timeStamp', 'desc')), 
             snapShot => {
-                setUserComment(snapShot.docs.filter(doc => doc.data().userId === session.user.id))
+                setUserComments(snapShot.docs.filter(comment => comment.data().userId === session.user.id))
             }
         ), 
     [])
@@ -83,10 +84,11 @@ const Post = ({index, postId, username, userImage, postImage, commentCount, capt
         const commentToSend = comment
         setComment('') // avoid spamming
 
-        await addDoc(collection(db, 'posts', postId, 'comments'), {
+        await addDoc(collection(db, 'comments'), {
             text: commentToSend,
             likes: [],
             userId: session.user.id,
+            postId: postId,
             username: session.user.username,
             userImage: session.user.image,
             parentColRef: `posts/${postId}/comments`,
@@ -159,7 +161,7 @@ const Post = ({index, postId, username, userImage, postImage, commentCount, capt
                 priority={index && index > 1 ? false : true}
                 sizes="(max-width: 767px) 100vw,
                     (min-width: 768px) 70vw"
-                src={postImage} 
+                src={postImage ?? placeholder} // avoid errors on post upload: see ImageUpload component 
                 alt="post image" />
             {/* bottom section */}
             <section className="pt-5">
@@ -244,8 +246,8 @@ const Post = ({index, postId, username, userImage, postImage, commentCount, capt
                     }
                     {/* current user comments */}
                     <div>
-                        {userComment.length > 0 && 
-                            userComment.map((comment => (
+                        {userComments.length > 0 && 
+                            userComments.map((comment => (
                                 <p className='mb-2' key={comment.id}>
                                     <span className='font-bold mr-2'>{comment.data().username}</span>
                                     <span>{comment.data().text}</span>

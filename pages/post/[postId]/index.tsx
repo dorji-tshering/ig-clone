@@ -1,4 +1,3 @@
-// single post page
 import DetailedPost from '../../../components/DetailedPost'
 import Post from '../../../components/Post'
 import { useRouter } from 'next/router'
@@ -8,7 +7,6 @@ import useSWR from 'swr'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import FeedPostLoader from '../../../contentLoaders/FeedPostLoader'
-import { Data } from 'emoji-mart'
 
 const fetchPost = async (postPath: string) => {
     return await getDoc(doc(db, postPath))
@@ -27,7 +25,7 @@ const PostPage = () => {
         </div>
     )
 
-    if(post?.data() === undefined) return (
+    if(post?.data() === undefined && !isLoading) return (
         <div className='flex items-center flex-col justify-center px-5 h-full bg-white'>
             <h1 className='px-7 py-3 bg-gray-700 rounded-full text-gray-100 mb-10'>Post Not Found</h1>
             <div className='w-full max-w-[400px] shadow-mainShadow p-10 rounded-md'>
@@ -50,7 +48,7 @@ const PostPage = () => {
                             </div>
                         </section>
                         <Post
-                            index={0}
+                            index={0} 
                             postId={postId}
                             username={post?.data()?.username}
                             userImage={post?.data()?.userImage}

@@ -13,13 +13,14 @@ import { useSetRecoilState } from 'recoil'
 import { onModalState } from '../atoms/onModalAtom'
 import EmojiPicker from './EmojiPicker'
 import { db } from '../firebase'
-import { addDoc, arrayRemove, arrayUnion, collection, doc, DocumentData, DocumentSnapshot, getDoc, increment, onSnapshot, orderBy, query, QueryDocumentSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { addDoc, arrayRemove, arrayUnion, collection, doc, DocumentData, DocumentSnapshot, getDoc, increment, onSnapshot, orderBy, query, QueryDocumentSnapshot, serverTimestamp, updateDoc, where } from 'firebase/firestore'
 import Moment from 'react-moment'
 import { Comment } from '../utils/types'
 import { useSession } from 'next-auth/react'
 import { CurrentSession } from '../utils/types'
 import ContentLoader from '../contentLoaders/ContentLoader'
 import Image from 'next/image'
+import Placeholder from '../utils/rgbDataUrl'
 
 type Props = {
     postId: string,
@@ -68,12 +69,13 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
     // listen to post comments
     useEffect(() => {
         setCommentLoading(true)
-        const unsubscribe = onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
+        const unsubscribe = onSnapshot(query(collection(db, 'comments'), where('postId', '==', postId), orderBy('timeStamp', 'desc')), snapshot => {
             setPostComments(snapshot.docs.map(doc => {
                 return {
                     id: doc.id,
                     text: doc.data().text,
                     likes: doc.data().likes,
+                    postId: doc.data().postId,
                     timeStamp: doc.data().timeStamp,
                     userImage: doc.data().userImage,
                     username: doc.data().username,
@@ -141,10 +143,11 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
         const commentToSend = comment
         setComment('') // avoid spamming
 
-        await addDoc(collection(db, 'posts', postId, 'comments'), {
+        await addDoc(collection(db, 'comments'), {
             text: commentToSend,
             likes: [],
             userId: session.user.id,
+            postId: postId,
             username: session.user.username,
             userImage: session.user.image,
             parentColRef: `posts/${postId}/comments`,
@@ -187,6 +190,8 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                                     width={800}
                                     height={900}
                                     priority
+                                    placeholder='blur'
+                                    blurDataURL={Placeholder}
                                     quality={100}
                                     style={{height: '100%', width: 'auto'}}
                                     alt="post image" 
@@ -203,7 +208,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                     {/* right/bottom section */}
                     <div className={classNames(
                         'bg-white flex flex-col scrollbar-none w-auto relative',
-                        !onModal && 'max-w-[350px]', onModal && 'max-w-[400px] min-w-[380px]'
+                        !onModal && 'min-w-[340px] max-w-[350px]', onModal && 'max-w-[400px] min-w-[380px]'
                     )}>
                         <div id="emojiPicker">
                             {

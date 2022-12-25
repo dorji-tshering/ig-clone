@@ -19,7 +19,7 @@ const EditProfile = () => {
     return (
         <div className="pb-24">
             {/* header in mobile view */}
-            <section className='h-[60px] sticky top-[53px] -mt-5 md:hidden bg-white border-b px-5 mb-5'>
+            <section className='h-[50px] sticky top-[53px] -mt-5 md:hidden bg-white border-b px-5 mb-5'>
                 <div className='float-left relative h-full flex items-center z-10'>
                     <button onClick={() => router.back()}><MdKeyboardBackspace size={24}/></button>
                 </div>
