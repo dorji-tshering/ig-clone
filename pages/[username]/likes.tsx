@@ -14,6 +14,7 @@ import { collection, DocumentData, onSnapshot, query, QueryDocumentSnapshot, whe
 import { db } from "../../firebase"
 import ContentLoader from "../../contentLoaders/ContentLoader"
 import Image from 'next/image'
+import placeholder from "../../utils/rgbDataUrl"
 
 const Likes: NextPageWithLayout = () => {
     const [loading, setLoading] = useState(false)
@@ -86,8 +87,9 @@ const Likes: NextPageWithLayout = () => {
                                                     width={400}
                                                     height={400}
                                                     quality={80}
+                                                    placeholder="blur"
+                                                    blurDataURL={placeholder}
                                                     priority={idx < 8 ? true : false}
-                                                    sizes="50vw"
                                                     alt="post image" 
                                                     className="object-cover h-full w-full 
                                                     group-hover:scale-125 transition-all duration-300 ease-in-out"/>

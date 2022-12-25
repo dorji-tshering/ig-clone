@@ -16,6 +16,7 @@ import { db } from '../../firebase'
 import { CurrentSession } from '../../utils/types'
 import ContentLoader from '../../contentLoaders/ContentLoader'
 import Image from 'next/image'
+import placeholder from '../../utils/rgbDataUrl'
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter()
@@ -89,9 +90,10 @@ const Profile: NextPageWithLayout = () => {
                                                     src={post.data().postImage} 
                                                     width={400}
                                                     height={400}
+                                                    placeholder="blur"
+                                                    blurDataURL={ placeholder }
                                                     quality={80}
                                                     priority={idx < 8 ? true : false}
-                                                    sizes="50vw"
                                                     alt="post image" 
                                                     className="object-cover h-full w-full 
                                                     group-hover:scale-125 transition-all duration-300 ease-in-out"/>

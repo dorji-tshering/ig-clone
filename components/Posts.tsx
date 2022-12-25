@@ -39,9 +39,10 @@ const Posts = () => {
                         <p className='mt-10 text-gray-400 px-8 text-center'>Empty feed for now. Click the icon above to start uploading!</p>
                     </div>
                 ):(
-                    posts.map((post) => (
+                    posts.map((post, index) => (
                         <div className="mb-6" key={post.id}>
                             <Post  
+                                index={index}
                                 postId={post.id} 
                                 username={post.data().username} 
                                 userImage={post.data().userImage}

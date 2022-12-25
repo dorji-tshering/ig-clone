@@ -1,6 +1,3 @@
-/**
- * Post component used by post page and routedModal on desktop  
- */ 
 import Link from 'next/link'
 import classNames from 'classnames'
 import { FormEvent, useEffect, useRef, useState } from 'react'
@@ -47,6 +44,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
     const setOnRoutedModal = useSetRecoilState (onModalState)
     const session = useSession().data as CurrentSession
     const inputRef = useRef<any>(null)
+    const [commentLoading, setCommentLoading] = useState(false)
 
     // update whether the post is on routed modal or not
     useEffect(() => {
@@ -68,8 +66,9 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
     }, [likes])
 
     // listen to post comments
-    useEffect(() => 
-        onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
+    useEffect(() => {
+        setCommentLoading(true)
+        const unsubscribe = onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
             setPostComments(snapshot.docs.map(doc => {
                 return {
                     id: doc.id,
@@ -83,8 +82,10 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                     replies: doc.data().replies
                 }
             }))
-        }
-    ),[])
+            setCommentLoading(false)
+        })
+        return unsubscribe
+    },[])
 
     //listen to savePosts and following field changes for current user
     useEffect(() => onSnapshot(doc(db, 'users', session.user.id), snapshot => {
@@ -185,6 +186,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                                     src={post?.data()?.postImage} 
                                     width={800}
                                     height={900}
+                                    priority
                                     quality={100}
                                     style={{height: '100%', width: 'auto'}}
                                     alt="post image" 
@@ -261,38 +263,44 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                         </section>
 
                         {/* middle scrollable comment section */}
-                        <section className="p-5 overflow-y-auto scrollbar-none flex-1">
+                        <section className="p-5 overflow-y-auto scrollbar-none flex-1">                              
+                            {/* caption */}
                             {
-                                postComments && post ? (
-                                    <>
-                                        {/* caption */}
-                                        <div className="flex mb-7">
-                                            <div className="mr-5">
-                                                <Link href={`/${post?.data()?.username}`} className="rounded-full">
-                                                    <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="object-cover rounded-full w-10 h-10" />
-                                                </Link>
-                                            </div>
-                                            <div className="flex-1">
-                                                <p>
-                                                    <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
-                                                    <span>{post?.data()?.caption}</span>
-                                                </p>
-                                                <Moment fromNow className="text-gray-400 text-sm mt-2">
-                                                    {post?.data()?.timeStamp.toDate()}
-                                                </Moment>
-                                            </div>
+                                post && (
+                                    <div className="flex mb-7">
+                                        <div className="mr-5">
+                                            <Link href={`/${post?.data()?.username}`} className="rounded-full">
+                                                <img src={post?.data()?.userImage ?? '/images/placeholder.png'} alt="post user image" className="object-cover rounded-full w-10 h-10" />
+                                            </Link>
                                         </div>
-                                        {/* comments */}
-                                        {
-                                            postComments && <PostComment comments={postComments}/>
-                                        }
-                                    </>
-                                ):(
-                                    <div className='flex w-full justify-center mt-14'>
-                                        <ContentLoader/>
+                                        <div className="flex-1">
+                                            <p>
+                                                <Link href={`/${post?.data()?.username}`} className="font-bold mr-3">{post?.data()?.username}</Link>
+                                                <span>{post?.data()?.caption}</span>
+                                            </p>
+                                            <Moment fromNow className="text-gray-400 text-sm mt-2">
+                                                {post?.data()?.timeStamp.toDate()}
+                                            </Moment>
+                                        </div>
                                     </div>
                                 )
                             }
+                            {/* comments */}
+                            {
+                                commentLoading ? (
+                                    <div className='flex w-full justify-center mt-14'>
+                                        <ContentLoader/>
+                                    </div>
+                                ):(
+                                    postComments.length > 0 ? (
+                                        <PostComment comments={postComments}/>
+                                    ):(
+                                        <div className='text-center flex justify-center text-gray-400'>
+                                            <p>No comments yet.</p>
+                                        </div>
+                                    )
+                                )
+                            }                             
                         </section>
 
                         {/* bottom action section */}

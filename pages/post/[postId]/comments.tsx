@@ -8,6 +8,7 @@ import PostComment from '../../../components/PostComment'
 import { db } from '../../../firebase'
 import { Comment, CurrentSession } from '../../../utils/types'
 import useSWR from 'swr'
+import ContentLoader from '../../../contentLoaders/ContentLoader'
 
 const fetchPost = async (postPath: string) => {
     return await getDoc(doc(db, postPath))
@@ -20,9 +21,11 @@ const Comments = () => {
     const postId = router.query.postId as string
     const session = useSession().data as CurrentSession
     const {data: post} = useSWR(`posts/${postId}`, fetchPost)
+    const [loading, setLoading] = useState(false)
 
-    useEffect(() => 
-        onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
+    useEffect(() => {
+        setLoading(true)
+        const unsubscribe = onSnapshot(query(collection(db, 'posts', postId, 'comments'), orderBy('timeStamp', 'desc')), snapshot => {
             setPostComments(snapshot.docs.map(doc => {
                 return {
                     id: doc.id,
@@ -36,8 +39,10 @@ const Comments = () => {
                     replies: doc.data().replies
                 }
             }))
-        }
-    ),[])
+            setLoading(false)
+        })
+        return unsubscribe
+    },[])
 
     // post comment
     const postComment = async(e: FormEvent) => {
@@ -112,7 +117,21 @@ const Comments = () => {
                     </section>
                     {/* comments */}
                     <section className="px-5 py-2">
-                        <PostComment comments={postComments}/>
+                        {
+                            loading ? (
+                                <div className='flex justify-center mb-10'>
+                                    <ContentLoader/>
+                                </div>
+                            ):(
+                                postComments.length > 0 ? (
+                                    <PostComment comments={postComments}/>
+                                ):(
+                                    <div className='text-center text-gray-400 mb-10'>
+                                        <p>No comment for this post yet.</p>
+                                    </div>
+                                )
+                            )
+                        }
                     </section>
                 </div>
         </div>

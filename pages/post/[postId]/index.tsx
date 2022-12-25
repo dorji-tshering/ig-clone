@@ -14,11 +14,11 @@ const fetchPost = async (postPath: string) => {
 }
 
 const PostPage = () => {
-    const router = useRouter();
-    const isMb = isMobile();
+    const router = useRouter()
+    const isMb = isMobile()
     const postId = router.query.postId as string
 
-    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost)
+    const {data: post, isLoading} = useSWR(`posts/${postId}`, fetchPost, {refreshInterval: 1000})
 
     if(isLoading && isMb) return (
         <div className='mt-5'>
@@ -40,6 +40,7 @@ const PostPage = () => {
                             </div>
                         </section>
                         <Post
+                            index={0}
                             postId={postId}
                             username={post?.data()?.username}
                             userImage={post?.data()?.userImage}

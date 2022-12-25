@@ -21,6 +21,7 @@ import { CurrentSession } from "../utils/types"
 import Image from 'next/image'
 
 interface PostData {
+    index?: number,
     postId: string,
     username: string, 
     userImage: string, 
@@ -33,7 +34,7 @@ interface PostData {
 /**
  * Post component used in the `index/home page` composing the feeds and in the `single post page` for mobile devices.
  */
-const Post = ({postId, username, userImage, postImage, commentCount, caption, timeStamp } : PostData) => {
+const Post = ({index, postId, username, userImage, postImage, commentCount, caption, timeStamp } : PostData) => {
     const [showPicker, setShowPicker] = useState(false)
     const session = useSession().data as CurrentSession
     const [comment, setComment] = useState('')
@@ -122,7 +123,7 @@ const Post = ({postId, username, userImage, postImage, commentCount, caption, ti
             })
         }
     }
-
+    
     return (
         <div className={`bg-white md:rounded-lg md:shadow-mainShadow relative`}>
             {/* show emoji picker */}
@@ -155,10 +156,11 @@ const Post = ({postId, username, userImage, postImage, commentCount, caption, ti
                 width={900}
                 height={800}
                 quality={100}
+                priority={index && index > 1 ? false : true}
                 sizes="(max-width: 767px) 100vw,
                     (min-width: 768px) 70vw"
                 src={postImage} 
-                alt="post-image" />
+                alt="post image" />
             {/* bottom section */}
             <section className="pt-5">
                 {/* Buttons */}

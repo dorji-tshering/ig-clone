@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react"
 import { CurrentSession } from "../../utils/types"
 import ContentLoader from "../../contentLoaders/ContentLoader"
 import Image from 'next/image'
+import placeholder from '../../utils/rgbDataUrl'
 
 const Saved: NextPageWithLayout = () => {
     const [savedPosts, setSavedPosts] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
@@ -99,8 +100,9 @@ const Saved: NextPageWithLayout = () => {
                                                         width={400}
                                                         height={400}
                                                         quality={80}
+                                                        placeholder="blur"
+                                                        blurDataURL={placeholder}
                                                         priority={idx < 8 ? true : false}
-                                                        sizes="50vw"
                                                         alt="post image" 
                                                         className="object-cover h-full w-full 
                                                         group-hover:scale-125 transition-all duration-300 ease-in-out"/>
