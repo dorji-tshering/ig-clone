@@ -1,4 +1,3 @@
-// page header component
 import Image from 'next/image'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
@@ -11,7 +10,6 @@ import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { BsPeople } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { TbSearch } from 'react-icons/tb'
-import { useState } from 'react'
 import InstantSearch from './InstantSearch'
 import { useContextualRouting } from 'next-use-contextual-routing'
 import { CurrentSession } from '../utils/types'
@@ -19,7 +17,6 @@ import { MdOutlineFeaturedPlayList } from 'react-icons/md'
 
 const Header = () => {
     const session = useSession().data as CurrentSession
-    const [searchText, setSearchText] = useState<string | null>(null)
     const router = useRouter()
     const openUploadModal = useSetRecoilState(uploadModalState)
     const { makeContextualHref, returnHref } = useContextualRouting()
@@ -121,7 +118,7 @@ const Header = () => {
                             </div>
                             {/* profile link */}
                             <div className="dNavWrapper">
-                                <Tooltip className="mt-[-1.5px]" style="light" content={`@${session?.user?.username}`} placement="bottom" animation="duration-1000">
+                                <Tooltip className="mt-[-1.5px]" style="light" content={`@${session && session.user.username}`} placement="bottom" animation="duration-1000">
                                     <button onClick={() => router.push(`/${session?.user?.username}`)} 
                                         className="h-12 w-12 flex items-center justify-center cursor-pointer
                                         bg-transparent ml-0 hover:bg-gray-100 rounded-full group">

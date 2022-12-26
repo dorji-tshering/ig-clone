@@ -25,7 +25,11 @@ const Posts = () => {
     [])
 
     if(loading) return (
-       Array.from({length: 2}).map((_, idx) => <FeedPostLoader key={idx}/>)
+       <>
+            {
+                Array.from({length: 2}).map((_, idx) => <FeedPostLoader key={idx}/>)
+            }
+       </>
     )
 
     return (

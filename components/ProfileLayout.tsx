@@ -128,7 +128,7 @@ const ProfileLayout = ({ children }: Props) => {
                     </div>
                     <div className="sm:ml-10 grow sm:grow-0 flex flex-col justify-between sm:py-3">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center">
-                            <h1 className="text-2xl sm:text-3xl mb-3 sm:mb-0 sm:mr-6">{curProfile.data().username}</h1>
+                            <h1 className="text-2xl sm:text-3xl mb-3 sm:mb-0 sm:mr-6 break-all">{curProfile.data().username}</h1>
                             {
                                 curProfile.id === session.user.id ? (
                                     <div className="flex flex-col xs:flex-row">

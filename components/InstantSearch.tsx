@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useEffect, useRef, useState } from "react"
 import { TbSearch } from 'react-icons/tb'
 import isMobile from '../utils/useMediaQuery'
-import client from '../utils/typeSense'
+import searchClient from '../utils/typeSense'
 import { collection, onSnapshot } from "firebase/firestore"
 import { db } from "../firebase"
 import ContentLoader from '../contentLoaders/ContentLoader'
@@ -29,15 +29,15 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
             })
         })
         if(searchDocuments.length > 0) {
-            client.collections('users').documents().import(searchDocuments, {action: 'upsert'})
+            searchClient.collections('users').documents().import(searchDocuments, {action: 'upsert'})
         }
     }),[])
 
-    // 
+    // auto search no query changes
     useEffect(() => {
         if(query) {
             setLoading(true)
-            client.collections('users').documents().search({
+            searchClient.collections('users').documents().search({
                 'q': query,
                 'query_by'  : 'name',
             }).then(result => {

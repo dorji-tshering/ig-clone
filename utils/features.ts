@@ -11,7 +11,8 @@ export const currentFeatures = [
     'Real-time updates of everything you do like following, commenting, or liking a post.',
     'Sign in with either Twitter or Google account.',
     'Search users by their profile name.',
-    'Delete account along with all the associated data.'
+    'Delete account along with all the associated data like your posts, comments, likes, and followers.',
+    'Your post is public by default and can be viewed by any signed in user'
 ]
 
 export const toBeImplemented = [
@@ -23,5 +24,7 @@ export const toBeImplemented = [
     'Email sign-in.',
     'Replies to a comment',
     'View who all liked your post and comments.',
-    'Share post to other users via chat.'
+    'Share post to other users via chat.',
+    'Option to make a post private/make it public only to your followers.',
+    'Edit comments and posts.',
 ]

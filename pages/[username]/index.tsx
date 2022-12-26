@@ -122,7 +122,7 @@ const Profile: NextPageWithLayout = () => {
                         <div className="text-center">
                             <p className="text-gray-400 mb-5">You don't have any posts right now</p>
                             <p className="text-xl font-bold mb-16">Start creating one</p>
-                            <div className="h-28 w-28 mx-auto relative">
+                            <div className="h-28 w-28 mx-auto mb-10 relative">
                                 <span className="absolute inset-0 animate-ping rounded-full bg-instaBlue opacity-25"/>
                                 <button className="absolute inset-0 z-1 flex justify-center items-center
                                     rounded-full bg-instaBlue"
@@ -131,7 +131,7 @@ const Profile: NextPageWithLayout = () => {
                             </div>
                         </div>
                     ):(
-                        <p className="text-gray-400 text-center">This user has no post yet</p>
+                        <p className="text-gray-400 py-16 text-center">This user has no post yet</p>
                     )
                 )
             }

@@ -9,6 +9,7 @@ import { collection, deleteDoc, doc, getDocs, query, updateDoc, where, increment
 import ContentLoader from "../contentLoaders/ContentLoader"
 import { useState } from "react"
 import { signOut } from "next-auth/react"
+import searchClient from "../utils/typeSense"
 
 const DeleteAccountModal = () => {
     const [openModal, setOpenModal] = useRecoilState(deleteAccountState)
@@ -44,6 +45,19 @@ const DeleteAccountModal = () => {
             })
         })
 
+        // update other user's follower and following fields
+        const currentUser = await getDoc(doc(db, 'users', session.user.id))
+        currentUser.data()?.following.length > 0 && currentUser.data()?.following.forEach(async(userId: string) => {
+            await updateDoc(doc(db, 'users', userId), {
+                followers: arrayRemove(session.user.id)
+            })
+        })
+        currentUser.data()?.followers.length > 0 && currentUser.data()?.followers.forEach(async(userId: string) => {
+            await updateDoc(doc(db, 'users', userId), {
+                following: arrayRemove(session.user.id)
+            })
+        })
+
         // delete account/accounts of current user
         const accounts = await getDocs(query(collection(db, 'accounts'), where('userId', '==', session.user.id)))
         accounts.forEach(async(account) => {
@@ -55,6 +69,9 @@ const DeleteAccountModal = () => {
         sessions.forEach(async(session) => {
             await deleteDoc(doc(db, 'sessions', session.id))
         })
+
+        // delete current user document from typesense user collection
+        await searchClient.collections('users').documents(session.user.id).delete()
 
         // delete current user and sign out
         await deleteDoc(doc(db, 'users', session.user.id))
@@ -75,7 +92,7 @@ const DeleteAccountModal = () => {
                 <div className="flex flex-col">
                     <div className="py-5 border-b">
                         <h1 className="font-bold text-lg mb-2">Confirm account delete?</h1>
-                        <p className="max-w-[400px] text-sm text-gray-400 px-5">Your posts, comments, and all the data associated with the current account will be deleted.</p>
+                        <p className="max-w-[400px] text-sm text-gray-400 px-5">Your posts, comments, followers, and all the data associated with the current account will be deleted.</p>
                     </div>
                     <button onClick={deleteAccount} className="font-[600] text-red-500 py-3 border-b">{deleting ? 'Deleting...' : 'Delete'}</button>
                     <button onClick={() => setOpenModal(false)} className="py-3">Cancel</button>
