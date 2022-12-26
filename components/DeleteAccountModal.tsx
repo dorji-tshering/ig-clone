@@ -76,8 +76,8 @@ const DeleteAccountModal = () => {
         // delete current user and sign out
         await deleteDoc(doc(db, 'users', session.user.id))
         await signOut()
-        setDeleting(false)
         setOpenModal(false)
+        setDeleting(false)
     }
 
     return (
