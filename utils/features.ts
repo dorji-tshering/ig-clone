@@ -22,7 +22,7 @@ export const toBeImplemented = [
     'Explore page.',
     'Notifications.',
     'Email sign-in.',
-    'Replies to a comment',
+    'Replies to a comment.',
     'View who all liked your post and comments.',
     'Share post to other users via chat.',
     'Option to make a post private/make it public only to your followers.',

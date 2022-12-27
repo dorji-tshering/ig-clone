@@ -3,10 +3,10 @@ import classNames from 'classnames'
 import { useEffect, useRef, useState } from "react"
 import { TbSearch } from 'react-icons/tb'
 import isMobile from '../utils/useMediaQuery'
-import searchClient from '../utils/typeSense'
 import { collection, onSnapshot } from "firebase/firestore"
 import { db } from "../firebase"
 import ContentLoader from '../contentLoaders/ContentLoader'
+import searchClient from "../utils/mellisearch"
 
 /**
  * Search component
@@ -19,28 +19,34 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
     const isMb = isMobile()
     const [loading, setLoading] = useState(false)
 
-    // listen to user document changes and update the search collection
+    // create users index if it doesn't exist
+    searchClient.getIndex('users').then(index => {
+        if(index.uid !== 'users') {
+            searchClient.createIndex('users')
+        }
+    })
+
+    //listen to user document changes and update the search collection
     useEffect(() => onSnapshot(collection(db, 'users'), snapshot => {
         let searchDocuments: {}[] = []
         snapshot.docs.map(doc => {
             searchDocuments.push({
                 id: doc.id,
-                ...doc.data()
+                name: doc.data().name,
+                username: doc.data().username,
+                image: doc.data().image     
             })
         })
         if(searchDocuments.length > 0) {
-            searchClient.collections('users').documents().import(searchDocuments, {action: 'upsert'})
+            searchClient.index('users').addDocuments(searchDocuments)
         }
     }),[])
 
-    // auto search no query changes
+    // auto search on query changes
     useEffect(() => {
         if(query) {
             setLoading(true)
-            searchClient.collections('users').documents().search({
-                'q': query,
-                'query_by'  : 'name',
-            }).then(result => {
+            searchClient.index('users').search(query).then(result => {
                 setSearchResults(result.hits)
                 setLoading(false)
             })
@@ -83,14 +89,14 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
                             ):(
                                 query && searchResults && searchResults?.length > 0 ? (
                                     searchResults.map(result => (
-                                        <Link key={result.document.id} onClick={() => setActive(false)} 
-                                            href={`/${result.document.username}`} className="flex items-center px-5 py-4 hover:bg-gray-100">
+                                        <Link key={result.id} onClick={() => setActive(false)} 
+                                            href={`/${result.username}`} className="flex items-center px-5 py-4 hover:bg-gray-100">
                                             <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3">
-                                                <img src={result.document.image} className="absolute inset-0 object-cover" alt="" />
+                                                <img src={result.image} className="absolute inset-0 object-cover" alt="" />
                                             </div>
                                             <div className="flex flex-col justify-center">
-                                                <p className="font-bold">{result.document.username}</p>
-                                                <p className="font-[500] text-gray-500">{result.document.name}</p>
+                                                <p className="font-bold">{result.username}</p>
+                                                <p className="font-[500] text-gray-500">{result.name}</p>
                                             </div>
                                         </Link>
                                     ))

@@ -23,6 +23,7 @@
     "flowbite-react": "^0.3.5",
     "framer-motion": "^7.10.2",
     "html-to-image": "^1.11.3",
+    "meilisearch": "^0.30.0",
     "moment": "^2.29.4",
     "next": "^13.0.2",
     "next-auth": "^4.17.0",
@@ -36,7 +37,6 @@
     "styled-components": "^5.3.6",
     "swr": "^2.0.0",
     "tailwind-scrollbar-hide": "^1.1.7",
-    "typesense": "^1.4.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

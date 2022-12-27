@@ -9,7 +9,7 @@ import { collection, deleteDoc, doc, getDocs, query, updateDoc, where, increment
 import ContentLoader from "../contentLoaders/ContentLoader"
 import { useState } from "react"
 import { signOut } from "next-auth/react"
-import searchClient from "../utils/typeSense"
+import searchClient from "../utils/mellisearch"
 
 const DeleteAccountModal = () => {
     const [openModal, setOpenModal] = useRecoilState(deleteAccountState)
@@ -70,8 +70,8 @@ const DeleteAccountModal = () => {
             await deleteDoc(doc(db, 'sessions', session.id))
         })
 
-        // delete current user document from typesense user collection
-        await searchClient.collections('users').documents(session.user.id).delete()
+        // delete current user document from mellisearch user collection
+        await searchClient.index('users').deleteDocument(session.user.id)
 
         // delete current user and sign out
         await deleteDoc(doc(db, 'users', session.user.id))
