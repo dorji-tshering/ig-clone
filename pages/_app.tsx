@@ -61,6 +61,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 <Head>
                     <title>InstaClone</title>
                     <link rel="icon" href="/images/insta-mobile-logo.png" />
+                    <meta name="robots" content="noindex"/>
                 </Head>
                 <Loader isRouteChanging={state.isRouteChanging} key={state.loadingKey} />
                 <Layout>
