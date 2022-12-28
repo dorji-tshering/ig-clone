@@ -11,7 +11,7 @@ import { BsPeople } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { TbSearch } from 'react-icons/tb'
 import InstantSearch from './InstantSearch'
-import { useContextualRouting } from 'next-use-contextual-routing'
+import { useContextualRouting } from '../utils/contextualRouting'
 import { CurrentSession } from '../utils/types'
 import { MdOutlineFeaturedPlayList } from 'react-icons/md'
 

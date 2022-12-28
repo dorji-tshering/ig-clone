@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { useSession } from 'next-auth/react'
-import { arrayUnion, collection, doc, DocumentData, DocumentSnapshot, getDocs, onSnapshot, query, QueryDocumentSnapshot, updateDoc, where } from "firebase/firestore"
+import { arrayUnion, collection, doc, DocumentData, onSnapshot, query, QueryDocumentSnapshot, updateDoc } from "firebase/firestore"
 import { db } from "../firebase"
 import { CurrentSession } from '../utils/types'
 import Link from "next/link"
+import Image from 'next/image'
 
 function Suggestions() {
     const [suggestions, setSuggestions] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
@@ -37,7 +38,10 @@ function Suggestions() {
                     suggestions.map(user=>(
                         <div key={user.id} className="flex items-center justify-between mt-3">
                             <Link href={`/${user.data().username}`}>
-                                <img className='w-10 h-10 rounded-full border p-[2px]' src={user.data().image} alt="" />
+                                <Image className='object-cover rounded-full border p-[2px]' 
+                                    width={40}
+                                    height={40}
+                                    src={user.data().image} alt="" />
                             </Link>
                             <div className="flex-1 ml-4">
                                 <Link href={`/${user.data().username}`} className='font-semibold'>{user.data().username}</Link>

@@ -6,13 +6,14 @@ import { HiOutlineBookmark } from 'react-icons/hi'
 import { useRouter } from 'next/router'
 import { useSetRecoilState } from 'recoil'
 import { profileImageUploadState } from '../atoms/profileImageUploadAtom'
-import { useContextualRouting } from 'next-use-contextual-routing'
+import { useContextualRouting } from '../utils/contextualRouting'
 import { useEffect, useState } from 'react'
 import { arrayRemove, arrayUnion, collection, doc, DocumentData, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../firebase'
 import { CurrentSession } from '../utils/types' 
 import ContentLoader from '../contentLoaders/ContentLoader'
 import { deleteAccountState } from '../atoms/deleteAccoutAtom'
+import Image from 'next/image'
 
 type Props = { 
     children: React.ReactElement
@@ -105,10 +106,13 @@ const ProfileLayout = ({ children }: Props) => {
                                     <div className="w-[80px] sm:w-[150px] pt-[100%] relative">
                                         <button className="rounded-full overflow-hidden h-full absolute inset-0" 
                                             onClick={uploadProfileImage}>
-                                            <img 
-                                                className="w-full h-full object-cover 
+                                            <Image 
+                                                className="object-cover 
                                                     rounded-full p-1 border border-solid border-gray-300
                                                     cursor-pointer" 
+                                                width={150}
+                                                height={150}
+                                                style={{width: '100%', height: 'auto'}}
                                                 src={curProfile.data().image} alt="avatar"
                                             />
                                         </button>

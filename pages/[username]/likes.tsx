@@ -6,7 +6,7 @@ import type { NextPageWithLayout } from '../_app'
 import { BsHeartFill } from 'react-icons/bs'
 import { AiTwotoneMessage } from 'react-icons/ai'
 import { useSession } from 'next-auth/react'
-import { useContextualRouting } from 'next-use-contextual-routing'
+import { useContextualRouting } from '../../utils/contextualRouting'
 import isMobile from "../../utils/useMediaQuery"
 import { CurrentSession } from "../../utils/types"
 import { useRouter } from "next/router"
@@ -15,6 +15,8 @@ import { db } from "../../firebase"
 import ContentLoader from "../../contentLoaders/ContentLoader"
 import Image from 'next/image'
 import placeholder from "../../utils/rgbDataUrl"
+import { IoMdImages } from 'react-icons/io'
+import { IoHeartSharp } from 'react-icons/io5' 
 
 const Likes: NextPageWithLayout = () => {
     const [loading, setLoading] = useState(false)
@@ -114,7 +116,17 @@ const Likes: NextPageWithLayout = () => {
                     </>
                 ):(
                     curProfile.id === session.user.id ? (
-                        <p className="text-center py-16 text-gray-400">You don't have any liked post</p>
+                        <div className="py-16 text-center">
+                            <div className="flex justify-center mb-5">
+                                <div>
+                                    <IoMdImages className="text-gray-400" size={90}/>
+                                </div>
+                                <div className="relative -left-5 text-gray-500 -bottom-5 h-fit">
+                                    <IoHeartSharp size={30}/>
+                                </div>
+                            </div>
+                            <p className="text-gray-400">You don't have any liked post</p>
+                        </div>
                     ):(
                         <p className="text-center py-16 text-gray-400">This user doesn't have any liked post</p>
                     )

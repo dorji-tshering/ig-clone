@@ -2,6 +2,7 @@ import { signOut, useSession } from "next-auth/react"
 import Link from "next/link";
 import { useRouter } from 'next/router'
 import { CurrentSession } from '../utils/types'
+import Image from 'next/image'
 
 function MiniProfile() {
     const router = useRouter()
@@ -10,7 +11,11 @@ function MiniProfile() {
     return (
         <div className='flex items-center'>
             <Link href={`/${session.user.username}`}>
-                <img className='rounded-full border p-[2px] w-14 h-14' src={session?.user?.image as string ?? '/images/placeholder.png'} alt="current user image" />
+                <Image className='rounded-full overflow-hidden border p-[2px]' 
+                    width={56} 
+                    height={56} 
+                    src={session?.user?.image as string ?? '/images/placeholder.png'} 
+                    alt="current user image" />
             </Link>
             <div className="ml-3">
                 <Link href={`/${session.user.username}`} className='font-bold'>{session?.user?.username}</Link>

@@ -1,13 +1,13 @@
-// profile saved component
 import Link from "next/link"
 import { ReactElement, useEffect, useState } from "react"
 import ProfileLayout from "../../components/ProfileLayout"
 import type { NextPageWithLayout } from '../_app'
 import { BsHeartFill } from 'react-icons/bs'
 import { AiTwotoneMessage } from 'react-icons/ai'
+import { RiSave3Fill } from 'react-icons/ri'
 import { useRouter } from 'next/router'
 import isMobile from "../../utils/useMediaQuery"
-import { useContextualRouting } from 'next-use-contextual-routing'
+import { useContextualRouting } from '../../utils/contextualRouting'
 import { collection, doc, DocumentData, getDoc, onSnapshot, query, QueryDocumentSnapshot, where } from "firebase/firestore"
 import { db } from "../../firebase"
 import { useSession } from "next-auth/react"
@@ -18,7 +18,7 @@ import placeholder from '../../utils/rgbDataUrl'
 
 const Saved: NextPageWithLayout = () => {
     const [savedPosts, setSavedPosts] = useState<QueryDocumentSnapshot<DocumentData>[]>([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false) 
     const [savedPostIds, setSavedPostIds] = useState<string[]>([])
     const [curProfile, setCurProfile] = useState<DocumentData>()
     const isMb = isMobile()
@@ -130,7 +130,12 @@ const Saved: NextPageWithLayout = () => {
                             </div>
                         </>
                     ):(
-                        <p className="text-center py-16 text-gray-400">You don't have any saved posts yet</p>
+                        <div className="text-center py-16">
+                            <div className="flex justify-center mb-5">
+                                <RiSave3Fill className="text-gray-400" size={90}/>
+                            </div>
+                            <p className="text-gray-400">You don't have any saved posts yet</p>
+                        </div>
                     )
                 ):(
                     <p className="text-center py-16 text-gray-400">You don't have access to this content</p>

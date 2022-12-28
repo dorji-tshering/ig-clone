@@ -5,7 +5,7 @@ import { addDoc, collection, serverTimestamp, onSnapshot,
         query, orderBy, DocumentData, QueryDocumentSnapshot, doc, updateDoc, arrayUnion, increment, arrayRemove, where } from 'firebase/firestore'
 import { db } from "../firebase"
 import Moment from 'react-moment'
-import { useContextualRouting } from 'next-use-contextual-routing'
+import { useContextualRouting } from '../utils/contextualRouting'
 import { useRouter } from 'next/router'
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
 import { TbMessageCircle2 } from 'react-icons/tb'

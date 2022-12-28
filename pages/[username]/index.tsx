@@ -10,7 +10,7 @@ import { AiTwotoneMessage, AiOutlinePlus } from 'react-icons/ai'
 import { useSetRecoilState } from 'recoil'
 import { uploadModalState } from '../../atoms/uploadModalAtom'
 import isMobile from "../../utils/useMediaQuery"
-import { useContextualRouting } from 'next-use-contextual-routing'
+import { useContextualRouting } from '../../utils/contextualRouting'
 import { collection, DocumentData, onSnapshot, query, QueryDocumentSnapshot, where } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { CurrentSession } from '../../utils/types'
