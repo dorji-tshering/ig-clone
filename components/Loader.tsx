@@ -1,5 +1,10 @@
 import { useNProgress } from '@tanem/react-nprogress';
 
+/**
+ * Loader component used for indicating the page load in client side transitions
+ * @param param0 
+ * @returns 
+ */
 const Loader: React.FC<{ isRouteChanging: boolean }> = ({ isRouteChanging }) => {
     const { animationDuration, isFinished, progress } = useNProgress({
         isAnimating: isRouteChanging,
