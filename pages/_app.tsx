@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     // remove the initial loader after page is hydrated
     useEffect(() => {
         const loader = document.getElementById('initial-loader')
-        loader?.remove()
+        if(loader) loader.style.display = 'none' 
     },[])
 
     useEffect(() => {
