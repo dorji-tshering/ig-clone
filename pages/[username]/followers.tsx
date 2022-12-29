@@ -1,4 +1,3 @@
-// user followers page
 import Followers from '../../components/Followers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'

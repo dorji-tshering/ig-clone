@@ -187,7 +187,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                             <div className="bg-black h-full flex items-center">
                                 <figure className={`w-full ${post.data()?.imageFilter}`}>
                                     <Image 
-                                        src={post.data()?.postImage} 
+                                        src={post.data()?.postImage ?? placeholder} 
                                         width={800}
                                         height={800}
                                         priority

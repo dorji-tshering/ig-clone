@@ -1,4 +1,3 @@
-// user following page
 import Following from '../../components/Following'
 import { useRouter } from 'next/router'
 import { db } from '../../firebase'

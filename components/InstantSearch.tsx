@@ -5,7 +5,7 @@ import { TbSearch } from 'react-icons/tb'
 import isMobile from '../utils/useMediaQuery'
 import { collection, onSnapshot } from "firebase/firestore"
 import { db } from "../firebase"
-import ContentLoader from '../loaders/ContentLoader'
+import ContentLoader from "../loaders/ContentLoader"
 import searchClient from "../utils/mellisearch"
 
 /**
@@ -41,7 +41,7 @@ const InstantSearch = ({onSearchPage = false}: {onSearchPage?: boolean}) => {
             searchClient.index('users').addDocuments(searchDocuments)
         }
     }),[])
-
+    
     // auto search on query changes
     useEffect(() => {
         if(query) {
