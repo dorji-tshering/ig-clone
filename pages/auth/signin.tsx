@@ -38,6 +38,9 @@ function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>,
                 message: errors[error] ?? errors['default']
             })
         }
+        // hide initial loader if the sign in page is refreshed
+        const loader = document.getElementById('initial-loader')
+        if(loader) loader.style.display = 'none' 
     }, [error])
 
     if(status === 'authenticated') {

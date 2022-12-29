@@ -19,7 +19,7 @@ const Layout = ({children}: {children: ReactElement}) => {
     // secure unauthorized contents
     useEffect(() => {
         if(router.pathname !== '/auth/signin' && status === 'unauthenticated') {
-            const loader = document.getElementById('initial-loader') // keep loading until pushed to login page
+            const loader = document.getElementById('initial-loader') // keep loading until pushed to login page upon visit of any other page
             if(loader) loader.style.display = 'none'
             router.push('/auth/signin')
         }
