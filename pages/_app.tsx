@@ -25,12 +25,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     // get layout of page if it exists, else return the page
     const getLayout = Component.getLayout ?? ((page) => page)
 
-    // remove the initial loader after page is hydrated
-    useEffect(() => {
-        const loader = document.getElementById('initial-loader')
-        if(loader) loader.style.display = 'none' 
-    },[])
-
     useEffect(() => {
         const handleRouteChangeStart = () => {
             setRouteChanging(true)
