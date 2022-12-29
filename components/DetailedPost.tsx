@@ -197,7 +197,7 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                                         style={{height: '100%', width: 'auto'}}
                                         alt="post image" 
                                         className={classNames(
-                                        'object-contain w-full', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
+                                        'object-contain w-full min-w-[250px]', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
                                         )}
                                     />
                                 </figure>
