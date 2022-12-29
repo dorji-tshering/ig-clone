@@ -1,4 +1,4 @@
-import { addDoc, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadString } from 'firebase/storage'
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
@@ -12,14 +12,14 @@ type Props = {
     setOpenModal: Dispatch<SetStateAction<boolean>>
     setFileSelectOpen: Dispatch<SetStateAction<boolean>>
     setSelectedFile: Dispatch<SetStateAction<any>>
-    setEditedFile: Dispatch<SetStateAction<any>>
-    editedFile: any
+    setFilter: Dispatch<SetStateAction<string>>
+    filter: string
     selectedFile: any
 }
 
 const ImageUpload = ({ 
-    setEditorOpen, setCaptionModalOpen, setFileSelectOpen, setOpenModal, 
-    editedFile, selectedFile, setSelectedFile, setEditedFile}: Props) => {
+    setEditorOpen, setCaptionModalOpen, setFileSelectOpen, filter, setFilter, setOpenModal, 
+    selectedFile, setSelectedFile}: Props) => {
     const [caption, setCaption] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     // ref to allow only single space between caption words
@@ -37,6 +37,7 @@ const ImageUpload = ({
             likes: [],
             username: session.user.username,
             userImage: session.user.image,
+            imageFilter: filter,
             userId: session.user.id,
             commentCount: 0,
             timeStamp: serverTimestamp(),
@@ -45,7 +46,7 @@ const ImageUpload = ({
         // upload image/videos to firebase storage and update the document
         const imageRef = ref(storage, `posts/images/${session.user.id}/${docRef.id}`)
 
-        await uploadString(imageRef, editedFile ?? selectedFile, "data_url").then(async () => {
+        await uploadString(imageRef, selectedFile, "data_url").then(async () => {
             const downloadURL = await getDownloadURL(imageRef)
             await updateDoc(doc(db, 'posts', docRef.id), {
                 postImage: downloadURL,
@@ -58,7 +59,7 @@ const ImageUpload = ({
         setCaptionModalOpen(false)
         setFileSelectOpen(true)
         setSelectedFile(null)
-        setEditedFile(null)
+        setFilter('')
         setLoading(false)
     }
 
@@ -101,7 +102,9 @@ const ImageUpload = ({
             <div className="flex flex-col md:flex-row md:h-[550px] md:max-h-[550px]">
                 {/* edited image */}
                 <section className='md:h-full md:w-full md:flex md:items-center md:justify-center md:border-r'>
-                    <img src={editedFile ?? selectedFile} className="max-h-[400px] md:max-h-[550px] mx-auto" alt="edited post image" />
+                    <figure className={filter}>
+                        <img src={selectedFile} className="max-h-[400px] md:max-h-[550px] mx-auto" alt="edited post image" />
+                    </figure>
                 </section>
                 {/* caption */}
                 <section className="px-8 pt-8 md:pr-0 md:pb-8 min-w-[250px] flex flex-col justify-center">

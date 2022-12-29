@@ -1,15 +1,14 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import { MdOutlineArrowBack } from 'react-icons/md'
 import PostDiscardAlert from './PostDiscardAlert'
-import * as htmlToImage from 'html-to-image'
 
 type Props = {
     setFileSelectOpen: Dispatch<SetStateAction<boolean>>
     setEditorOpen: Dispatch<SetStateAction<boolean>>
     setCaptionModalOpen: Dispatch<SetStateAction<any>>
     selectedFile: any
-    setEditedFile: Dispatch<SetStateAction<any>>
-    editedFile: any
+    setFilter: Dispatch<SetStateAction<string>>
+    filter: string
     setSelectedFile: Dispatch<SetStateAction<any>>
     editorOpen: boolean
     captionModalOpen: boolean
@@ -28,44 +27,40 @@ const ImageEditor = ({
         setEditorOpen, 
         setCaptionModalOpen, 
         selectedFile, 
-        setEditedFile, 
-        editedFile,
+        setFilter,
+        filter,
         setSelectedFile,
         editorOpen, 
         captionModalOpen }: Props) => {
     const [alertChanges, setAlertChanges] = useState(false)
-    const [filter, setFilter] = useState('')
     const mainImageRef = useRef<HTMLImageElement | null>(null)
 
     const onNext = () => {
-        htmlToImage.toPng(mainImageRef.current!).then(dataURl => {
-            setEditedFile(dataURl)
-            setEditorOpen(false)
-            setCaptionModalOpen(true)
-        })
+        setEditorOpen(false)
+        setCaptionModalOpen(true)
     }
 
     const onBack = () => {
-        if(editedFile || selectedFile) {
-            setAlertChanges(true);
+        if(filter || selectedFile) {
+            setAlertChanges(true)
         } else {
-            setEditorOpen(false); 
-            setFileSelectOpen(true);
-            setSelectedFile(null);
+            setEditorOpen(false)
+            setFileSelectOpen(true)
+            setSelectedFile(null)
         } 
     }
 
     const discard = () => {
-        selectedFile && setSelectedFile(null);
-        editedFile && setEditedFile(null);
-        editorOpen && setEditorOpen(false);
-        captionModalOpen && setCaptionModalOpen(false);
-        setFileSelectOpen(true);
-        setAlertChanges(false);
+        selectedFile && setSelectedFile(null)
+        filter && setFilter('')
+        editorOpen && setEditorOpen(false)
+        captionModalOpen && setCaptionModalOpen(false)
+        setFileSelectOpen(true)
+        setAlertChanges(false)
     }
 
     const cancel = () => {
-        setAlertChanges(false);
+        setAlertChanges(false)
     }
 
     return (
@@ -84,7 +79,7 @@ const ImageEditor = ({
             <div className="flex flex-col md:flex-row">
                 <div className='md:basis-2/3 md:max-h-[550px] flex justify-center items-center'>
                     <figure ref={mainImageRef} className={`${filter}`}>
-                            <img  src={editedFile ?? selectedFile} 
+                            <img  src={selectedFile} 
                             className={`h-full max-h-[400px] md:max-h-[550px] object-contain`} 
                             alt="post image" />
                     </figure>
@@ -92,13 +87,13 @@ const ImageEditor = ({
                 <div className='md:basis-1/3 my-5 md:my-0 md:h-auto mx-2 md:mx-0 md:mt-0 flex md:grid md:grid-cols-2 
                     md:max-h-[550px] md:overflow-y-auto overflow-x-auto scrollbar-none'>
                     <figure onClick={() => setFilter('')} className='min-w-[75px] sm:min-w-[90px] md:min-w-[auto]'>
-                        <img src={editedFile ?? selectedFile} className=' md:h-full object-cover' alt="original image" />
+                        <img src={selectedFile} className=' md:h-full object-cover' alt="original image" />
                     </figure>
                     {
                         imageFilters.map((filter, idx) => (
                             <figure key={idx} onClick={() => setFilter(filter)} 
                                 className={filter + ' min-w-[75px] sm:min-w-[90px] md:min-w-[auto]'}>
-                                <img src={editedFile || selectedFile} className='md:h-full object-contain relative' alt={`filter ${filter}`} />
+                                <img src={selectedFile} className='md:h-full object-contain relative' alt={`filter ${filter}`} />
                             </figure>
                         ))
                     }

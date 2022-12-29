@@ -99,17 +99,18 @@ const Saved: NextPageWithLayout = () => {
                                                     }
                                                     as={isMb ? undefined : `/post/${post.id}`} 
                                                     className="group relative rounded-lg h-full w-full block overflow-hidden">
-                                                    <Image 
-                                                        src={post.data().postImage} 
-                                                        width={400}
-                                                        height={400}
-                                                        quality={80}
-                                                        placeholder="blur"
-                                                        blurDataURL={placeholder}
-                                                        priority={idx < 8 ? true : false}
-                                                        alt="post image" 
-                                                        className="object-cover h-full w-full 
-                                                        group-hover:scale-125 transition-all duration-300 ease-in-out"/>
+                                                    <figure className={`${post.data()?.imageFilter} h-full`}>
+                                                        <Image 
+                                                            src={post.data().postImage ?? placeholder} // avoid errors on post upload: see ImageUpload component
+                                                            width={400}
+                                                            height={400}
+                                                            placeholder="blur"
+                                                            blurDataURL={ placeholder }
+                                                            priority={idx < 8 ? true : false}
+                                                            alt="post image" 
+                                                            className="object-cover h-full group-hover:scale-125 transition-all duration-300 ease-in-out"
+                                                        />
+                                                    </figure>
                                                     <div className="hidden group-hover:flex absolute inset-0 justify-center 
                                                         items-center bg-black/30 text-white font-bold">
                                                         <span className="flex items-center text-xl mr-3"><BsHeartFill size={18} className="mr-1"/>

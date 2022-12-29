@@ -28,6 +28,7 @@ interface PostData {
     userImage: string, 
     postImage: string,
     caption: string,
+    imageFilter?: string
     commentCount: number,
     timeStamp: any
 }
@@ -35,7 +36,7 @@ interface PostData {
 /**
  * Post component used in the `index/home page` composing the feeds and in the `single post page` for mobile devices.
  */
-const Post = ({index, postId, username, userImage, postImage, commentCount, caption, timeStamp } : PostData) => {
+const Post = ({index, postId, username, imageFilter, userImage, postImage, commentCount, caption, timeStamp } : PostData) => {
     const [showPicker, setShowPicker] = useState(false)
     const session = useSession().data as CurrentSession
     const [comment, setComment] = useState('')
@@ -153,16 +154,20 @@ const Post = ({index, postId, username, userImage, postImage, commentCount, capt
             </div>
 
             {/* Post image */}
-            <Image 
-                className="object-contain"
-                width={900}
-                height={800}
-                quality={100}
-                priority={index && index > 1 ? false : true}
-                sizes="(max-width: 767px) 100vw,
-                    (min-width: 768px) 70vw"
-                src={postImage ?? placeholder} // avoid errors on post upload: see ImageUpload component 
-                alt="post image" />
+            <figure className={imageFilter}>
+                <Image 
+                    className="object-contain"
+                    width={800}
+                    height={800}
+                    placeholder='blur'
+                    blurDataURL={placeholder}
+                    style={{width: '100%', height: 'auto'}}
+                    priority={index && index > 1 ? false : true}
+                    sizes="(max-width: 767px) 100vw,
+                        (min-width: 768px) 70vw"
+                    src={postImage ?? placeholder} // avoid errors on post upload: see ImageUpload component 
+                    alt="post image" />
+            </figure>
             {/* bottom section */}
             <section className="pt-5">
                 {/* Buttons */}

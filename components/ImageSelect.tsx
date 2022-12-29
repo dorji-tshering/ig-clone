@@ -1,24 +1,24 @@
-import { Dispatch, SetStateAction, useRef } from 'react';
+import { Dispatch, SetStateAction, useRef } from 'react'
 
 type Props = {
-    setFileSelectOpen: Dispatch<SetStateAction<boolean>>;
-    setEditorOpen: Dispatch<SetStateAction<boolean>>;
-    setSelectedFile: Dispatch<SetStateAction<any>>;
+    setFileSelectOpen: Dispatch<SetStateAction<boolean>>
+    setEditorOpen: Dispatch<SetStateAction<boolean>>
+    setSelectedFile: Dispatch<SetStateAction<any>>
 }
 
 const ImageSelect = ({ setFileSelectOpen, setEditorOpen, setSelectedFile }: Props) => {
-    const filePickerRef = useRef<any>(null);
+    const filePickerRef = useRef<any>(null)
 
     const selectImage = (e: any) => {
-        const reader = new FileReader();
+        const reader = new FileReader()
 
         if(e.target.files[0]){
-            reader.readAsDataURL(e.target.files[0]);
+            reader.readAsDataURL(e.target.files[0])
         }
         reader.onload = (readerEvent) => {
-            setSelectedFile(readerEvent.target?.result);
-            setFileSelectOpen(false); 
-            setEditorOpen(true);
+            setSelectedFile(readerEvent.target?.result)
+            setFileSelectOpen(false)
+            setEditorOpen(true)
         }
     }
 

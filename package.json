@@ -22,7 +22,6 @@
     "flowbite": "^1.5.4",
     "flowbite-react": "^0.3.5",
     "framer-motion": "^8.0.0",
-    "html-to-image": "^1.11.3",
     "meilisearch": "^0.30.0",
     "moment": "^2.29.4",
     "next": "^13.0.2",

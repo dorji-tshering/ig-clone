@@ -52,6 +52,7 @@ const PostPage = () => {
                             postId={postId}
                             username={post?.data()?.username}
                             userImage={post?.data()?.userImage}
+                            imageFilter={post?.data()?.imageFilter}
                             postImage={post?.data()?.postImage}
                             caption={post?.data()?.caption}
                             timeStamp={post?.data()?.timeStamp}

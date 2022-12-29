@@ -20,7 +20,7 @@ import { useSession } from 'next-auth/react'
 import { CurrentSession } from '../utils/types'
 import ContentLoader from '../contentLoaders/ContentLoader'
 import Image from 'next/image'
-import Placeholder from '../utils/rgbDataUrl'
+import placeholder from '../utils/rgbDataUrl'
 
 type Props = {
     postId: string,
@@ -185,19 +185,22 @@ const DetailedPost = ({postId, onModal=false}: Props) => {
                     {
                         post ? (
                             <div className="bg-black h-full flex items-center">
-                                <Image 
-                                    src={post?.data()?.postImage} 
-                                    width={800}
-                                    height={900}
-                                    priority
-                                    placeholder='blur'
-                                    blurDataURL={Placeholder}
-                                    quality={100}
-                                    style={{height: '100%', width: 'auto'}}
-                                    alt="post image" 
-                                    className={classNames(
-                                    'object-contain', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
-                                )}/>
+                                <figure className={`w-full ${post.data()?.imageFilter}`}>
+                                    <Image 
+                                        src={post.data()?.postImage} 
+                                        width={800}
+                                        height={800}
+                                        priority
+                                        placeholder='blur'
+                                        blurDataURL={placeholder}
+                                        quality={100}
+                                        style={{height: '100%', width: 'auto'}}
+                                        alt="post image" 
+                                        className={classNames(
+                                        'object-contain w-full', onModal ? 'max-h-[90%]' : 'h-[100%] w-auto',
+                                        )}
+                                    />
+                                </figure>
                             </div>
                         ):(
                             <div className='flex justify-center items-center border-r w-[400px] bg-white'>

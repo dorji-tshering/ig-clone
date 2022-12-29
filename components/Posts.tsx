@@ -1,4 +1,4 @@
-import { collection, DocumentData, onSnapshot, orderBy, query, QueryDocumentSnapshot, where } from 'firebase/firestore'
+import { collection, DocumentData, onSnapshot, orderBy, query, QueryDocumentSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { db } from '../firebase'
 import Post from './Post'
@@ -48,6 +48,7 @@ const Posts = () => {
                             <Post  
                                 index={index}
                                 postId={post.id} 
+                                imageFilter={post.data().imageFilter}
                                 username={post.data().username} 
                                 userImage={post.data().userImage}
                                 postImage={post.data().postImage}

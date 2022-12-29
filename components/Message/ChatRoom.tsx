@@ -56,16 +56,6 @@ const ChatRoom = () => {
                     </div>
                     <p>Feature <span className="font-bold">coming soon!</span> You can still play with the UI though.</p>
                 </div>
-                <div className="mb-10">
-                    <div className="flex items-center mx-auto justify-center w-32 h-32 rounded-full bg-gray-50 mb-10">
-                        <AiOutlineWechat size={50}/>
-                    </div>
-                    <p>Feature <span className="font-bold">coming soon!</span> You can still play with the UI though.</p>
-                </div>
-                
-
-
-
             </section>
             {/* message input */}
             <section className='px-5 py-3 md:px-8 sticky bottom-0 bg-white border-t'>
