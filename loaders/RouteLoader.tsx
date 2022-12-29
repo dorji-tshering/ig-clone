@@ -16,6 +16,7 @@ const Loader = () => {
                     height: var(--height-of-loader);
                     position: absolute;
                     overflow: hidden;
+                    z-index: 1000;
                }
                .loader::before {
                     content: "";
@@ -39,7 +40,7 @@ const Loader = () => {
                     }
                }
             `}</style>
-            <div className="loader z-[9000] before:bg-instaBlue bg-instaBlue/10"></div>
+            <div className="loader before:bg-instaBlue bg-instaBlue/10"></div>
         </>
     )
 }
