@@ -5,7 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 import { RecoilRoot } from 'recoil'
 import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
-import Loader from '../components/Loader'
+import RouteLoader from '../loaders/RouteLoader'
 import { JSXElementConstructor, ReactElement, useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
@@ -19,29 +19,25 @@ type AppPropsWithLayout = AppProps & {
 }
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-    const [state, setState] = useState({
-        isRouteChanging: false,
-        loadingKey: 0,
-    })
+    const [routeChanging, setRouteChanging] = useState(false)
     const router = useRouter()
 
     // get layout of page if it exists, else return the page
     const getLayout = Component.getLayout ?? ((page) => page)
 
+    // remove the initial loader after page is hydrated
+    useEffect(() => {
+        const loader = document.getElementById('initial-loader')
+        loader?.remove()
+    },[])
+
     useEffect(() => {
         const handleRouteChangeStart = () => {
-            setState((prevState) => ({
-                ...prevState,
-                isRouteChanging: true,
-                loadingKey: prevState.loadingKey ^ 1,
-            }))
+            setRouteChanging(true)
         }
     
         const handleRouteChangeEnd = () => {
-            setState((prevState) => ({
-                ...prevState,
-                isRouteChanging: false,
-            }))
+            setRouteChanging(false)
         }
     
         router.events.on('routeChangeStart', handleRouteChangeStart);
@@ -56,19 +52,21 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       }, [router.events])
 
     return (
-        <SessionProvider session={pageProps.session}>
-            <RecoilRoot>
-                <Head>
-                    <title>InstaClone</title>
-                    <link rel="icon" href="/images/insta-mobile-logo.png" />
-                    <meta name="robots" content="noindex"/>
-                </Head>
-                <Loader isRouteChanging={state.isRouteChanging} key={state.loadingKey} />
-                <Layout>
-                    { getLayout(<Component {...pageProps} />) }
-                </Layout>
-            </RecoilRoot>
-        </SessionProvider>
+        <>
+            <SessionProvider session={pageProps.session}>
+                <RecoilRoot>
+                    <Head>
+                        <title>InstaClone</title>
+                        <link rel="icon" href="/images/insta-mobile-logo.png" />
+                        <meta name="robots" content="noindex"/>
+                    </Head>
+                    {routeChanging && <RouteLoader />}
+                    <Layout>
+                        { getLayout(<Component {...pageProps} />) }
+                    </Layout>
+                </RecoilRoot>
+            </SessionProvider>
+        </>
     )
 }
 

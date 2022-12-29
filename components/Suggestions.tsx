@@ -13,7 +13,7 @@ function Suggestions() {
     // get users not followed by the current user
     useEffect(() => 
         onSnapshot(query(collection(db, 'users')), snapshot => {
-            setSuggestions(snapshot.docs.filter(user => user.id !== session.user.id && !user.data().followers.includes(session.user.id)))
+            setSuggestions(snapshot.docs.filter(user => user.id !== session.user.id && !user.data().followers?.includes(session.user.id)))
         }),
     [])
 

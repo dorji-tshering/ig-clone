@@ -8,7 +8,7 @@ import PostComment from '../../../components/PostComment'
 import { db } from '../../../firebase'
 import { Comment, CurrentSession } from '../../../utils/types'
 import useSWR from 'swr'
-import ContentLoader from '../../../contentLoaders/ContentLoader'
+import ContentLoader from '../../../loaders/ContentLoader'
 
 const fetchPost = async (postPath: string) => {
     return await getDoc(doc(db, postPath))

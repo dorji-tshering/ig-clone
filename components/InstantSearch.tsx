@@ -5,7 +5,7 @@ import { TbSearch } from 'react-icons/tb'
 import isMobile from '../utils/useMediaQuery'
 import { collection, onSnapshot } from "firebase/firestore"
 import { db } from "../firebase"
-import ContentLoader from '../contentLoaders/ContentLoader'
+import ContentLoader from '../loaders/ContentLoader'
 import searchClient from "../utils/mellisearch"
 
 /**

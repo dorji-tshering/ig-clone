@@ -7,7 +7,7 @@ import { arrayRemove, arrayUnion, collection, doc, DocumentData, onSnapshot, que
 import { db } from '../firebase'
 import { CurrentSession } from '../utils/types'
 import { useSession } from 'next-auth/react'
-import ContentLoader from '../contentLoaders/ContentLoader'
+import ContentLoader from '../loaders/ContentLoader'
 
 type Props = {
     onClose?: () => void, 

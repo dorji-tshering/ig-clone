@@ -7,7 +7,7 @@ import { CurrentSession } from '../utils/types'
 import { uploadModalState } from '../atoms/uploadModalAtom'
 import { useSetRecoilState } from 'recoil'
 import { MdAddToPhotos } from 'react-icons/md'
-import FeedPostLoader from '../contentLoaders/FeedPostLoader'
+import FeedPostLoader from '../loaders/FeedPostLoader'
 
 const Posts = () => {
     const [posts, setPosts] = useState<QueryDocumentSnapshot<DocumentData>[]>([])

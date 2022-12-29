@@ -14,7 +14,7 @@ import { useContextualRouting } from '../../utils/contextualRouting'
 import { collection, DocumentData, onSnapshot, query, QueryDocumentSnapshot, where } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { CurrentSession } from '../../utils/types'
-import ContentLoader from '../../contentLoaders/ContentLoader'
+import ContentLoader from '../../loaders/ContentLoader'
 import Image from 'next/image'
 import placeholder from '../../utils/rgbDataUrl'
 

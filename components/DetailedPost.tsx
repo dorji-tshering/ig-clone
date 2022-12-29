@@ -18,7 +18,7 @@ import Moment from 'react-moment'
 import { Comment } from '../utils/types'
 import { useSession } from 'next-auth/react'
 import { CurrentSession } from '../utils/types'
-import ContentLoader from '../contentLoaders/ContentLoader'
+import ContentLoader from '../loaders/ContentLoader'
 import Image from 'next/image'
 import placeholder from '../utils/rgbDataUrl'
 

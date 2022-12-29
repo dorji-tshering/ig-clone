@@ -2,7 +2,8 @@ import ContentLoader from "react-content-loader"
 
 const FeedPostLoader = () => {
     return (
-        <div className="shadow-mainShadow mb-6 rounded-lg bg-white">
+        <div className="shadow-mainShadow mb-6 rounded-lg bg-white
+            sm:max-w-lg md:max-w-xl mx-auto lg:max-w-none">
             <ContentLoader 
                 speed={2}
                 width="100%"

@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { arrayRemove, arrayUnion, collection, doc, DocumentData, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../firebase'
 import { CurrentSession } from '../utils/types' 
-import ContentLoader from '../contentLoaders/ContentLoader'
+import ContentLoader from '../loaders/ContentLoader'
 import { deleteAccountState } from '../atoms/deleteAccoutAtom'
 import Image from 'next/image'
 

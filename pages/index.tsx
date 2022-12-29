@@ -6,7 +6,7 @@ import { collection, doc, getDocs, query, setDoc, where } from "firebase/firesto
 import { CurrentSession } from '../utils/types'
 import { generateFromEmail } from '../utils/generateUsername'
 import { useEffect, useState } from 'react'
-import ContentLoader from '../contentLoaders/ContentLoader'
+import ContentLoader from '../loaders/ContentLoader'
 
 const Home = () => {
     const session  = useSession().data as CurrentSession

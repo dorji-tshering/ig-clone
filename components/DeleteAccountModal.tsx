@@ -6,7 +6,7 @@ import { db, storage } from "../firebase"
 import { useSession } from 'next-auth/react'
 import { CurrentSession } from "../utils/types"
 import { collection, deleteDoc, doc, getDocs, query, updateDoc, where, increment, getDoc, arrayRemove } from "firebase/firestore"
-import ContentLoader from "../contentLoaders/ContentLoader"
+import ContentLoader from "../loaders/ContentLoader"
 import { useState } from "react"
 import { signOut } from "next-auth/react"
 import searchClient from "../utils/mellisearch"

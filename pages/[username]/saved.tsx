@@ -12,7 +12,7 @@ import { collection, doc, DocumentData, getDoc, onSnapshot, query, QueryDocument
 import { db } from "../../firebase"
 import { useSession } from "next-auth/react"
 import { CurrentSession } from "../../utils/types"
-import ContentLoader from "../../contentLoaders/ContentLoader"
+import ContentLoader from "../../loaders/ContentLoader"
 import Image from 'next/image'
 import placeholder from '../../utils/rgbDataUrl'
 

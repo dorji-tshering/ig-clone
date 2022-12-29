@@ -12,7 +12,7 @@ import { CurrentSession } from "../../utils/types"
 import { useRouter } from "next/router"
 import { collection, DocumentData, onSnapshot, query, QueryDocumentSnapshot, where } from "firebase/firestore"
 import { db } from "../../firebase"
-import ContentLoader from "../../contentLoaders/ContentLoader"
+import ContentLoader from "../../loaders/ContentLoader"
 import Image from 'next/image'
 import placeholder from "../../utils/rgbDataUrl"
 import { IoMdImages } from 'react-icons/io'

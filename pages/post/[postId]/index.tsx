@@ -6,7 +6,7 @@ import { MdKeyboardBackspace } from 'react-icons/md'
 import useSWR from 'swr'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../../firebase'
-import FeedPostLoader from '../../../contentLoaders/FeedPostLoader'
+import FeedPostLoader from '../../../loaders/FeedPostLoader'
 
 const fetchPost = async (postPath: string) => {
     return await getDoc(doc(db, postPath))
