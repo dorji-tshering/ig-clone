@@ -20,7 +20,7 @@ const Layout = ({children}: {children: ReactElement}) => {
     useEffect(() => {
         if(router.pathname !== '/auth/signin' && status === 'unauthenticated') {
             const loader = document.getElementById('initial-loader') // keep loading until pushed to login page upon visit of any other page
-            if(loader) loader.style.display = 'none'
+            if(loader) loader.remove()
             router.push('/auth/signin')
         }
     },[status])
@@ -28,7 +28,7 @@ const Layout = ({children}: {children: ReactElement}) => {
     // remove the initial loader after page is hydrated/ user is authenticated
     useEffect(() => {
         const loader = document.getElementById('initial-loader')
-        if(loader && status === 'authenticated') loader.style.display = 'none' 
+        if(loader && status === 'authenticated') loader.remove()
     },[status])
 
     if(router.pathname !== '/auth/signin' && status === 'unauthenticated' || status === 'loading') return <></>

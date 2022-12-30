@@ -40,7 +40,7 @@ function SignIn({ providers }: Record<LiteralUnion<BuiltInProviderType, string>,
         }
         // hide initial loader if the sign in page is refreshed
         const loader = document.getElementById('initial-loader')
-        if(loader) loader.style.display = 'none' 
+        if(loader) loader.remove() 
     }, [error])
 
     if(status === 'authenticated') {
