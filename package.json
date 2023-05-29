@@ -11,7 +11,7 @@
   "dependencies": {
     "@emoji-mart/data": "^1.0.8",
     "@emoji-mart/react": "^1.0.1",
-    "@faker-js/faker": "^7.6.0",
+    "@faker-js/faker": "^8.0.0",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
     "@next-auth/firebase-adapter": "^1.0.3",
