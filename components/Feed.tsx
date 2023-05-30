@@ -14,7 +14,7 @@ const Feed = () => {
             {/* right section */}
             <section className={`hidden lg:block lg:col-span-1 ml-5`}>
                 <div className="fixed rounded-md w-[315px] overflow-y-auto  
-                    shadow-mainShadow bg-white px-6 py-8">
+                    shadow-mainShadow bg-white px-6 py-8 h-[75%]">
                     <MiniProfile/>
                     <Suggestions/>
                 </div>

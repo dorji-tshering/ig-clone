@@ -14,32 +14,32 @@ const NewMessageModal = () => {
     const [chatUsers, setChatUsers] = useState<{ name: string, username: string, image: string }[] | null>(null)
     const [suggestions, setSuggestions] = useState([
         {
-            name: faker.name.fullName(),
+            name: faker.person.fullName(),
             username: faker.internet.userName(),
             image: faker.image.avatar()
         }, 
         {
-            name: faker.name.fullName(),
+            name: faker.person.fullName(),
             username: faker.internet.userName(),
             image: faker.image.avatar()
         }, 
         {
-            name: faker.name.fullName(),
+            name: faker.person.fullName(),
             username: faker.internet.userName(),
             image: faker.image.avatar()
         }, 
         {
-            name: faker.name.fullName(),
+            name: faker.person.fullName(),
             username: faker.internet.userName(),
             image: faker.image.avatar()
         }, 
         {
-            name: faker.name.fullName(),
+            name: faker.person.fullName(),
             username: faker.internet.userName(),
             image: faker.image.avatar()
         }, 
         {
-            name: faker.name.fullName(),
+            name: faker.person.fullName(),
             username: faker.internet.userName(),
             image: faker.image.avatar()
         }, 

@@ -41,7 +41,7 @@ function Suggestions() {
                                 <Image className='object-cover rounded-full border p-[2px]' 
                                     width={40}
                                     height={40}
-                                    src={user.data().image} alt="" />
+                                    src={user.data().image} alt="user image" />
                             </Link>
                             <div className="flex-1 ml-4">
                                 <Link href={`/${user.data().username}`} className='font-semibold'>{user.data().username}</Link>

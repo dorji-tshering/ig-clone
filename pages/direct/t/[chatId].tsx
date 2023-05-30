@@ -19,17 +19,17 @@ const ChatPage = () => {
             {
                 chatId: '2342345345',
                 avatar: faker.image.avatar(),
-                fullName: faker.name.fullName(),
+                fullName: faker.person.fullName(),
             },
             {
                 chatId: '234264222',
                 avatar: faker.image.avatar(),
-                fullName: faker.name.fullName(),
+                fullName: faker.person.fullName(),
             },
             {
                 chatId: '45675634563',
                 avatar: faker.image.avatar(),
-                fullName: faker.name.fullName(),
+                fullName: faker.person.fullName(),
             }
         ]
         setActiveChats(chats)
