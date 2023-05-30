@@ -13,7 +13,7 @@ const NewMessageModal = () => {
     const [open, setOpen] = useRecoilState(newMessageModalState)
     const [chatUsers, setChatUsers] = useState<{ name: string, username: string, image: string }[] | null>(null)
     const [suggestions, setSuggestions] = useState([
-        {
+        { 
             name: faker.person.fullName(),
             username: faker.internet.userName(),
             image: faker.image.avatar()
