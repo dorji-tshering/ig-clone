@@ -20,7 +20,7 @@
     "emoji-mart": "^5.3.3",
     "firebase": "^9.14.0",
     "flowbite": "^1.5.4",
-    "flowbite-react": "^0.5.0",
+    "flowbite-react": "^0.6.0",
     "framer-motion": "^10.0.0",
     "meilisearch": "^0.34.0",
     "moment": "^2.29.4",
