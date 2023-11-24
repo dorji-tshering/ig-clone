@@ -22,7 +22,7 @@
     "flowbite": "^1.5.4",
     "flowbite-react": "^0.6.0",
     "framer-motion": "^10.0.0",
-    "meilisearch": "^0.35.0",
+    "meilisearch": "^0.36.0",
     "moment": "^2.29.4",
     "next": "^13.0.2",
     "next-auth": "^4.17.0",
