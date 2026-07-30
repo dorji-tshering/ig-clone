@@ -14,7 +14,7 @@
     "@faker-js/faker": "^8.0.0",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
-    "@next-auth/firebase-adapter": "^1.0.3",
+    "@next-auth/firebase-adapter": "^2.0.0",
     "@tanem/react-nprogress": "^5.0.19",
     "classnames": "^2.3.2",
     "emoji-mart": "^5.3.3",
